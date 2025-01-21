@@ -1,0 +1,19 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+	content: ["./src/**/*.{html,js,jsx,ts,tsx}"], // Adjust the paths as needed
+	theme: {
+		extend: {
+			colors: {
+				"general-blue": "#002855",
+				"general-grey": "#DFE6EC",
+				"general-light-grey": "#79747E33",
+				"general-light-red": "#E46561",
+				"general-green": "#4d8c71",
+				"general-red": "#FF000033",
+				"general-yellow": "#f2c008",
+				"general-bg": "#fafafa",
+			},
+		},
+	},
+	plugins: [],
+};
