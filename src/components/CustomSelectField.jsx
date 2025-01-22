@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import "./css/select.css";
@@ -20,6 +21,7 @@ function CustomSelectField({
 	enableFocusHandler = false,
 	onFocus = () => {},
 	borderSize = "md",
+	register,
 }) {
 	const [selectedValue, setSelectedValue] = useState(initialValue ?? "");
 
@@ -36,25 +38,34 @@ function CustomSelectField({
 	}, [initialValue]);
 
 	return (
-		<div className={`mb-5 w-full`}>
-			<div
-				className={`mb-1 text-left w-full flex ${
-					singleLine ? "flex-row items-center" : "flex-col"
-				} relative`}>
-				<label
-					className={`text-sm font-[500] mb-2 ${
-						singleLine ? "w-[30%]" : "w-full"
+		<div className={`w-full`}>
+			<fieldset
+				// className={`mb-1 text-left w-full flex ${
+				// 	singleLine ? "flex-row items-center" : "flex-col"
+				// } relative`}
+				className={`${singleLine ? "w-[70%]" : "w-full"} ${
+					readOnly || disabled ? "bg-transparent" : "bg-transparent"
+				} h-[3.6rem] border-2 rounded-${borderSize} px-3  outline-none ${
+					error ? "border-red-400" : "border-gray-300"
+				}`}>
+				<legend
+					className={`text-sm text-gray-500 font-[500] text-left px-2 ${
+						singleLine ? "w-[30%]" : ""
 					}`}
 					htmlFor={htmlFor}>
-					{label}
-				</label>
+					{label} {required && <span className="text-red-500 pl-1">*</span>}
+				</legend>
 				<select
+					{...register}
 					disabled={readOnly}
 					defaultValue={selectedValue}
+					className="bg-transparent w-full h-[2.3rem] outline-none pl-2"
 					value={selectedValue}
-					className={`${singleLine ? "w-[70%]" : "w-full"} ${
-						readOnly || disabled ? "bg-gray-100" : ""
-					} h-12 border rounded-${borderSize} px-5  outline-none`}
+					// className={`${singleLine ? "w-[70%]" : "w-full"} ${
+					// 	readOnly || disabled ? "bg-transparent" : "bg-transparent"
+					// } h-[3.3rem] border-2 rounded-${borderSize} px-5  outline-none ${
+					// 	error ? "border-red-300" : "border-gray-300"
+					// }`}
 					name={name}
 					id={name}
 					onChange={handleSelectChange}>
@@ -65,10 +76,9 @@ function CustomSelectField({
 						</option>
 					))}
 				</select>
-			</div>
+			</fieldset>
 			{error && (
-				<div className="text-[11px] text-red-300 flex">
-					<div className="w-[30%]"></div>
+				<div className="text-[11px] text-red-500 flex text-left">
 					<div>{error}</div>
 				</div>
 			)}

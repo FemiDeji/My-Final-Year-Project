@@ -1,1 +1,1 @@
-export const isGeneralRoute = ["/dashboard", "/bookings"];
+export const isGeneralRoute = ["/dashboard", "/bookings", "/history"];

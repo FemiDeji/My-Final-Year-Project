@@ -1,9 +1,10 @@
+import { FaFilter } from "react-icons/fa";
 import CustomButton from "../../components/CustomButton";
 import CustomSearchField from "../../components/CustomSearchField";
 import Layout from "../../components/Layout";
 import Table from "../../components/Table";
 
-export default function Bookings() {
+export default function History() {
 	const headers = [
 		{ key: "matric_no", value: "Matric No" },
 		{ key: "fullname", value: "Full Name" },
@@ -21,17 +22,28 @@ export default function Bookings() {
 	];
 
 	return (
-		<Layout title={"Bookings"}>
-			<div className="bg-white rounded-lg shadow-sm flex flex-col w-full p-3">
-				<div className="flex gap-4 justify-end items-center">
-					<div className="justify-end w-full lg:w-[40%]">
-						<CustomSearchField placeholder={"Search"} borderRadius={"lg"} />
+		<Layout title={"History"}>
+			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
+				<div className="flex justify-end items-center gap-3 w-full">
+					<div className="lg:w-[40%]">
+						<CustomSearchField
+							placeholder={"Search history"}
+							borderRadius={"lg"}
+							name={"searchHistory"}
+						/>
 					</div>
 					<div className="lg:w-[20%]">
-						<CustomButton label={"Book Pass"} bgColor="#f2c008" bordered />
+						<CustomButton
+							label={"Filter History"}
+							bgColor="#002855"
+							textColor="white"
+							bordered
+							borderSize="lg">
+							<FaFilter />
+						</CustomButton>
 					</div>
 				</div>
-				<div>
+				<div className="mt-1">
 					<Table headers={headers} data={[]} />
 				</div>
 			</div>

@@ -5,8 +5,8 @@ import ArrowLeftIcon from "./ArrowLeftIcon";
 import ArrowRightIcon from "./ArrowRightIcon";
 
 import LinkItem from "./LinkItem";
-import { CiBoxList } from "react-icons/ci";
-import { RiFolderHistoryLine } from "react-icons/ri";
+import { IoListOutline } from "react-icons/io5";
+import { MdOutlineHistoryToggleOff } from "react-icons/md";
 
 export default function SideBar({ showIconsOnly, setShowIconsOnly }) {
 	return (
@@ -49,14 +49,14 @@ export default function SideBar({ showIconsOnly, setShowIconsOnly }) {
 					text={"Bookings"}
 					url={"/bookings"}
 					showIconOnly={showIconsOnly}>
-					<CiBoxList />
+					<IoListOutline />
 				</LinkItem>
 
 				<LinkItem
 					text={"History"}
 					url={"/history"}
 					showIconOnly={showIconsOnly}>
-					<RiFolderHistoryLine />
+					<MdOutlineHistoryToggleOff />
 				</LinkItem>
 			</div>
 		</div>

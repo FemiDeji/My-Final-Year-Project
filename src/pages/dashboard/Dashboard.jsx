@@ -5,6 +5,7 @@ export default function Dashboard() {
 	return (
 		<Layout title={"Dashboard"}>
 			<Stats />
+			<div></div>
 		</Layout>
 	);
 }
