@@ -24,7 +24,7 @@ function CustomButton({
 				bordered ? `border rounded-${borderSize}` : ""
 			} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
 			{children && <div>{children}</div>}
-			<div className="font-[500] text-[12px]">{label}</div>
+			<div className="font-semibold text-[13px]">{label}</div>
 		</button>
 	);
 }
