@@ -6,6 +6,7 @@ import ArrowRightIcon from "./ArrowRightIcon";
 
 import LinkItem from "./LinkItem";
 import { CiBoxList } from "react-icons/ci";
+import { RiFolderHistoryLine } from "react-icons/ri";
 
 export default function SideBar({ showIconsOnly, setShowIconsOnly }) {
 	return (
@@ -43,11 +44,19 @@ export default function SideBar({ showIconsOnly, setShowIconsOnly }) {
 				<LinkItem text={"Home"} url={"/dashboard"} showIconOnly={showIconsOnly}>
 					<GoHome />
 				</LinkItem>
+
 				<LinkItem
 					text={"Bookings"}
 					url={"/bookings"}
 					showIconOnly={showIconsOnly}>
 					<CiBoxList />
+				</LinkItem>
+
+				<LinkItem
+					text={"History"}
+					url={"/history"}
+					showIconOnly={showIconsOnly}>
+					<RiFolderHistoryLine />
 				</LinkItem>
 			</div>
 		</div>

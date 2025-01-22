@@ -1,15 +1,19 @@
 /* eslint-disable react/prop-types */
 export default function Stat({ icon, title, value }) {
 	return (
-		<div className="bg-general-grey border rounded-md p-4 flex flex-row justify-center items-center gap-3">
-			<div
-				className={`row-span-full aspect-square rounded-full flex justify-center items-center `}>
-				<svg className="w-7 h-7 text-general-blue">{icon}</svg>
+		<div className="bg-white border rounded-lg p-2 flex flex-col justify-center items-center w-full">
+			<div className="flex flex-row justify-start items-center w-full gap-3">
+				<div
+					className={`flex justify-center items-center rounded-lg p-1 border`}>
+					<svg className="w-7 h-7 text-[#f2c008]">{icon}</svg>
+				</div>
+				<div className="text-[1.1rem] uppercase tracking-[0.4px] font-semibold text-general-blue">
+					{title}
+				</div>
 			</div>
-			<div className="self-end text-[1rem] uppercase tracking-[0.4px] font-semibold text-general-yellow">
-				{title}
+			<div className="ml-auto text-[1.1rem] leading-none font-medium text-general-blue">
+				{value}
 			</div>
-			<div className="text-[1.4rem] leading-none font-medium">{value}</div>
 		</div>
 	);
 }
