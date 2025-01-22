@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 export default function Stat({ icon, title, value }) {
 	return (
-		<div className="bg-white border rounded-lg p-2 flex flex-col justify-center items-center w-full">
+		<div className="bg-white shadow-sm rounded-lg p-2 flex flex-col justify-center items-center w-full">
 			<div className="flex flex-row justify-start items-center w-full gap-3">
 				<div
 					className={`flex justify-center items-center rounded-lg p-1 border`}>

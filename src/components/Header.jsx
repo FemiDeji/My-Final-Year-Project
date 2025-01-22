@@ -1,6 +1,9 @@
 import { HiMiniArrowRightOnRectangle } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+	const navigate = useNavigate();
+
 	return (
 		<div className="flex justify-between py-2 px-10 shadow-sm bg-white fixed w-full z-50 ">
 			<img src="hello" alt="AU logo" />
@@ -14,7 +17,9 @@ export default function Header() {
 				</div>
 				<div className="bg-general-blue h-[2.5rem] w-[0.1rem]"></div>
 
-				<div className="flex gap-2 items-center text-general-light-red">
+				<div
+					className="flex gap-2 items-center text-general-light-red"
+					onClick={() => navigate("/login")}>
 					<span>
 						<HiMiniArrowRightOnRectangle size={20} />
 					</span>

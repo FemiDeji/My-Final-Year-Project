@@ -14,7 +14,6 @@ export default function Login() {
 	const {
 		register,
 		handleSubmit,
-		getValues,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
@@ -25,13 +24,20 @@ export default function Login() {
 		mode: "onBlur",
 	});
 
+	const onSubmit = (data) => {
+		console.log("login data: ", data);
+		navigate("/dashboard");
+	};
+
 	return (
 		<div className="h-full min-h-screen flex flex-row justify-center items-center w-full">
 			<div className="bg-general-yellow flex flex-col justify-center items-center w-[50%] h-full min-h-screen">
 				hello
 			</div>
 			<div className="w-[50%] flex flex-col justify-center items-center">
-				<form className="flex flex-col justify-start items-start gap-2 w-[70%]">
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="flex flex-col justify-start items-start gap-2 w-[70%]">
 					<div className="text-general-blue font-semibold text-xl text-left">
 						Welcome
 					</div>
@@ -103,13 +109,16 @@ export default function Login() {
 						<CustomInput
 							label={"Email"}
 							name="email"
-							register={register("email", {
-								required: "Email is required",
-								pattern: {
-									value: /^[^s@]+@[^s@]+.[^s@]+$/,
-									message: "Invalid email format",
-								},
-							})}
+							register={register(
+								"email",
+								forgotPasswordModal && {
+									required: "Email is required",
+									pattern: {
+										value: /^[^s@]+@[^s@]+.[^s@]+$/,
+										message: "Invalid email format",
+									},
+								}
+							)}
 							error={errors?.email?.message}
 						/>
 					</div>

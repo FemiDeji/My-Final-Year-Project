@@ -24,12 +24,6 @@ export default function Stats({ bookings, numDays, confirmedBookings }) {
 				color={"#002855"}
 				value={18}
 			/>
-			<Stat
-				title={"Distance"}
-				icon={<FaRoad size={25} />}
-				color={"#002855"}
-				value={1000}
-			/>
 		</div>
 	);
 }
