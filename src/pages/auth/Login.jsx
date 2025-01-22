@@ -86,6 +86,7 @@ export default function Login() {
 						<CustomButton
 							label={"Login"}
 							bgColor="#f2c008"
+							textColor="#002855"
 							bordered
 							borderSize="lg"
 							type="submit"
@@ -93,6 +94,7 @@ export default function Login() {
 						<CustomButton
 							label={"Sign up"}
 							bgColor="#f2c008"
+							textColor="#002855"
 							bordered
 							borderSize="lg"
 							onClick={() => navigate("/signup")}
@@ -135,6 +137,7 @@ export default function Login() {
 						<CustomButton
 							label={"Reset"}
 							bgColor="#f2c008"
+							textColor="#002855"
 							bordered
 							borderSize="lg"
 							type="submit"

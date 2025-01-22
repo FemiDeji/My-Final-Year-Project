@@ -1,3 +1,4 @@
+import { FaPlus } from "react-icons/fa";
 import CustomButton from "../../components/CustomButton";
 import CustomSearchField from "../../components/CustomSearchField";
 import Layout from "../../components/Layout";
@@ -28,7 +29,13 @@ export default function Bookings() {
 						<CustomSearchField placeholder={"Search"} borderRadius={"lg"} />
 					</div>
 					<div className="lg:w-[20%]">
-						<CustomButton label={"Book Pass"} bgColor="#f2c008" bordered />
+						<CustomButton
+							label={"Book Pass"}
+							bgColor="#f2c008"
+							textColor="#002855"
+							bordered>
+							<FaPlus />
+						</CustomButton>
 					</div>
 				</div>
 				<div>

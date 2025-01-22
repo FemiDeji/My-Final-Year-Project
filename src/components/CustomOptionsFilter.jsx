@@ -20,8 +20,8 @@ export default function CustomOptionsFilter({
 						index === options.length - 1 ? "rounded-r-lg" : ""
 					} flex flex-row justify-center gap-2 items-center p-3 py-1 w-full text-center ${
 						activeType === option.value
-							? "bg-general-yellow text-white cursor-not-allowed"
-							: "bg-general-grey cursor-pointer"
+							? "bg-general-yellow text-general-blue font-medium cursor-not-allowed"
+							: "bg-general-grey text-general-blue font-medium cursor-pointer"
 					}`}
 					onClick={() => {
 						if (activeType !== option.value) {

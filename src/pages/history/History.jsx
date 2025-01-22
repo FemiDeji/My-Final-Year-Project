@@ -35,8 +35,8 @@ export default function History() {
 					<div className="lg:w-[20%]">
 						<CustomButton
 							label={"Filter History"}
-							bgColor="#002855"
-							textColor="white"
+							bgColor="#f2c008"
+							textColor="#002855"
 							bordered
 							borderSize="lg">
 							<FaFilter />

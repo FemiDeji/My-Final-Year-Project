@@ -240,6 +240,7 @@ export default function SignUp() {
 						<div className="w-[30%]">
 							<CustomButton
 								label={"Back to Login"}
+								textColor="#002855"
 								bgColor="#f2c008"
 								bordered
 								borderSize="lg"
@@ -249,6 +250,7 @@ export default function SignUp() {
 						<div className="w-[30%]">
 							<CustomButton
 								label={"Sign up"}
+								textColor="#002855"
 								bgColor="#f2c008"
 								bordered
 								borderSize="lg"
