@@ -6,7 +6,7 @@ export default function Header() {
 
 	return (
 		<div className="flex justify-between py-2 px-10 shadow-sm bg-white fixed w-full z-50 ">
-			<img src="hello" alt="AU logo" />
+			<img src="AU_logo.jpg" alt="AU logo" className="h-[45px]" />
 			<div className="flex items-center gap-6 cursor-pointer">
 				<div className="rounded-full w-10 h-10 border-white border-2 bg-general-yellow"></div>
 				<div className="text-general-blue flex flex-row gap-5 justify-center items-center">

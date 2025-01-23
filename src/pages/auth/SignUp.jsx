@@ -66,9 +66,20 @@ export default function SignUp() {
 	return (
 		<div className="h-full flex flex-row justify-center items-center w-full">
 			<div className="bg-general-yellow flex flex-col justify-center items-center w-[50%] h-full">
-				hello
+				<img
+					src="/AU_Senate_Building.jpg"
+					alt="Senate Building"
+					className="object-cover object-center h-full"
+				/>
 			</div>
 			<div className="w-[50%] flex flex-col justify-center items-center h-full overflow-auto">
+				<div className="w-full flex justify-center items-center mb-3">
+					<img
+						src="AU_logo.jpg"
+						alt="AU logo"
+						className="object-contain object-left h-[70px]"
+					/>
+				</div>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className="flex flex-col justify-start items-start gap-2 w-full p-5">
