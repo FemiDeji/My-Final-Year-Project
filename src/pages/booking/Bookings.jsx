@@ -25,7 +25,7 @@ export default function Bookings() {
 		<Layout title={"Bookings"}>
 			<div className="bg-white rounded-lg shadow-sm flex flex-col w-full p-3">
 				<div className="flex gap-4 justify-end items-center">
-					<div className="justify-end w-full lg:w-[40%]">
+					<div className="justify-end w-full lg:w-[40%] xs:hidden">
 						<CustomSearchField placeholder={"Search"} borderRadius={"lg"} />
 					</div>
 					<div className="lg:w-[20%]">

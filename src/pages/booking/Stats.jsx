@@ -5,22 +5,22 @@ import { FaXmark } from "react-icons/fa6";
 
 export default function Stats({ bookings, numDays, confirmedBookings }) {
 	return (
-		<div className="flex flex-row justify-between items-center gap-3">
+		<div className="flex flex-row xs:flex-col w-full justify-between items-center gap-3">
 			<Stat
 				title={"Bookings"}
-				icon={<FaBookOpen size={25} />}
+				icon={<FaBookOpen className="text-2xl xs:text-xl" />}
 				color={"#002855"}
 				value={100}
 			/>
 			<Stat
 				title={"Approved"}
-				icon={<FaCheck size={25} />}
+				icon={<FaCheck className="text-2xl xs:text-xl" />}
 				color={"#002855"}
 				value={40}
 			/>
 			<Stat
 				title={"Declined"}
-				icon={<FaXmark size={25} />}
+				icon={<FaXmark className="text-2xl xs:text-xl" />}
 				color={"#002855"}
 				value={18}
 			/>

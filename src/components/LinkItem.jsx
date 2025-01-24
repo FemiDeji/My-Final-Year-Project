@@ -1,11 +1,21 @@
 /* eslint-disable react/prop-types */
 import { useNavigate, useLocation } from "react-router-dom";
 
-const LinkItem = ({ text, url, children, showIconOnly = false }) => {
+const LinkItem = ({
+	text,
+	url,
+	children,
+	showIconOnly = false,
+	setIsSidebarOpen,
+}) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
 	const handleRedirect = () => {
+		if (setIsSidebarOpen) {
+			console.log("closing...");
+			setIsSidebarOpen(false);
+		}
 		navigate(url);
 	};
 
@@ -25,8 +35,8 @@ const LinkItem = ({ text, url, children, showIconOnly = false }) => {
 				} 
         ${isActive ? "h-11 " : ""} 
       `}>
-			<div className="text-[1.5em]">{children}</div>
-			{!showIconOnly && <div>{text}</div>}
+			<div className="text-[1.5em] xs:text-[1.3em]">{children}</div>
+			{!showIconOnly && <div className="xs:text-[1em]">{text}</div>}
 		</div>
 	);
 };

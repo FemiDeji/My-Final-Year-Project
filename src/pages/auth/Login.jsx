@@ -31,14 +31,14 @@ export default function Login() {
 
 	return (
 		<div className="h-full min-h-screen flex flex-row justify-center items-center w-full">
-			<div className="bg-general-yellow flex flex-col justify-center items-center w-[50%] h-full">
+			<div className="bg-general-yellow flex flex-col justify-center items-center xs:w-0 w-[50%] h-full">
 				<img
 					src="/AU_Senate_Building.jpg"
 					alt="Senate Building"
-					className="object-cover object-center h-full"
+					className="object-cover object-center h-full xs:hidden"
 				/>
 			</div>
-			<div className="w-[50%] flex flex-col justify-center items-center">
+			<div className="xs:w-full w-[50%] flex flex-col justify-center items-center">
 				<div className="w-full flex justify-center items-center mb-3">
 					<img
 						src="AU_logo.jpg"
@@ -48,7 +48,7 @@ export default function Login() {
 				</div>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
-					className="flex flex-col justify-start items-start gap-2 w-[70%]">
+					className="flex flex-col justify-start items-start gap-2 w-[70%] xs:w-[90%]">
 					<div className="text-general-blue font-semibold text-xl text-left">
 						Welcome
 					</div>

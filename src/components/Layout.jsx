@@ -19,6 +19,7 @@ export default function Layout({
 }) {
 	const [showIconsOnly, setShowIconsOnly] = useState(false);
 	const [showSidebarGeneralList, setShowSidebarGeneralList] = useState(false);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
 	const location = useLocation();
 	const isGeneralActive = isGeneralRoute.some(
@@ -41,7 +42,10 @@ export default function Layout({
 
 	return (
 		<div className="min-h-screen flex flex-col h-full">
-			<Header />
+			<Header
+				isSidebarOpen={isSidebarOpen}
+				setIsSidebarOpen={setIsSidebarOpen}
+			/>
 			<div className="flex min-h-screen h-full">
 				<div
 					className={`flex h-full 
@@ -58,14 +62,18 @@ export default function Layout({
 						isGeneralActive={isGeneralActive}
 						setShowIconsOnly={setShowIconsOnly}
 						showSidebarGeneralList={showSidebarGeneralList}
+						setIsSidebarOpen={setIsSidebarOpen}
+						isSidebarOpen={isSidebarOpen}
 					/>
 				</div>
 				<div
 					className={`flex flex-col right-0 gap-3 bg-[whitesmoke] mt-[3.8rem] ml-1 ${
-						showIconsOnly ? "lg:w-[93%] xl:w-[95%]" : "lg:w-[78%] xl:w-[82%]"
+						showIconsOnly
+							? "lg:w-[93%] xl:w-[95%]"
+							: "lg:w-[78%] xl:w-[82%] xs:w-full"
 					}`}>
 					{title && (
-						<div className="px-8 pt-8 flex flex-row justify-between items-center">
+						<div className="px-8 xs:px-4 xs:pt-5 pt-8 flex flex-row justify-between items-center">
 							<CustomLayoutHeader
 								title={title}
 								subtitle={subtitle}
@@ -84,7 +92,9 @@ export default function Layout({
 					{divider && (
 						<div className="h-[0.15rem] w-full bg-[#e3e3e3] max-w-full shadow-lg"></div>
 					)}
-					<div className="w-full p-8 flex-grow overflow-y-auto">{children}</div>
+					<div className="w-full p-8 xs:p-4 flex-grow overflow-y-auto">
+						{children}
+					</div>
 				</div>
 			</div>
 		</div>

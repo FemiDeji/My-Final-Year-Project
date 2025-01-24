@@ -64,15 +64,16 @@ export default function SignUp() {
 	};
 
 	return (
-		<div className="h-full flex flex-row justify-center items-center w-full">
-			<div className="bg-general-yellow flex flex-col justify-center items-center w-[50%] h-full">
+		<div
+			className={`min-h-screen "xs:min-h-[150vh]" : "xs:min-h-full" flex flex-row justify-center items-center w-full xs:overflow-y-auto`}>
+			<div className="bg-general-yellow flex flex-col justify-center items-center xs:w-0 w-[50%] h-full">
 				<img
 					src="/AU_Senate_Building.jpg"
 					alt="Senate Building"
-					className="object-cover object-center h-full"
+					className="object-cover object-center h-full xs:hidden"
 				/>
 			</div>
-			<div className="w-[50%] flex flex-col justify-center items-center h-full overflow-auto">
+			<div className="xs:w-full w-[50%] flex flex-col justify-center items-center h-full xs:min-h-screen xs:h-[100%] overflow-auto">
 				<div className="w-full flex justify-center items-center mb-3">
 					<img
 						src="AU_logo.jpg"
@@ -83,14 +84,14 @@ export default function SignUp() {
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className="flex flex-col justify-start items-start gap-2 w-full p-5">
-					<div className="flex flex-row justify-between items-center w-full mb-3">
+					<div className="flex xs:flex-col xs:items-start flex-row justify-between items-center w-full mb-3">
 						<div className="text-general-blue font-semibold text-xl text-left">
 							Welcome
 							<div className="text-general-blue text-sm font-medium">
 								PASS-BOOK MANAGEMENT SYSTEM
 							</div>
 						</div>
-						<div className="w-[40%] flex flex-row gap-2 justify-center items-center">
+						<div className="xs:pl-6 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center">
 							<span className="text-general-blue text-[1rem] font-medium">
 								Role:{" "}
 							</span>
@@ -102,7 +103,7 @@ export default function SignUp() {
 						</div>
 					</div>
 					<div className="w-full flex flex-col justify-center items-center gap-4">
-						<div className="w-full flex justify-center items-start gap-3">
+						<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 							<CustomInput
 								label={"Username"}
 								name="username"
@@ -122,7 +123,7 @@ export default function SignUp() {
 								placeholder={"John Doe"}
 							/>
 						</div>
-						<div className="w-full flex justify-center items-start gap-3">
+						<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 							<CustomInput
 								label={"Email"}
 								name="email"
@@ -146,7 +147,7 @@ export default function SignUp() {
 								placeholder={"09013647832"}
 							/>
 						</div>
-						<div className="w-full flex justify-center items-start gap-3">
+						<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 							<CustomInput
 								label={"Department"}
 								name="department"
@@ -176,7 +177,7 @@ export default function SignUp() {
 							)}
 						</div>
 						{activeType === "user" && (
-							<div className="w-full flex justify-center items-start gap-3">
+							<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 								<CustomInput
 									label={"Room Number"}
 									name="roomNo"
@@ -203,7 +204,7 @@ export default function SignUp() {
 								/>
 							</div>
 						)}
-						<div className="w-full flex justify-center items-start gap-3">
+						<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 							<div className="w-full relative">
 								<CustomInput
 									label={"Password"}
@@ -248,7 +249,7 @@ export default function SignUp() {
 					</div>
 
 					<div className="flex gap-3 justify-between items-center w-full ml-auto mt-2">
-						<div className="w-[30%]">
+						<div className="xs:w-[40%] w-[30%]">
 							<CustomButton
 								label={"Back to Login"}
 								textColor="#002855"

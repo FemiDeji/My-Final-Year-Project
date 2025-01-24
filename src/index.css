@@ -20,6 +20,13 @@ body,
 	overflow: hidden;
 }
 
+@media screen and (max-width: 426px) {
+	html,
+	body,
+	#root {
+		overflow-y: auto;
+	}
+}
 .scrollable {
 	overflow-y: scroll;
 	-ms-overflow-style: none;

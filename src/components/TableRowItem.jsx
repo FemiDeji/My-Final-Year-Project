@@ -52,7 +52,7 @@ function TableRowItem({
 	};
 
 	return (
-		<tr className="w-full hover:bg-gray-100 cursor-pointer text-[12px] text-[#323c47] bg-white border border-y-2 text-left">
+		<tr className="w-full hover:bg-gray-100 cursor-pointer text-[12px] text-[#323c47] bg-white border border-y-2 text-left xs:table-row">
 			{/* Render each data cell */}
 			{headers.map(({ key }, index) => (
 				<td

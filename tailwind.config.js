@@ -13,6 +13,9 @@ module.exports = {
 				"general-yellow": "#f2c008",
 				"general-bg": "#fafafa",
 			},
+			screens: {
+				xs: { min: "320px", max: "426px" },
+			},
 		},
 	},
 	plugins: [],
