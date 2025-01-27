@@ -7,9 +7,12 @@ import { useNavigate } from "react-router-dom";
 import useLogout from "../hooks/auth/useLogout";
 import CustomBackdrop from "./CustomBackdrop";
 import useUser from "../hooks/auth/useUser";
+import { useState } from "react";
+import { delayAction } from "../helpers/custom";
 
 export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 	const { logout, isLoggingOut } = useLogout();
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const { user } = useUser();
 
@@ -50,7 +53,13 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 
 					<div
 						className="flex gap-2 items-center xs:hidden text-general-light-red"
-						onClick={logout}>
+						onClick={() => {
+							setIsLoading(true);
+							delayAction(() => {
+								setIsLoading(false);
+								logout();
+							}, 2000);
+						}}>
 						<span>
 							<HiMiniArrowRightOnRectangle size={20} />
 						</span>
@@ -58,7 +67,9 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 					</div>
 				</div>
 			</div>
-			{isLoggingOut && <CustomBackdrop open={true} text={"Logging out..."} />}
+			{(isLoggingOut || isLoading) && (
+				<CustomBackdrop open={true} text={"Logging out..."} />
+			)}
 		</>
 	);
 }
