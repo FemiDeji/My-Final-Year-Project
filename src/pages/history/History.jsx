@@ -25,13 +25,13 @@ export default function History() {
 		<Layout title={"History"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
-					<div className="lg:w-[40%]">
+					{/* <div className="lg:w-[40%]">
 						<CustomSearchField
 							placeholder={"Search history"}
 							borderRadius={"lg"}
 							name={"searchHistory"}
 						/>
-					</div>
+					</div> */}
 					<div className="lg:w-[20%]">
 						<CustomButton
 							label={"Filter History"}

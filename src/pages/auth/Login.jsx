@@ -5,28 +5,33 @@ import GeneralModal from "../../components/GeneralModal";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { delayAction } from "../../helpers/custom";
+import CustomBackdrop from "../../components/CustomBackdrop";
+import useLogin from "../../hooks/auth/useLogin";
 
 export default function Login() {
 	const navigate = useNavigate();
 	const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const { isLogginIn, login } = useLogin();
 
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm({
 		defaultValues: {
-			username: "",
+			identifier: "",
 			password: "",
-			email: "",
 		},
 		mode: "onBlur",
 	});
 
 	const onSubmit = (data) => {
-		console.log("login data: ", data);
-		navigate("/dashboard");
+		login({ ...data }, { onSettled: () => reset({ data: "" }) });
+		console.log("login data: ", { ...data });
 	};
 
 	return (
@@ -57,13 +62,13 @@ export default function Login() {
 					</div>
 					<div className="w-full">
 						<CustomInput
-							label={"Username"}
-							name="username"
-							register={register("username", {
-								required: "Username is required",
+							label={"Username or Email"}
+							name="identifier"
+							register={register("identifier", {
+								required: "Username or Email is required",
 							})}
-							placeholder={"02/1021"}
-							error={errors?.username?.message}
+							placeholder={"e.g. user@gmail.com or 02/1021"}
+							error={errors?.identifier?.message}
 						/>
 					</div>
 					<div className="w-full relative">
@@ -101,6 +106,7 @@ export default function Login() {
 							bordered
 							borderSize="lg"
 							type="submit"
+							disabled={isLogginIn}
 						/>
 						<CustomButton
 							label={"Sign up"}
@@ -108,7 +114,13 @@ export default function Login() {
 							textColor="#002855"
 							bordered
 							borderSize="lg"
-							onClick={() => navigate("/signup")}
+							onClick={() => {
+								setIsLoading(true);
+								delayAction(() => {
+									setIsLoading(false);
+									navigate("/signup");
+								}, 2000);
+							}}
 						/>
 					</div>
 				</form>
@@ -156,6 +168,12 @@ export default function Login() {
 					</div>
 				</form>
 			</GeneralModal>
+			{(isLoading || isLogginIn) && (
+				<CustomBackdrop
+					open={true}
+					text={isLogginIn ? "Validating..." : "Please wait..."}
+				/>
+			)}
 		</div>
 	);
 }

@@ -1,3 +1,4 @@
 export async function apiBookings() {
-	return <div>apiBookings</div>;
+	let status = "pending";
+	return {};
 }

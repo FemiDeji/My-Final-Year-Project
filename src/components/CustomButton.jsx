@@ -20,7 +20,7 @@ function CustomButton({
 				backgroundColor: bgColor,
 				color: textColor,
 			}}
-			className={`w-full flex px-2 py-3 gap-2 items-center justify-center ${
+			className={`w-full flex px-2 py-3 xs:py-2 gap-2 items-center justify-center ${
 				bordered ? `border rounded-${borderSize}` : ""
 			} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
 			{children && <div>{children}</div>}

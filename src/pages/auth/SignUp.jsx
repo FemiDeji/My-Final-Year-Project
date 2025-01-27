@@ -6,6 +6,8 @@ import { useState } from "react";
 import CustomOptionsFilter from "../../components/CustomOptionsFilter";
 import { useNavigate } from "react-router-dom";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import useSignup from "../../hooks/auth/useSignup";
+import CustomBackdrop from "../../components/CustomBackdrop";
 
 export default function SignUp() {
 	const [levels, setLevels] = useState("");
@@ -14,6 +16,7 @@ export default function SignUp() {
 
 	const navigate = useNavigate();
 
+	const { signup, isSigningUp } = useSignup();
 	const {
 		register,
 		formState: { errors },
@@ -26,20 +29,16 @@ export default function SignUp() {
 			password: "",
 			fullname: "",
 			email: "",
-			phoneNo: "",
+			phone: "",
 			department: "",
 			level: "",
-			roomNo: "",
-			guardianName: "",
+			room: "",
+			guardian_name: "",
 			role: "",
 			confirmPassword: "",
 		},
 		mode: "onBlur",
 	});
-
-	const onSubmit = (data) => {
-		console.log("Sign up", data);
-	};
 
 	const levelOption = [
 		{ key: "100", value: "100" },
@@ -61,6 +60,11 @@ export default function SignUp() {
 	const handleRoleChange = (role) => {
 		setActiveType(role);
 		setValue("role", role);
+	};
+
+	const onSubmit = (data) => {
+		signup({ ...data, role: activeType });
+		console.log({ ...data, role: activeType });
 	};
 
 	return (
@@ -139,11 +143,11 @@ export default function SignUp() {
 							/>
 							<CustomInput
 								label={"Phone Number"}
-								name="phoneNo"
-								register={register("phoneNo", {
+								name="phone"
+								register={register("phone", {
 									required: "Phone Number is required",
 								})}
-								error={errors?.phoneNo?.message}
+								error={errors?.phone?.message}
 								placeholder={"09013647832"}
 							/>
 						</div>
@@ -180,26 +184,26 @@ export default function SignUp() {
 							<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 								<CustomInput
 									label={"Room Number"}
-									name="roomNo"
+									name="room"
 									register={register(
-										"roomNo",
+										"room",
 										activeType === "user" && {
 											required: "Room Number is required",
 										}
 									)}
-									error={errors?.roomNo?.message}
+									error={errors?.room?.message}
 									placeholder={"A1"}
 								/>
 								<CustomInput
 									label={"Guardian/Parent Name"}
-									name="guardianName"
+									name="guardian_name"
 									register={register(
-										"guardianName",
+										"guardian_name",
 										activeType === "user" && {
 											required: "This field is required",
 										}
 									)}
-									error={errors?.guardianName?.message}
+									error={errors?.guardian_name?.message}
 									placeholder={"Jane Doe"}
 								/>
 							</div>
@@ -257,6 +261,7 @@ export default function SignUp() {
 								bordered
 								borderSize="lg"
 								onClick={() => navigate("/login")}
+								disabled={isSigningUp}
 							/>
 						</div>
 						<div className="w-[30%]">
@@ -267,11 +272,13 @@ export default function SignUp() {
 								bordered
 								borderSize="lg"
 								type="submit"
+								disabled={isSigningUp}
 							/>
 						</div>
 					</div>
 				</form>
 			</div>
+			{isSigningUp && <CustomBackdrop open={true} text={"Please wait..."} />}
 		</div>
 	);
 }

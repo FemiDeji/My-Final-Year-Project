@@ -13,7 +13,6 @@ const LinkItem = ({
 
 	const handleRedirect = () => {
 		if (setIsSidebarOpen) {
-			console.log("closing...");
 			setIsSidebarOpen(false);
 		}
 		navigate(url);
