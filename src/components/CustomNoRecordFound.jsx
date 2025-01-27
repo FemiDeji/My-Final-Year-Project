@@ -5,9 +5,9 @@ function CustomNoRecordFound({ text = "No Record Found" }) {
 	return (
 		<div className="my-5 text-center text-xs flex items-center justify-center gap-2">
 			<span>
-				<MdOutlineSearchOff className="text-xl" />
+				<MdOutlineSearchOff className="text-xl xs:text-lg" />
 			</span>
-			<span>{text}</span>
+			<span className="xs:text-[10.5px] text-[12px]">{text}</span>
 		</div>
 	);
 }
