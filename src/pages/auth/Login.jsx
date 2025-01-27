@@ -31,7 +31,6 @@ export default function Login() {
 
 	const onSubmit = (data) => {
 		login({ ...data }, { onSettled: () => reset({ data: "" }) });
-		console.log("login data: ", { ...data });
 	};
 
 	return (

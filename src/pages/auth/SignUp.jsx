@@ -69,7 +69,7 @@ export default function SignUp() {
 
 	return (
 		<div
-			className={`min-h-screen "xs:min-h-[150vh]" : "xs:min-h-full" flex flex-row justify-center items-center w-full xs:overflow-y-auto`}>
+			className={`min-h-screen h-full "xs:min-h-[150vh]" : "xs:min-h-full" flex flex-row justify-center items-center w-full xs:overflow-y-auto`}>
 			<div className="bg-general-yellow flex flex-col justify-center items-center xs:w-0 w-[50%] h-full">
 				<img
 					src="/AU_Senate_Building.jpg"
