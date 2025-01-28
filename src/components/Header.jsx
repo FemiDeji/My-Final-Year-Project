@@ -39,7 +39,7 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 							<div className="font-medium text-base xs:text-sm">
 								{user?.user_metadata?.fullname}
 							</div>
-							<div className="text-xs font-normal mb-1">
+							<div className="text-xs font-medium mb-1">
 								{user?.user_metadata?.username}
 							</div>
 						</div>
