@@ -28,7 +28,7 @@ export default function SideBar({
 	return (
 		<>
 			<div
-				className={`bg-white text-general-blue p-3.5 h-[80vh] mt-[4.5rem] scrollable fixed xs:flex xs:flex-col xs:min-h-screen xs:mt-[3.8rem] xs:transition-transform xs:duration-300 xs:ease-in-out ${
+				className={`bg-white text-general-blue p-3.5 h-[80vh] mt-[4.5rem] scrollable fixed xs:flex xs:flex-col xs:min-h-screen xs:mt-[3.8rem] xs:transition-transform xs:duration-300 xs:ease-in-out xs:z-50 ${
 					!isSidebarOpen ? "xs:translate-x-0" : "xs:-translate-x-full"
 				} ${
 					showIconsOnly
