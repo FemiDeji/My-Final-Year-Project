@@ -11,7 +11,7 @@ function Table({
 	data,
 	onViewClick,
 	viewTitle,
-	isView,
+	isView = false,
 	isDownolad,
 	hasActions = true,
 	navKey = "id",

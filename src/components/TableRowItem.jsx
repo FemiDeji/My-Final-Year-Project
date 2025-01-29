@@ -10,7 +10,7 @@ function TableRowItem({
 	dataList,
 	onViewClick,
 	viewTitle,
-	isView = false,
+	isView,
 	isDownload,
 	navKey = "id",
 }) {

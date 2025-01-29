@@ -13,7 +13,7 @@ export default function BookingSummary({ data }) {
 
 	return (
 		<div className="w-full items-center justify-center flex">
-			<div className="w-full xs:h-[200px] h-[300px]">
+			<div className="w-full xs:h-[220px] h-[300px]">
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie

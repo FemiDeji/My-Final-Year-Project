@@ -13,7 +13,7 @@ export default function ActivityChart({ data }) {
 
 	return (
 		<div className="flex w-full justify-center items-center">
-			<div className="w-full h-[350px] xs:h-[200px]">
+			<div className="w-full h-[350px] xs:h-[220px]">
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie

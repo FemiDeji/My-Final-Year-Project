@@ -14,7 +14,8 @@ module.exports = {
 				"general-bg": "#fafafa",
 			},
 			screens: {
-				xs: { min: "320px", max: "426px" },
+				xs: { min: "320px", max: "769px" },
+				cl: { max: "769px" },
 			},
 		},
 	},

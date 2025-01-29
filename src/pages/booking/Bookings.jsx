@@ -8,16 +8,16 @@ export default function Bookings() {
 	const headers = [
 		{ key: "matric_no", value: "Matric No" },
 		{ key: "fullname", value: "Full Name" },
-		{ key: "phone_no", value: "Phone No" },
+		// { key: "phone_no", value: "Phone No" },
 		{ key: "department", value: "Department" },
-		{ key: "room_no", value: "Room No" },
-		{ key: "guardian_name", value: "Guardian Name" },
-		{ key: "guardian_phone_contact", value: "Guardian Phone No" },
-		{ key: "type", value: "Type" },
-		{ key: "destination", value: "destination" },
-		{ key: "purpose", value: "Purpose" },
-		{ key: "start_date", value: "Start Date" },
-		{ key: "end_date", value: "End Date" },
+		// { key: "room_no", value: "Room No" },
+		// { key: "guardian_name", value: "Guardian Name" },
+		// { key: "guardian_phone_contact", value: "Guardian Phone No" },
+		// { key: "type", value: "Type" },
+		{ key: "destination", value: "Destination" },
+		// { key: "purpose", value: "Purpose" },
+		// { key: "start_date", value: "Start Date" },
+		// { key: "end_date", value: "End Date" },
 		{ key: "status", value: "Status" },
 	];
 
@@ -39,7 +39,7 @@ export default function Bookings() {
 					</div>
 				</div>
 				<div>
-					<Table headers={headers} data={[]} />
+					<Table headers={headers} data={[]} isView />
 				</div>
 			</div>
 		</Layout>
