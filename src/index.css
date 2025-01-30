@@ -9,10 +9,6 @@
 	scroll-behavior: smooth;
 }
 
-body {
-	zoom: 90%;
-}
-
 html,
 body,
 #root {
@@ -25,6 +21,7 @@ body,
 	body,
 	#root {
 		overflow-y: auto;
+		overflow: auto;
 	}
 }
 .scrollable {

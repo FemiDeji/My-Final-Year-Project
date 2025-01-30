@@ -18,7 +18,7 @@ export default function CustomInput({
 			<fieldset
 				className={`w-full border-2 p-2 py-1.5 rounded-${borderSize} ${
 					error ? "border-red-400" : "border-gray-300"
-				} ${!readOnly ? "bg-[transparent]" : "bg-gray-100"}`}>
+				} ${!readOnly ? "bg-[transparent]" : "bg-gray-50"}`}>
 				{label && (
 					<legend className="text-gray-500 bg-transparent px-2 text-sm">
 						{label} {required && <span className="text-red-500 pl-1">*</span>}
