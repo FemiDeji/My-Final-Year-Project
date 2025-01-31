@@ -35,7 +35,7 @@ const LinkItem = ({
         ${isActive ? "h-11 " : ""} 
       `}>
 			<div className="text-[1.5em] xs:text-[1.3em]">{children}</div>
-			{!showIconOnly && <div className="xs:text-[1em]">{text}</div>}
+			{!showIconOnly && <div className="xs:text-[0.9em]">{text}</div>}
 		</div>
 	);
 };

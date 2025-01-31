@@ -67,7 +67,7 @@ export default function Layout({
 					/>
 				</div>
 				<div
-					className={`flex flex-col right-0 gap-3 bg-[whitesmoke] mt-[3.8rem] ml-1 ${
+					className={`flex flex-col right-0 gap-3 bg-[whitesmoke] mt-[3.8rem] xs:mt-[3.5rem] ml-1 ${
 						showIconsOnly
 							? "lg:w-[93%] xl:w-[95%]"
 							: "lg:w-[78%] xl:w-[82%] xs:w-full"

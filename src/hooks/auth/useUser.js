@@ -7,6 +7,8 @@ export default function useUser() {
 		queryFn: getCurrentUser,
 	});
 
+	const profile = user?.profile || {};
+
 	const isStudent = user?.role === "user";
 	const isAdmin = user?.role === "admin";
 	const isSuperAdmin = user?.role === "super-admin";
@@ -15,5 +17,13 @@ export default function useUser() {
 		user?.role === "admin" ||
 		user?.role === "super-admin";
 
-	return { isPending, isStudent, isAdmin, isSuperAdmin, isAuthenticated, user };
+	return {
+		isPending,
+		isStudent,
+		isAdmin,
+		isSuperAdmin,
+		isAuthenticated,
+		user,
+		profile,
+	};
 }

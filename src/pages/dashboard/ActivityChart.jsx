@@ -13,7 +13,7 @@ export default function ActivityChart({ data }) {
 
 	return (
 		<div className="flex w-full justify-center items-center">
-			<div className="w-full h-[350px] xs:h-[220px]">
+			<div className="w-full h-[290px] xs:h-[220px]">
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie
@@ -32,7 +32,7 @@ export default function ActivityChart({ data }) {
 								<Cell
 									key={`cell-${index}`}
 									fill={COLORS[index % COLORS.length]}
-									fontSize={"90%"}
+									fontSize={"75%"}
 								/>
 							))}
 						</Pie>

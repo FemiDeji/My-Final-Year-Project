@@ -9,6 +9,7 @@ import CustomBackdrop from "./CustomBackdrop";
 import useUser from "../hooks/auth/useUser";
 import { useState } from "react";
 import { delayAction } from "../helpers/custom";
+import UserAvatar from "../pages/auth/UserAvatar";
 
 export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 	const { logout, isLoggingOut } = useLogout();
@@ -33,9 +34,11 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 					onClick={() => navigate("/dashboard")}
 				/>
 				<div className="flex items-center gap-6 cursor-pointer">
-					<div className="xs:hidden rounded-full w-10 h-10 border-white border-2 bg-general-yellow"></div>
+					<div className="xs:hidden">
+						<UserAvatar />
+					</div>
 					<div className="text-general-blue flex flex-row gap-5 justify-center items-center">
-						<div className="flex justify-start items-start xs:items-end flex-col">
+						<div className="flex justify-start items-end flex-col">
 							<div className="font-medium text-base xs:text-sm">
 								{user?.user_metadata?.fullname}
 							</div>
@@ -43,14 +46,11 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 								{user?.user_metadata?.username}
 							</div>
 						</div>
-						<img
-							src="AU_logo.jpg"
-							alt="AU logo"
-							className="h-[45px] lg:hidden"
-						/>
 					</div>
 					<div className="xs:hidden bg-general-blue h-[2.5rem] w-[0.1rem]"></div>
-
+					<div className="lg:hidden">
+						<UserAvatar />
+					</div>
 					<div
 						className="flex gap-2 items-center xs:hidden text-general-light-red"
 						onClick={() => {

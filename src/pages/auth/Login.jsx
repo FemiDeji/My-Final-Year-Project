@@ -113,6 +113,7 @@ export default function Login() {
 							textColor="#002855"
 							bordered
 							borderSize="lg"
+							disabled={isLogginIn}
 							onClick={() => {
 								setIsLoading(true);
 								delayAction(() => {

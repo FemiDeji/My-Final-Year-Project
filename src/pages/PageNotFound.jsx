@@ -13,7 +13,7 @@ export default function PageNotFound() {
 				</div>
 				<div className="w-[35%] xs:w-[50%]">
 					<CustomButton
-						onClick={() => navigate(-1)}
+						onClick={() => navigate("/dashboard")}
 						bgColor="#f2c008"
 						bordered
 						borderSize="lg"

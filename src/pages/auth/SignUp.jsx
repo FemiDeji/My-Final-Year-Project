@@ -80,7 +80,7 @@ export default function SignUp() {
 			</div>
 			<div className="xs:w-full xs:h-screen w-[50%] flex flex-col justify-center items-center h-screen overflow-y-auto py-5">
 				<div className="w-full h-screen min-h-screen">
-					<div className="w-full flex justify-center items-center">
+					<div className="w-full flex justify-center items-center lg:hidden">
 						<img
 							src="AU_logo.jpg"
 							alt="AU logo"
@@ -231,7 +231,7 @@ export default function SignUp() {
 							<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 								<div className="w-full relative">
 									<CustomInput
-										label={"Password"}
+										label={"Password (min 8 chars)"}
 										name="password"
 										register={register("password", {
 											required: "Password is required",

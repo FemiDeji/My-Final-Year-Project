@@ -1,17 +1,14 @@
 /* eslint-disable react/prop-types */
-export default function CustomInput({
+export default function FileInput({
 	label,
 	register,
-	type = "text",
-	placeholder,
+	type = "file",
 	name = "",
 	required = true,
 	readOnly = false,
 	error = "",
-	maxLength,
-	onInput,
 	borderSize = "md",
-	autoFocus,
+	onChange,
 }) {
 	return (
 		<div className="w-full">
@@ -27,17 +24,10 @@ export default function CustomInput({
 				{/* Spread the register function return value */}
 				<input
 					{...register}
+					onChange={onChange}
 					type={type}
-					placeholder={placeholder}
+					className="text-[0.8rem] xs:text-[0.65rem] rounded-sm file:font-medium file:px-4 file:py-1.5 file:rounded-md file:border-none file:cursor-pointer file:transition-colors file:duration-200 hover:file:bg-brand-700"
 					name={name}
-					id={name}
-					readOnly={readOnly}
-					maxLength={maxLength}
-					onInput={onInput}
-					autoFocus={autoFocus}
-					className={`w-full outline-none text-sm pl-2 bg-[transparent] ${
-						readOnly ? "text-gray-700" : ""
-					}`}
 				/>
 			</fieldset>
 			{/* Display error message if any */}

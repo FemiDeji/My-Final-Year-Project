@@ -79,16 +79,19 @@ export async function getCurrentUser() {
 	if (userError) throw new Error(userError.message);
 
 	// Step 3: Fetch the user role from the profiles table
-	const { data: profile, error: profileError } = await supabase
+	const { data: profileData, error: profileError } = await supabase
 		.from("profiles")
-		.select("role")
+		.select("*")
 		.eq("auth_id", user.user.id)
 		.single();
 
 	if (profileError) throw new Error(profileError.message);
+	console.log("profile", profileData);
+	console.log("user", user);
 
 	// Step 4: Return the user details with the role
-	return { ...user.user, role: profile.role };
+
+	return { ...user.user, role: profileData.role, profile: profileData };
 }
 
 export async function logout() {
@@ -102,6 +105,7 @@ export async function updateCurrentUser({
 	phone_no,
 	room_no,
 	guardian_name,
+	guardian_phone,
 	department,
 	level,
 	avatar,
@@ -109,36 +113,56 @@ export async function updateCurrentUser({
 	// Step 1: Upload the password OR fullname
 	let updateData;
 	if (password) updateData = { password };
-	if (fullname) updateData = { data: { fullname } };
-	if (phone_no) updateData = { phone_no };
-	if (room_no) updateData = { room_no };
-	if (guardian_name) updateData = { guardian_name };
-	if (department) updateData = { department };
-	if (level) updateData = { level };
+	if (fullname) updateData = { fullname };
 
 	const { data, error } = await supabase.auth.updateUser(updateData);
-
 	if (error) throw new Error(error.message);
-	if (!avatar) return data;
+
+	const userId = data?.user?.id;
+	if (!userId) throw new Error("User ID not found!");
 
 	// Step 2: Upload the avatar image
-	const fileName = `avatar-${data.user.id}-${Date.now()}`;
+	let avatarUrl = null;
+	if (avatar) {
+		const fileName = `avatar-${userId}-${Date.now()}`;
 
-	const { error: storageError } = await supabase.storage
-		.from("avatars")
-		.upload(fileName, avatar);
+		const { error: storageError } = await supabase.storage
+			.from("avatars")
+			.upload(fileName, avatar);
 
-	if (storageError) throw new Error(storageError.message);
+		if (storageError) throw new Error(storageError.message);
+		avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+	}
 
 	// Step 3: Update avatar in the user
-	const { data: updatedUser, error: updateUserError } =
-		await supabase.auth.updateUser({
-			data: {
-				avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-			},
-		});
+	const { error: avatarUpdateError } = await supabase.auth.updateUser({
+		data: {
+			avatar: avatarUrl,
+		},
+	});
 
-	if (updateUserError) throw new Error(updateUserError.message);
+	if (avatarUpdateError) throw new Error(avatarUpdateError.message);
 
-	return updatedUser;
+	//Step 3: Update the profiles table
+	const profileUpdateData = {
+		...(fullname && { fullname }),
+		...(phone_no && { phone_no }),
+		...(room_no && { room_no }),
+		...(guardian_name && { guardian_name }),
+		...(guardian_phone && { guardian_phone }),
+		...(department && { department }),
+		...(level && { level }),
+		...(avatarUrl && { avatar: avatarUrl }),
+	};
+
+	if (Object.keys(profileUpdateData).length > 0) {
+		const { error: profileError } = await supabase
+			.from("profiles")
+			.update(profileUpdateData)
+			.eq("auth_id", userId);
+
+		if (profileError) throw new Error(profileError.message);
+	}
+
+	return data;
 }
