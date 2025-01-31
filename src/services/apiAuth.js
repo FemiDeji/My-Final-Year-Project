@@ -46,6 +46,32 @@ export async function signup({
 	return data;
 }
 
+/* export async function login({ identifier, password }) {
+	// Step 1: Log in using Supabase Auth
+	const { data: authData, error: authError } =
+		await supabase.auth.signInWithPassword({
+			email: identifier, // identifier can be email or username
+			password,
+		});
+
+	if (authError) throw new Error(authError.message);
+	const user = authData?.user;
+	if (!user) throw new Error("Login failed. No user found.");
+
+	// Step 2: Fetch the user profile using `auth_id`
+	const { data: profile, error: profileError } = await supabase
+		.from("profiles")
+		.select("*")
+		.eq("auth_id", user.id) // Using `auth_id` to match the correct profile
+		.single(); // Ensure we only fetch one profile
+
+	if (profileError) throw new Error(profileError.message);
+
+	// Return both user and profile
+	return { user, profile };
+}
+ */
+
 export async function login({ identifier, password }) {
 	// Step 1: Check if the identifier is a username or email
 
@@ -117,6 +143,7 @@ export async function updateCurrentUser({
 
 	const { data, error } = await supabase.auth.updateUser(updateData);
 	if (error) throw new Error(error.message);
+	if (!avatar) return data;
 
 	const userId = data?.user?.id;
 	if (!userId) throw new Error("User ID not found!");
@@ -126,12 +153,14 @@ export async function updateCurrentUser({
 	if (avatar) {
 		const fileName = `avatar-${userId}-${Date.now()}`;
 
-		const { error: storageError } = await supabase.storage
+		const { data: avatarData, error: storageError } = await supabase.storage
 			.from("avatars")
 			.upload(fileName, avatar);
 
 		if (storageError) throw new Error(storageError.message);
 		avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+
+		return avatarData;
 	}
 
 	// Step 3: Update avatar in the user
