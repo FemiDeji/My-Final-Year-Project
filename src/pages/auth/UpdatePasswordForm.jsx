@@ -11,6 +11,7 @@ export default function UpdatePasswordForm() {
 	const { updateUser, isUpdating } = useUpdateUser();
 	const { logout, isLoggingOut } = useLogout();
 	const [showPassword, setShowPassword] = useState(false);
+	const [showPassword2, setShowPassword2] = useState(false);
 
 	const {
 		register,
@@ -45,7 +46,7 @@ export default function UpdatePasswordForm() {
 				<div className="flex justify-center items-start xs:flex-col gap-5">
 					<div className="w-full relative">
 						<CustomInput
-							label={"New password"}
+							label={"New password (min 8 chars)"}
 							name="password"
 							register={register("password", {
 								required: "Password is required",
@@ -69,18 +70,30 @@ export default function UpdatePasswordForm() {
 							)}
 						</span>
 					</div>
-
-					<CustomInput
-						label={"Confirm password"}
-						name="confirmPassword"
-						register={register("confirmPassword", {
-							required: "Confirm password is required",
-							validate: (value) =>
-								value === getValues().password || "Passwords do not match",
-						})}
-						error={errors?.confirmPassword?.message}
-						type="password"
-					/>
+					<div className="w-full relative">
+						<CustomInput
+							label={"Confirm password"}
+							name="confirmPassword"
+							register={register("confirmPassword", {
+								required: "Confirm password is required",
+								validate: (value) =>
+									value === getValues().password || "Passwords do not match",
+							})}
+							error={errors?.confirmPassword?.message}
+							type={showPassword2 ? "text" : "password"}
+						/>
+						<span
+							className={`absolute right-3 ${
+								errors.password ? "top-[45%]" : "top-[57%]"
+							} transform -translate-y-1/2 cursor-pointer text-gray-500`}
+							onClick={() => setShowPassword2(!showPassword2)}>
+							{showPassword2 ? (
+								<MdVisibilityOff size={24} />
+							) : (
+								<MdVisibility size={24} />
+							)}
+						</span>
+					</div>
 				</div>
 				<div className="ml-auto flex justify-end items-end gap-3 w-[35%] xs:w-[100%] mt-2">
 					<CustomButton

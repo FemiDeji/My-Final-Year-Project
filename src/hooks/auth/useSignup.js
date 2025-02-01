@@ -8,8 +8,7 @@ export default function useSignup() {
 	const navigate = useNavigate();
 	const { mutate: signup, isPending: isSigningUp } = useMutation({
 		mutationFn: signupApi,
-		onSuccess: (data) => {
-			console.log("signup:", data);
+		onSuccess: () => {
 			toast.success("Account successfully created!");
 			delayAction(() => {
 				navigate("/login");

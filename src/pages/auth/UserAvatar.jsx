@@ -3,7 +3,6 @@ import useUser from "../../hooks/auth/useUser";
 
 export default function UserAvatar() {
 	const { user, isPending } = useUser();
-	console.log("User:", user);
 
 	return (
 		<>

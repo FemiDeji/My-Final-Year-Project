@@ -11,6 +11,7 @@ export async function signup({
 	department,
 	room,
 	guardian_name,
+	guardian_phone,
 }) {
 	// Step 1: Sign up the user in the auth table
 	const { data, error } = await supabase.auth.signUp({
@@ -38,6 +39,7 @@ export async function signup({
 			level,
 			room,
 			guardian_name,
+			guardian_phone,
 			role,
 		});
 
@@ -112,8 +114,6 @@ export async function getCurrentUser() {
 		.single();
 
 	if (profileError) throw new Error(profileError.message);
-	console.log("profile", profileData);
-	console.log("user", user);
 
 	// Step 4: Return the user details with the role
 
@@ -128,8 +128,8 @@ export async function logout() {
 export async function updateCurrentUser({
 	fullname,
 	password,
-	phone_no,
-	room_no,
+	phone,
+	room,
 	guardian_name,
 	guardian_phone,
 	department,
@@ -143,7 +143,6 @@ export async function updateCurrentUser({
 
 	const { data, error } = await supabase.auth.updateUser(updateData);
 	if (error) throw new Error(error.message);
-	if (!avatar) return data;
 
 	const userId = data?.user?.id;
 	if (!userId) throw new Error("User ID not found!");
@@ -153,30 +152,29 @@ export async function updateCurrentUser({
 	if (avatar) {
 		const fileName = `avatar-${userId}-${Date.now()}`;
 
-		const { data: avatarData, error: storageError } = await supabase.storage
+		const { error: storageError } = await supabase.storage
 			.from("avatars")
 			.upload(fileName, avatar);
 
 		if (storageError) throw new Error(storageError.message);
 		avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
-
-		return avatarData;
 	}
 
 	// Step 3: Update avatar in the user
-	const { error: avatarUpdateError } = await supabase.auth.updateUser({
-		data: {
-			avatar: avatarUrl,
-		},
-	});
-
-	if (avatarUpdateError) throw new Error(avatarUpdateError.message);
+	if (avatarUrl) {
+		const { error: avatarUpdateError } = await supabase.auth.updateUser({
+			data: {
+				avatar: avatarUrl,
+			},
+		});
+		if (avatarUpdateError) throw new Error(avatarUpdateError.message);
+	}
 
 	//Step 3: Update the profiles table
 	const profileUpdateData = {
 		...(fullname && { fullname }),
-		...(phone_no && { phone_no }),
-		...(room_no && { room_no }),
+		...(phone && { phone }),
+		...(room && { room }),
 		...(guardian_name && { guardian_name }),
 		...(guardian_phone && { guardian_phone }),
 		...(department && { department }),

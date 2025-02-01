@@ -13,7 +13,7 @@ export default function FileInput({
 	return (
 		<div className="w-full">
 			<fieldset
-				className={`w-full border-2 p-2 py-1.5 rounded-${borderSize} ${
+				className={`w-full border-2 p-2 py-1 rounded-${borderSize} ${
 					error ? "border-red-400" : "border-gray-300"
 				} ${!readOnly ? "bg-[transparent]" : "bg-gray-50"}`}>
 				{label && (
@@ -26,7 +26,7 @@ export default function FileInput({
 					{...register}
 					onChange={onChange}
 					type={type}
-					className="text-[0.8rem] xs:text-[0.65rem] rounded-sm file:font-medium file:px-4 file:py-1.5 file:rounded-md file:border-none file:cursor-pointer file:transition-colors file:duration-200 hover:file:bg-brand-700"
+					className="text-[0.7rem] xs:text-[0.65rem] rounded-sm file:font-medium file:px-4 file:py-[0.36rem] file:rounded-md file:border-none file:cursor-pointer file:transition-colors file:duration-200 hover:file:bg-brand-700"
 					name={name}
 				/>
 			</fieldset>

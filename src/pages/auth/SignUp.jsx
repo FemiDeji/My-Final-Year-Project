@@ -13,6 +13,7 @@ export default function SignUp() {
 	const [levels, setLevels] = useState("");
 	const [activeType, setActiveType] = useState("user");
 	const [showPassword, setShowPassword] = useState(false);
+	const [showPassword2, setShowPassword2] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -266,8 +267,19 @@ export default function SignUp() {
 												"Passwords do not match",
 										})}
 										error={errors?.confirmPassword?.message}
-										type={"password"}
+										type={showPassword2 ? "text" : "password"}
 									/>
+									<span
+										className={`absolute right-3 ${
+											errors.password ? "top-[45%]" : "top-[57%]"
+										} transform -translate-y-1/2 cursor-pointer text-gray-500`}
+										onClick={() => setShowPassword2(!showPassword2)}>
+										{showPassword2 ? (
+											<MdVisibilityOff size={24} />
+										) : (
+											<MdVisibility size={24} />
+										)}
+									</span>
 								</div>
 							</div>
 						</div>
