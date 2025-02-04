@@ -8,6 +8,7 @@ import SignUp from "./pages/auth/SignUp";
 import { Toaster } from "react-hot-toast";
 import PageNotFound from "./pages/PageNotFound";
 import Settings from "./pages/settings/Settings";
+import CreateBookingForm from "./pages/booking/CreateBookingForm";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ function App() {
 					<Route path="/bookings" element={<Bookings />} />
 					<Route path="/history" element={<History />} />
 					<Route path="/settings" element={<Settings />} />
+					<Route path="/new-booking" element={<CreateBookingForm />} />
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 

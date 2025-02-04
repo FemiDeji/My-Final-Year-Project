@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-export default function CustomInput({
+export default function CustomTextarea({
 	label,
 	register,
 	type = "text",
@@ -13,6 +13,7 @@ export default function CustomInput({
 	borderSize = "md",
 	autoFocus,
 	disabled = false,
+	row = 3,
 }) {
 	return (
 		<div className="w-full">
@@ -26,7 +27,7 @@ export default function CustomInput({
 					</legend>
 				)}
 				{/* Spread the register function return value */}
-				<input
+				<textarea
 					{...register}
 					type={type}
 					placeholder={placeholder}
@@ -37,6 +38,7 @@ export default function CustomInput({
 					maxLength={maxLength}
 					onInput={onInput}
 					autoFocus={autoFocus}
+					rows={row}
 					className={`w-full outline-none text-sm pl-2 bg-[transparent] ${
 						readOnly ? "text-gray-700" : ""
 					}`}

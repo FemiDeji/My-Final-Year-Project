@@ -22,6 +22,7 @@ function CustomSelectField({
 	onFocus = () => {},
 	borderSize = "md",
 	register,
+	classname,
 }) {
 	const [selectedValue, setSelectedValue] = useState(initialValue ?? "");
 
@@ -38,13 +39,13 @@ function CustomSelectField({
 	}, [initialValue]);
 
 	return (
-		<div className={`w-full`}>
+		<div className={`w-full `}>
 			<fieldset
 				// className={`mb-1 text-left w-full flex ${
 				// 	singleLine ? "flex-row items-center" : "flex-col"
 				// } relative`}
 				className={`${singleLine ? "w-[70%]" : "w-full"} ${
-					readOnly || disabled ? "bg-transparent" : "bg-transparent"
+					!readOnly && !disabled ? "bg-transparent" : "bg-gray-50"
 				} h-[3.6rem] border-2 rounded-${borderSize} px-3  outline-none ${
 					error ? "border-red-400" : "border-gray-300"
 				}`}>
@@ -59,19 +60,18 @@ function CustomSelectField({
 					{...register}
 					disabled={readOnly}
 					defaultValue={selectedValue}
-					className="bg-transparent w-full h-[2.3rem] outline-none pl-2"
+					className={`bg-transparent w-full h-[2.3rem] outline-none pl-2 `}
 					value={selectedValue}
-					// className={`${singleLine ? "w-[70%]" : "w-full"} ${
-					// 	readOnly || disabled ? "bg-transparent" : "bg-transparent"
-					// } h-[3.3rem] border-2 rounded-${borderSize} px-5  outline-none ${
-					// 	error ? "border-red-300" : "border-gray-300"
-					// }`}
 					name={name}
 					id={name}
 					onChange={handleSelectChange}>
 					{placeholder && <option value="">-- {placeholder} --</option>}
+
 					{options?.map((option) => (
-						<option key={option[optionKey]} value={option[optionKey]}>
+						<option
+							key={option[optionKey]}
+							value={option[optionKey]}
+							className={`${classname}`}>
 							{option[optionLabel]}
 						</option>
 					))}

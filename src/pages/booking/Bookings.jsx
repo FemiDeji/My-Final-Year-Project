@@ -3,13 +3,10 @@ import CustomButton from "../../components/CustomButton";
 import CustomSearchField from "../../components/CustomSearchField";
 import Layout from "../../components/Layout";
 import Table from "../../components/Table";
-import { useState } from "react";
-import GeneralModal from "../../components/GeneralModal";
-import CreateBookingForm from "./CreateBookingForm";
+import { useNavigate } from "react-router-dom";
 
 export default function Bookings() {
-	const [showBookingModal, setShowBookingModal] = useState(false);
-	const [studentDetails, setStudentDetails] = useState(null);
+	const navigate = useNavigate();
 
 	const headers = [
 		{ key: "matric_no", value: "Matric No" },
@@ -40,7 +37,7 @@ export default function Bookings() {
 							bgColor="#f2c008"
 							textColor="#002855"
 							bordered
-							onClick={() => setShowBookingModal(true)}>
+							onClick={() => navigate("/new-booking")}>
 							<FaPlus />
 						</CustomButton>
 					</div>
@@ -49,17 +46,6 @@ export default function Bookings() {
 					<Table headers={headers} data={[]} isView />
 				</div>
 			</div>
-
-			<GeneralModal
-				isOpen={showBookingModal}
-				widthClass="w-full"
-				onClose={() => setShowBookingModal(false)}
-				showCloseButton>
-				<CreateBookingForm
-					setStudentDetails={setStudentDetails}
-					close={setShowBookingModal}
-				/>
-			</GeneralModal>
 		</Layout>
 	);
 }
