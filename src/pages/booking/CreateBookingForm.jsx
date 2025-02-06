@@ -8,18 +8,24 @@ import { useEffect, useState } from "react";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import CustomTextarea from "../../components/CustomTextarea";
 import { states } from "../../helpers/states";
+import { dateDifference } from "../../helpers/dateAndTime";
+import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
 	const [submitType, setSubmitType] = useState("");
 	const [passType, setPassType] = useState("short");
+	const [userDetails, setUserDetails] = useState(null);
+	const today = new Date().toISOString().split("T")[0];
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		setValue,
+		getValues,
 		watch,
+		reset,
 	} = useForm({
 		mode: "onBlur",
 		defaultValues: {
@@ -35,14 +41,27 @@ export default function CreateBookingForm() {
 			type: "",
 			destination: "",
 			purpose: "",
-			startDate: new Date(),
-			endDate: "",
+			startDate: today,
+			endDate: today,
 			num_days: 0,
 		},
 	});
 
+	const { createUpdateBooking, isBooking } = useCreateUpdateBooking();
+
 	const username = watch("username");
 	const isDisabled = !watch("fullname");
+
+	const startDate = watch("startDate");
+	const endDate = watch("endDate");
+
+	useEffect(() => {
+		if (startDate && endDate) {
+			const days = dateDifference(startDate, endDate);
+
+			setValue("num_days", days);
+		}
+	}, [startDate, endDate, setValue, passType]);
 
 	const passTypeOptions = [
 		{ key: "short", value: "Short pass" },
@@ -54,10 +73,20 @@ export default function CreateBookingForm() {
 		setValue("type", type);
 	};
 
+	const handleReset = () => {
+		setValue("destination", "");
+		setValue("startDate", "");
+		setValue("endDate", "");
+		setValue("type", "");
+
+		reset();
+	};
+
 	const onSubmit = async (data) => {
 		if (submitType === "fetchProfile") {
 			try {
 				const response = await profile(data.username);
+				setUserDetails(response);
 				console.log("response", response);
 				if (response) {
 					setValue("fullname", response.fullname);
@@ -73,6 +102,28 @@ export default function CreateBookingForm() {
 			} catch (err) {
 				console.error(err.mesaage);
 			}
+		}
+		if (submitType === "general") {
+			const bookingData = {
+				username: data.username,
+				email: data.email,
+				fullname: data.fullname,
+				department: data.department,
+				phone: data.phone,
+				room: data.room,
+				start_date: data.startDate,
+				end_date: data.endDate,
+				user_id: userDetails.id,
+				guardian_name: data.guardian_name,
+				guardian_phone: data.guardian_phone,
+				type: data.type,
+				destination: data.destination,
+				purpose: data.purpose,
+				num_days: data.num_days,
+			};
+
+			createUpdateBooking(bookingData, { onSuccess: () => handleReset() });
+			console.log("Data", { ...data });
 		}
 	};
 
@@ -191,20 +242,16 @@ export default function CreateBookingForm() {
 						optionKey="key"
 						optionLabel="value"
 						onChange={handlePassTypeOptionChange}
-						initialValue="short"
+						register={register(
+							"type",
+							submitType === "general" && !passType
+								? { required: "Pass type is required" }
+								: false
+						)}
+						error={errors?.type?.message}
 					/>
 				</div>
 				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomSelectField
-						name="destination"
-						label={"Destination"}
-						readOnly={isDisabled}
-						placeholder={"State"}
-						options={states}
-						optionKey="state"
-						optionLabel="state"
-					/>
-
 					<CustomInput
 						name="startDate"
 						label={"Start Date"}
@@ -212,14 +259,17 @@ export default function CreateBookingForm() {
 						disabled={isDisabled}
 						register={register(
 							"startDate",
-							submitType === "general" && {
-								required: "Start date is required",
-							}
+							submitType === "general" && passType === "long"
+								? {
+										required: "Start date is required",
+										validate: (value) =>
+											(passType === "long" && value <= getValues().endDate) ||
+											"Start date cannot be after end date",
+								  }
+								: false
 						)}
 						error={errors?.startDate?.message}
 					/>
-				</div>
-				<div className="flex flex-row xs:flex-col gap-3">
 					{passType === "long" && (
 						<CustomInput
 							name="endDate"
@@ -230,22 +280,62 @@ export default function CreateBookingForm() {
 								"endDate",
 								(submitType === "general" || passType === "long") && {
 									required: "End date is required",
+									validate: (value) =>
+										// console.log(value < getValues().startDate),
+										value >= getValues().startDate ||
+										"End date cannot be before start date",
 								}
 							)}
 							error={errors?.endDate?.message}
 						/>
 					)}
-					<CustomInput name="num_days" label={"Number of Days"} readOnly />
+				</div>
+
+				<div className="flex flex-row xs:flex-col gap-3">
+					<CustomInput
+						name="num_days"
+						label={"Number of Days"}
+						register={register("num_days", {
+							validate: (value) => {
+								if (passType === "long" && Number(value < 0)) {
+									return "A long pass must be more than a day";
+								}
+								return true;
+							},
+						})}
+						readOnly
+						error={errors?.num_days?.message}
+					/>
+					<CustomSelectField
+						name="destination"
+						label={"Destination"}
+						readOnly={isDisabled}
+						placeholder={"State"}
+						options={states}
+						optionKey="state"
+						optionLabel="state"
+						register={register(
+							"destination",
+							submitType === "general"
+								? {
+										required: "Destination is required",
+								  }
+								: false
+						)}
+						error={errors?.destination?.message}
+					/>
 				</div>
 				<div className="w-full">
 					<CustomTextarea
 						label={"Purpose"}
+						name="purpose"
 						placeholder={"Write your purpose here."}
 						disabled={isDisabled}
 						register={register(
 							"purpose",
 							submitType === "general" && { required: "Purpose is required" }
 						)}
+						error={errors?.purpose?.message}
 					/>
 				</div>
 				<div className="flex flex-row justify-center xs:justify-end items-center xs:items-end gap-3 w-[30%] ml-auto xs:w-full xs:m-0">
@@ -255,11 +345,27 @@ export default function CreateBookingForm() {
 						bordered
 						borderSize="lg"
 						onClick={() => close()}
+						disabled={isDisabled}
 					/>
-					<CustomButton label={"Submit"} bordered bgColor="#f2c008" />
+					<CustomButton
+						label={"Submit"}
+						onClick={() => {
+							setSubmitType("general");
+							console.log("clicked");
+						}}
+						bordered
+						bgColor="#f2c008"
+						type="submit"
+						disabled={isDisabled}
+					/>
 				</div>
 			</form>
-			{isPending && <CustomBackdrop open={true} text={"Fetching profile..."} />}
+			{(isPending || isBooking) && (
+				<CustomBackdrop
+					open={true}
+					text={isBooking ? "Please wait..." : "Fetching profile..."}
+				/>
+			)}
 		</Layout>
 	);
 }

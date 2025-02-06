@@ -10,5 +10,13 @@ export const convertToDateTime = (
 	return moment(dateString).format(format);
 };
 
+export const DATE_REQUEST_FORMAT = "YYYY-MM-DD";
 
-export const DATE_REQUEST_FORMAT = "YYYY-MM-DD"
+export function dateDifference(issueDate, expiryDate) {
+	const dateIssue = new Date(issueDate);
+	const dateExpire = new Date(expiryDate);
+	const differenceInTime = dateExpire - dateIssue;
+	const differenceInDays = differenceInTime / (1000 * 3600 * 48);
+
+	return Math.ceil(differenceInDays);
+}

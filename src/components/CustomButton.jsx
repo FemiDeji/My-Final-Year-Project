@@ -23,8 +23,8 @@ function CustomButton({
 			className={`w-full flex px-2 py-3 xs:py-2 gap-2 items-center justify-center ${
 				bordered ? `border rounded-${borderSize}` : ""
 			} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
-			{children && <div>{children}</div>}
-			<div className="font-semibold text-[13px]">{label}</div>
+			{children && <div className="xs:text-sm">{children}</div>}
+			<div className="font-semibold text-[13px] xs:text-[11px]">{label}</div>
 		</button>
 	);
 }

@@ -36,7 +36,7 @@ function App() {
 						success: { duration: 3000 },
 						error: { duration: 5000 },
 						style: {
-							fontSize: "15px",
+							fontSize: "13px",
 							maxWidth: "500px",
 							padding: "16px 24px",
 							backgroundColor: "white",
