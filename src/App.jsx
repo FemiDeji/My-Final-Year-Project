@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import PageNotFound from "./pages/PageNotFound";
 import Settings from "./pages/settings/Settings";
 import CreateBookingForm from "./pages/booking/CreateBookingForm";
+import ProtectedRoute from "./pages/auth/ProtectedRoute";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -17,15 +18,57 @@ function App() {
 		<QueryClientProvider client={queryClient}>
 			<BrowserRouter>
 				<Routes>
-					<Route index element={<Navigate replace to="/dashboard" />} />
+					{/* <Route index element={<Navigate replace to="/dashboard" />} /> */}
 					<Route path="/login" element={<Login />} />
-					<Route path="/signup" element={<SignUp />} />
-					<Route path="/dashboard" element={<Dashboard />} />
-					<Route path="/bookings" element={<Bookings />} />
-					<Route path="/history" element={<History />} />
-					<Route path="/settings" element={<Settings />} />
-					<Route path="/new-booking" element={<CreateBookingForm />} />
-					<Route path="*" element={<PageNotFound />} />
+					<Route
+						path="/signup"
+						element={
+							<ProtectedRoute authUser={["user", "admin"]}>
+								<SignUp />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/dashboard"
+						element={
+							<ProtectedRoute authUser={["user", "admin"]}>
+								<Dashboard />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/bookings"
+						element={
+							<ProtectedRoute authUser={["user"]}>
+								<Bookings />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/history"
+						element={
+							<ProtectedRoute authUser={["user", "admin"]}>
+								<History />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/settings"
+						element={
+							<ProtectedRoute authUser={["user", "admin"]}>
+								<Settings />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/new-booking"
+						element={
+							<ProtectedRoute authUser={["user"]}>
+								<CreateBookingForm />
+							</ProtectedRoute>
+						}
+					/>
+					<Route path="/unauthorized" element={<PageNotFound />} />
 				</Routes>
 
 				<Toaster

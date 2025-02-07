@@ -105,13 +105,15 @@ export default function SideBar({
 						<GoHome />
 					</LinkItem>
 
-					<LinkItem
-						text={"Bookings"}
-						url={"/bookings"}
-						showIconOnly={showIconsOnly}
-						setIsSidebarOpen={setIsSidebarOpen}>
-						<IoListOutline />
-					</LinkItem>
+					{isStudent && (
+						<LinkItem
+							text={"Bookings"}
+							url={"/bookings"}
+							showIconOnly={showIconsOnly}
+							setIsSidebarOpen={setIsSidebarOpen}>
+							<IoListOutline />
+						</LinkItem>
+					)}
 
 					<LinkItem
 						text={"History"}
