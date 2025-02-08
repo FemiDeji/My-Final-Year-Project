@@ -22,18 +22,26 @@ export default function ProtectedRoute({ children, authUser = [] }) {
 	});
 
 	useEffect(() => {
-		if (!user) {
+		if (user === undefined) return;
+		if (!user && !profile?.auth_id) {
 			navigate("/login");
 		}
 		return () => {};
-	}, [navigate, user]);
+	}, [navigate, user, profile?.auth_id, authUser, profile?.role]);
 
-	if (!user) return <Navigate to="/login" replace />;
+	if (user === undefined)
+		return <CustomBackdrop open={true} text={"Please wait..."} />;
+
+	if (!user && !profile?.auth_id) return <Navigate to="/login" replace />;
+
+	if (profile?.role && !authUser.includes(profile?.role)) {
+		return <Navigate to="/unauthorized" replace />;
+	}
 
 	if (
 		authUser.length > 0 &&
 		profile?.role &&
-		!authUser.includes(profile.role)
+		!authUser.includes(profile?.role)
 	) {
 		return <Navigate to="/unauthorized" replace />;
 	}

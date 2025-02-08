@@ -10,6 +10,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Settings from "./pages/settings/Settings";
 import CreateBookingForm from "./pages/booking/CreateBookingForm";
 import ProtectedRoute from "./pages/auth/ProtectedRoute";
+import Request from "./pages/request/Request";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -18,7 +19,7 @@ function App() {
 		<QueryClientProvider client={queryClient}>
 			<BrowserRouter>
 				<Routes>
-					{/* <Route index element={<Navigate replace to="/dashboard" />} /> */}
+					<Route index element={<Navigate replace to="/dashboard" />} />
 					<Route path="/login" element={<Login />} />
 					<Route
 						path="/signup"
@@ -65,6 +66,14 @@ function App() {
 						element={
 							<ProtectedRoute authUser={["user"]}>
 								<CreateBookingForm />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/requests"
+						element={
+							<ProtectedRoute authUser={["admin"]}>
+								<Request />
 							</ProtectedRoute>
 						}
 					/>

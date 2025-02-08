@@ -5,7 +5,7 @@ import ArrowLeftIcon from "./ArrowLeftIcon";
 import ArrowRightIcon from "./ArrowRightIcon";
 
 import LinkItem from "./LinkItem";
-import { IoListOutline } from "react-icons/io5";
+
 import { MdOutlineHistoryToggleOff } from "react-icons/md";
 import {
 	HiMiniArrowRightOnRectangle,
@@ -17,6 +17,7 @@ import CustomBackdrop from "./CustomBackdrop";
 import { useEffect, useRef, useState } from "react";
 import { delayAction } from "../helpers/custom";
 import useUser from "../hooks/auth/useUser";
+import { LuBook, LuBookDown } from "react-icons/lu";
 
 export default function SideBar({
 	showIconsOnly,
@@ -26,7 +27,7 @@ export default function SideBar({
 }) {
 	const { logout, isLoggingOut } = useLogout();
 	const [isLoading, setIsLoading] = useState(false);
-	const { isStudent } = useUser();
+	const { isStudent, isAdmin } = useUser();
 	const sideBarRef = useRef(null);
 
 	useEffect(() => {
@@ -111,7 +112,17 @@ export default function SideBar({
 							url={"/bookings"}
 							showIconOnly={showIconsOnly}
 							setIsSidebarOpen={setIsSidebarOpen}>
-							<IoListOutline />
+							<LuBook strokeWidth={1.5} />
+						</LinkItem>
+					)}
+
+					{isAdmin && (
+						<LinkItem
+							text={"Requests"}
+							url={"/requests"}
+							showIconOnly={showIconsOnly}
+							setIsSidebarOpen={setIsSidebarOpen}>
+							<LuBookDown strokeWidth={1.5} />
 						</LinkItem>
 					)}
 

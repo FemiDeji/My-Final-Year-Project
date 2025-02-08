@@ -2,10 +2,12 @@
 export default function Stat({ icon, title, value }) {
 	return (
 		<div className="bg-white shadow-sm rounded-lg p-2 py-3 flex flex-row justify-center items-center w-full">
-			<div className="flex flex-row justify-start items-center w-full gap-3">
+			<div className="flex flex-row justify-start items-center gap-3 w-full">
 				<div
-					className={`flex justify-center items-center rounded-lg p-1 border`}>
-					<svg className="w-7 h-7 xs:w-5 xs:h-5 text-[#002855]">{icon}</svg>
+					className={`flex justify-center items-center p-1 xs:p-0.5 w-9 h-10 xs:w-8 xs:h-8`}>
+					<div className="w-10 h-7 xs:w-[1.3rem] xs:h-5 text-[#002855] ">
+						{icon}
+					</div>
 				</div>
 				<div className="text-[1rem] xs:text-[14px] capitalize tracking-[0.4px] font-semibold text-general-blue">
 					{title}

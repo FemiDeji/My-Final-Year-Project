@@ -1,27 +1,41 @@
 /* eslint-disable react/prop-types */
 
 import Stat from "../../components/Stat";
-import { BsCheck2Circle, BsPass } from "react-icons/bs";
-import { LiaTimesCircle } from "react-icons/lia";
+import { LuBook, LuBookCheck, LuBookDown, LuBookX } from "react-icons/lu";
+import useUser from "../../hooks/auth/useUser";
 
 export default function Stats({ bookings, numDays, confirmedBookings }) {
+	const { isAdmin, isStudent } = useUser();
+
 	return (
 		<div className="flex flex-row xs:flex-col w-full justify-between items-center gap-3">
-			<Stat
-				title={"Bookings"}
-				icon={<BsPass className="text-2xl xs:text-xl" />}
-				color={"#002855"}
-				value={100}
-			/>
+			{isStudent && (
+				<Stat
+					title={"Bookings"}
+					icon={<LuBook className="text-2xl xs:text-xl" strokeWidth={1.5} />}
+					color={"#002855"}
+					value={100}
+				/>
+			)}
+			{isAdmin && (
+				<Stat
+					title={"Requests"}
+					icon={
+						<LuBookDown className="text-2xl xs:text-xl" strokeWidth={1.5} />
+					}
+					color={"#002855"}
+					value={100}
+				/>
+			)}
 			<Stat
 				title={"Approved"}
-				icon={<BsCheck2Circle className="text-2xl xs:text-xl" />}
+				icon={<LuBookCheck className="text-2xl xs:text-xl" strokeWidth={1.5} />}
 				color={"#002855"}
 				value={40}
 			/>
 			<Stat
 				title={"Declined"}
-				icon={<LiaTimesCircle className="text-2xl xs:text-xl" />}
+				icon={<LuBookX className="text-2xl xs:text-xl" strokeWidth={1.5} />}
 				color={"#002855"}
 				value={18}
 			/>
