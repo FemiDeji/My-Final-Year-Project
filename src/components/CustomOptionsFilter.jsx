@@ -9,6 +9,7 @@ export default function CustomOptionsFilter({
 		{ label: "Sell", value: "sell" },
 	],
 	className = "",
+	btnClassName = "",
 }) {
 	return (
 		<div
@@ -16,12 +17,12 @@ export default function CustomOptionsFilter({
 			{options.map((option, index) => (
 				<button
 					key={option.value}
-					className={`${index === 0 ? "rounded-l-lg" : ""} ${
+					className={`${index === 0 ? "rounded-l-lg" : ""}  ${
 						index === options.length - 1 ? "rounded-r-lg" : ""
-					} flex flex-row justify-center gap-2 items-center p-3 py-1 w-full text-center ${
+					} flex flex-row justify-center gap-2 items-center p-3 py-1 w-full text-center  ${
 						activeType === option.value
-							? "bg-general-yellow text-general-blue font-medium cursor-not-allowed"
-							: "bg-general-grey text-general-blue font-medium cursor-pointer"
+							? `bg-general-yellow text-general-blue font-medium cursor-not-allowed`
+							: `bg-general-grey text-general-blue font-medium cursor-pointer`
 					}`}
 					onClick={() => {
 						if (activeType !== option.value) {
@@ -30,7 +31,7 @@ export default function CustomOptionsFilter({
 					}}
 					disabled={activeType === option.value}>
 					{activeType === option.value && <FaCheck />}
-					<span className="text-sm">{option.label}</span>
+					<span className={`text-sm ${btnClassName}`}>{option.label}</span>
 				</button>
 			))}
 		</div>

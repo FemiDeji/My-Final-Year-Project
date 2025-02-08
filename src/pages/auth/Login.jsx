@@ -47,7 +47,7 @@ export default function Login() {
 					<img
 						src="AU_logo.jpg"
 						alt="AU logo"
-						className="object-contain object-left h-[70px]"
+						className="object-contain object-left h-[70px] xs:h-[50px]"
 					/>
 				</div>
 				<form

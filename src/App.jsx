@@ -21,14 +21,7 @@ function App() {
 				<Routes>
 					<Route index element={<Navigate replace to="/dashboard" />} />
 					<Route path="/login" element={<Login />} />
-					<Route
-						path="/signup"
-						element={
-							<ProtectedRoute authUser={["user", "admin"]}>
-								<SignUp />
-							</ProtectedRoute>
-						}
-					/>
+					<Route path="/signup" element={<SignUp />} />
 					<Route
 						path="/dashboard"
 						element={

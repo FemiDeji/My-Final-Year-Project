@@ -85,27 +85,29 @@ export default function SignUp() {
 						<img
 							src="AU_logo.jpg"
 							alt="AU logo"
-							className="object-contain object-center h-[70px] my-3"
+							className="object-contain object-center h-[70px] my-3 xs:h-[50px]"
 						/>
 					</div>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex flex-col justify-center items-center gap-2 w-full p-5 min-h-screen">
 						<div className="flex xs:flex-col xs:items-start flex-row justify-between items-center w-full mb-3">
-							<div className="text-general-blue font-semibold text-xl text-left">
+							<div className="text-general-blue font-semibold text-xl xl:text-base text-left">
 								Welcome
-								<div className="text-general-blue text-sm font-medium">
+								<div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
 									PASS-BOOK MANAGEMENT SYSTEM
 								</div>
 							</div>
-							<div className="xs:pl-6 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center">
-								<span className="text-general-blue text-[1rem] font-medium">
+							<div className="xs:pl-5 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center">
+								<span className="text-general-blue text-[1rem] xs:text-[0.9rem] font-medium">
 									Role:{" "}
 								</span>
 								<CustomOptionsFilter
 									options={roleOptions}
 									setActiveType={handleRoleChange}
 									activeType={activeType}
+									className="xs:text-[0.8rem]"
+									btnClassName="xs:text-[0.8rem]"
 								/>
 							</div>
 						</div>
