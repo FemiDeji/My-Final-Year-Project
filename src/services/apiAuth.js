@@ -79,7 +79,7 @@ export async function login({ identifier, password }) {
 
 	const { data: profile, error: profileError } = await supabase
 		.from("profiles")
-		.select("email", "username")
+		.select("*")
 		.or(`username.eq.${identifier}, email.eq.${identifier}`) // Match username or email
 		.single();
 
@@ -87,14 +87,14 @@ export async function login({ identifier, password }) {
 
 	// Step 2: Use the email to log in
 
-	const { data, error } = await supabase.auth.signInWithPassword({
+	const { data: authData, error } = await supabase.auth.signInWithPassword({
 		email: profile.email,
 		password,
 	});
 
 	if (error) throw new Error(error.message);
 
-	return data;
+	return { data: authData, profile };
 }
 
 export async function getCurrentUser() {

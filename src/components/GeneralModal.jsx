@@ -23,7 +23,7 @@ function GeneralModal({
 				e.stopPropagation();
 			}}>
 			<div
-				className={`${widthClass} mx-auto text-center relative ${classname}`}>
+				className={`${widthClass} mx-auto text-center relative ${classname} overflow-y-auto`}>
 				{showCloseButton && (
 					<IoClose
 						style={{

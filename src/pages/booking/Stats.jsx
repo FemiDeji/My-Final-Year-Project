@@ -5,11 +5,11 @@ import { LuBook, LuBookCheck, LuBookDown, LuBookX } from "react-icons/lu";
 import useUser from "../../hooks/auth/useUser";
 
 export default function Stats({ bookings, numDays, confirmedBookings }) {
-	const { isAdmin, isStudent } = useUser();
+	const { profile } = useUser();
 
 	return (
 		<div className="flex flex-row xs:flex-col w-full justify-between items-center gap-3">
-			{isStudent && (
+			{profile?.role === "user" && (
 				<Stat
 					title={"Bookings"}
 					icon={<LuBook className="text-2xl xs:text-xl" strokeWidth={1.5} />}
@@ -17,7 +17,7 @@ export default function Stats({ bookings, numDays, confirmedBookings }) {
 					value={100}
 				/>
 			)}
-			{isAdmin && (
+			{profile?.role === "admin" && (
 				<Stat
 					title={"Requests"}
 					icon={

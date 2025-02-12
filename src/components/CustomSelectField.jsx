@@ -54,7 +54,10 @@ function CustomSelectField({
 						singleLine ? "w-[30%]" : ""
 					}`}
 					htmlFor={htmlFor}>
-					{label} {required && <span className="text-red-500 pl-1">*</span>}
+					{label}{" "}
+					{required && (
+						<span className="text-red-500 pl-1 xs:text-[12px]">*</span>
+					)}
 				</legend>
 				<select
 					{...register}
@@ -78,7 +81,7 @@ function CustomSelectField({
 				</select>
 			</fieldset>
 			{error && (
-				<div className="text-[11px] text-red-500 flex text-left">
+				<div className="text-[11px] xs:text-[10px] text-red-500 flex text-left">
 					<div>{error}</div>
 				</div>
 			)}

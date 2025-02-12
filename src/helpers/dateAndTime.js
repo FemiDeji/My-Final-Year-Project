@@ -7,7 +7,14 @@ export const convertToDateTime = (
 	if (!dateString) {
 		return "";
 	}
-	return moment(dateString).format(format);
+	const parsedDate = moment(dateString, [
+		"YYYY-MM-DD HH:mm:ss",
+		"YYYY-MM-DD hh:mm:ss A",
+		"YYYY-MM-DDTHH:mm:ssZ",
+		"MM-DD-YYYY HH:mm:ss",
+		"DD-MM-YYYY HH:mm:ss",
+	]);
+	return parsedDate.isValid() ? parsedDate.format(format) : "";
 };
 
 export const DATE_REQUEST_FORMAT = "YYYY-MM-DD";

@@ -28,7 +28,7 @@ function CustomSearchField({
 			<div className={`${singleLine ? "w-[70%]" : "w-full"}`}>
 				<div className="flex items-center w-full">
 					<input
-						className={`border-2 p-2.5 pl-5 w-full text-sm outline-none border-gray-300 bg-[whitesmoke] rounded-${borderRadius}`}
+						className={`border-2 p-2 pl-5 w-full text-sm outline-none border-gray-300 bg-[whitesmoke] rounded-${borderRadius}`}
 						type={type}
 						name={name}
 						placeholder={placeholder}

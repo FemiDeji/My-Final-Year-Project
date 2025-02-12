@@ -13,34 +13,38 @@ export default function CustomStatusLabel({ status }) {
 
 	const statusConfig = {
 		pending: {
-			colorClass: "bg-general-light-grey- text-general-gray",
-			icon: <IoEllipsisHorizontalCircle color={"#DFE6EC"} size={18} />,
+			colorClass: "bg-general-mid-grey text-general-gray",
+			iconClass: "text-general-gray",
+			icon: <IoEllipsisHorizontalCircle size={16} />,
 			label: "Pending",
 		},
 		declined: {
 			colorClass: "bg-general-light-red- text-general-red",
-			icon: <FaXmark color="#E46561" size={18} />,
+			iconClass: "text-general-red",
+			icon: <FaXmark size={16} />,
 			label: "Declined",
 		},
 		approved: {
 			colorClass: "bg-general-green text-white",
-			icon: <IoMdCheckmark color="#ffffff" size={18} />,
+			iconClass: "text-white",
+			icon: <IoMdCheckmark size={16} />,
 			label: "Approved",
 		},
 		unknown: {
 			colorClass: "bg-general-gray text-general-gray",
-			icon: <CiCircleMore color="#DFE6EC" size={18} />,
+			iconClass: "text-general-gray",
+			icon: <CiCircleMore size={16} />,
 			label: "Unknown",
 		},
 	};
 
 	// Determine configuration based on the status
-	const { colorClass, icon, label } =
+	const { colorClass, iconClass, icon, label } =
 		statusConfig[formattedStatus] || statusConfig["unknown"];
 
 	return (
 		<div
-			className={`flex gap-2 content-center items-center text-center text-[11px] w-[70%] justify-center rounded-full py-1 px-8 font-bold ${colorClass}`}
+			className={`flex gap-2 content-center items-center text-center text-[11px] xs:text-[9px] w-[70%] justify-center rounded-full py-1 px-8 font-bold ${colorClass}`}
 			style={{ backgroundColor: backgroundColor, color: textColor }}>
 			<span>{icon}</span>
 			<span>{label}</span>

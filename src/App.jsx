@@ -11,6 +11,7 @@ import Settings from "./pages/settings/Settings";
 import CreateBookingForm from "./pages/booking/CreateBookingForm";
 import ProtectedRoute from "./pages/auth/ProtectedRoute";
 import Request from "./pages/request/Request";
+import Unauthorized from "./pages/Unauthorized";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -70,7 +71,8 @@ function App() {
 							</ProtectedRoute>
 						}
 					/>
-					<Route path="/unauthorized" element={<PageNotFound />} />
+					<Route path="/unauthorized" element={<Unauthorized />} />
+					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 
 				<Toaster

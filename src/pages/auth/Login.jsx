@@ -8,6 +8,7 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { delayAction } from "../../helpers/custom";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import useLogin from "../../hooks/auth/useLogin";
+import useUser from "../../hooks/auth/useUser";
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function Login() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const { isLogginIn, login } = useLogin();
+	const { isPending } = useUser();
 
 	const {
 		register,
@@ -35,7 +37,7 @@ export default function Login() {
 
 	return (
 		<div className="h-full min-h-screen flex flex-row justify-center items-center w-full">
-			<div className="bg-general-yellow flex flex-col justify-center items-center xs:w-0 w-[50%] h-full">
+			<div className="flex flex-col justify-center items-center xs:w-0 w-[50%] h-full">
 				<img
 					src="/AU_Senate_Building.jpg"
 					alt="Senate Building"
@@ -168,7 +170,7 @@ export default function Login() {
 					</div>
 				</form>
 			</GeneralModal>
-			{(isLoading || isLogginIn) && (
+			{(isLoading || isLogginIn || isPending) && (
 				<CustomBackdrop
 					open={true}
 					text={isLogginIn ? "Validating..." : "Please wait..."}

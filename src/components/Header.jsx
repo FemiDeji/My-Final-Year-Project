@@ -40,10 +40,10 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 					<div className="text-general-blue flex flex-row gap-5 justify-center items-center">
 						<div className="flex justify-start items-end flex-col">
 							<div className="font-medium text-base xs:text-sm">
-								{user?.user_metadata?.fullname}
+								{user?.user?.user_metadata?.fullname}
 							</div>
 							<div className="text-xs font-medium mb-1">
-								{user?.user_metadata?.username}
+								{user?.user?.user_metadata?.username}
 							</div>
 						</div>
 					</div>

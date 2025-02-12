@@ -10,6 +10,7 @@ import CustomTextarea from "../../components/CustomTextarea";
 import { states } from "../../helpers/states";
 import { dateDifference } from "../../helpers/dateAndTime";
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
@@ -17,6 +18,7 @@ export default function CreateBookingForm() {
 	const [passType, setPassType] = useState("short");
 	const [userDetails, setUserDetails] = useState(null);
 	const today = new Date().toISOString().split("T")[0];
+	const navigate = useNavigate();
 
 	const {
 		register,
@@ -64,8 +66,8 @@ export default function CreateBookingForm() {
 	}, [startDate, endDate, setValue, passType]);
 
 	const passTypeOptions = [
-		{ key: "short", value: "Short pass" },
-		{ key: "long", value: "Long pass" },
+		{ key: "Short", value: "Short pass" },
+		{ key: "Long", value: "Long pass" },
 	];
 
 	const handlePassTypeOptionChange = (type) => {
@@ -344,8 +346,11 @@ export default function CreateBookingForm() {
 						bgColor="#DFE6EC"
 						bordered
 						borderSize="lg"
-						onClick={() => close()}
-						disabled={isDisabled}
+						onClick={() => {
+							navigate("/bookings");
+							reset();
+						}}
+						disabled={isBooking}
 					/>
 					<CustomButton
 						label={"Submit"}
@@ -356,7 +361,7 @@ export default function CreateBookingForm() {
 						bordered
 						bgColor="#f2c008"
 						type="submit"
-						disabled={isDisabled}
+						disabled={isDisabled || isBooking}
 					/>
 				</div>
 			</form>

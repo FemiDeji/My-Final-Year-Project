@@ -10,7 +10,7 @@ function TableHeader({ headers = [], hasActions }) {
 						<th
 							key={index}
 							scope="col"
-							className="px-3 py-3 font-[600] xs:text-[10.5px] text-[11.5px] text-left">
+							className="px-3 py-3 font-[600] xs:text-[10px] text-[11.5px] text-left">
 							{/* Render a checkbox for the "checkbox" column */}
 							{header.key === "checkbox" ? (
 								<div className="translate-y-0.5">
@@ -27,7 +27,7 @@ function TableHeader({ headers = [], hasActions }) {
 				{hasActions && (
 					<th
 						scope="col"
-						className="px-6 py-3 font-[500] xs:text-[10.5px] text-[11px]"></th>
+						className="px-6 py-3 font-[500] xs:text-[10px] text-[11px]"></th>
 				)}
 			</tr>
 		</thead>

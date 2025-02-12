@@ -27,7 +27,7 @@ export default function SideBar({
 }) {
 	const { logout, isLoggingOut } = useLogout();
 	const [isLoading, setIsLoading] = useState(false);
-	const { isStudent, isAdmin } = useUser();
+	const { profile } = useUser();
 	const sideBarRef = useRef(null);
 
 	useEffect(() => {
@@ -69,7 +69,7 @@ export default function SideBar({
 					} xs:gap-1 gap-2`}>
 					{!showIconsOnly && (
 						<div className="text-[0.8rem] font-medium xs:text-[12px]">
-							{`PBMS ${isStudent ? "STUDENT" : "ADMIN"} PORTAL`}
+							{`PBMS ${profile?.role === "user" ? "STUDENT" : "ADMIN"} PORTAL`}
 						</div>
 					)}
 					<div
@@ -106,7 +106,7 @@ export default function SideBar({
 						<GoHome />
 					</LinkItem>
 
-					{isStudent && (
+					{profile?.role === "user" && (
 						<LinkItem
 							text={"Bookings"}
 							url={"/bookings"}
@@ -116,7 +116,7 @@ export default function SideBar({
 						</LinkItem>
 					)}
 
-					{isAdmin && (
+					{profile?.role === "admin" && (
 						<LinkItem
 							text={"Requests"}
 							url={"/requests"}

@@ -12,11 +12,11 @@ function CustomBackdrop({ open, text }) {
 					{/* <CircularProgress color="inherit" /> */}
 					<LoadingSpinner
 						visible={true}
-						height="80"
-						width="80"
+						height="70"
+						width="70"
 						colors={["red", "blue", "yellow", "green", "purple"]}
 					/>
-					<p className="mt-5">{text}</p>
+					<p className="mt-5 xs:text-xs">{text}</p>
 				</div>
 			</Backdrop>
 		</div>

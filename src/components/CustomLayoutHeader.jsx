@@ -11,7 +11,7 @@ export default function CustomLayoutHeader({
 	filters = [],
 }) {
 	return (
-		<div className="flex flex-row gap-10 justify-start items-center w-full">
+		<div className="flex flex-row gap-5 justify-start items-center w-full">
 			{backArrow && (
 				<div onClick={onClick}>
 					<CustomBackArrow className="text-general-blue cursor-pointer" />

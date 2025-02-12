@@ -62,8 +62,8 @@ function Table({
 	const formatWorkItemNumber = (index) => String(index + 1).padStart(5, "0");
 
 	return (
-		<div className="overflow-x-auto mb-8 mt-2 w-full">
-			<table className="w-full text-sm text-left rtl:text-right bg-gray-50 dark:text-gray-300 text-general-blue">
+		<div className="overflow-x-auto mb-8 mt-2 w-full rounded-lg">
+			<table className="w-full text-sm xs:text-xs text-left rtl:text-right bg-gray-50 dark:text-gray-300 text-general-blue">
 				<TableHeader
 					headers={addOptionalColumnsToHeaders(headers)}
 					hasActions={hasActions}
