@@ -13,14 +13,14 @@ export default function CustomStatusLabel({ status }) {
 
 	const statusConfig = {
 		pending: {
-			colorClass: "bg-general-mid-grey text-general-gray",
-			iconClass: "text-general-gray",
+			colorClass: "bg-general-mid-grey text-white",
+			iconClass: "text-white",
 			icon: <IoEllipsisHorizontalCircle size={16} />,
 			label: "Pending",
 		},
 		declined: {
-			colorClass: "bg-general-light-red- text-general-red",
-			iconClass: "text-general-red",
+			colorClass: "bg-general-red text-white",
+			iconClass: "text-white",
 			icon: <FaXmark size={16} />,
 			label: "Declined",
 		},
@@ -31,7 +31,7 @@ export default function CustomStatusLabel({ status }) {
 			label: "Approved",
 		},
 		unknown: {
-			colorClass: "bg-general-gray text-general-gray",
+			colorClass: "bg-general-mid-grey text-general-gray",
 			iconClass: "text-general-gray",
 			icon: <CiCircleMore size={16} />,
 			label: "Unknown",
@@ -46,7 +46,7 @@ export default function CustomStatusLabel({ status }) {
 		<div
 			className={`flex gap-2 content-center items-center text-center text-[11px] xs:text-[9px] w-[70%] justify-center rounded-full py-1 px-8 font-bold ${colorClass}`}
 			style={{ backgroundColor: backgroundColor, color: textColor }}>
-			<span>{icon}</span>
+			<span className={`${iconClass}`}>{icon}</span>
 			<span>{label}</span>
 		</div>
 	);

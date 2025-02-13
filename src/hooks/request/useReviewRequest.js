@@ -10,11 +10,10 @@ export default function useReviewRequest() {
 		isPending,
 		error,
 	} = useMutation({
-		mutationFn: async ({ bookingId, updateData }) =>
-			updateBooking(bookingId, updateData),
-		onSuccess: () => {
-			queryClient.invalidateQueries(["bookings"]);
+		mutationFn: ({ updateData, id }) => updateBooking(updateData, id),
+		onSuccess: (data) => {
 			toast.success("Request updated successdfully");
+			queryClient.invalidateQueries(["bookings", data]);
 		},
 		onError: (err) => {
 			console.log("Error", err.message);

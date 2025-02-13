@@ -32,7 +32,8 @@ export async function getBookings() {
 	const { data: profiles, error: profilesError } = await supabase
 		.from("profiles")
 		.select("id")
-		.eq("auth_id", user.id);
+		.eq("auth_id", user.id)
+		.eq("status", "Pending");
 
 	if (profilesError) {
 		console.error("Error fetching profile", profilesError.message);
@@ -61,7 +62,8 @@ export async function getBookings() {
 export async function getRequests() {
 	const { data: requests, error: requestsError } = await supabase
 		.from("bookings")
-		.select("*");
+		.select("*")
+		.eq("status", "Pending");
 
 	if (requestsError) {
 		console.log("Error fetching requests", requestsError.message);
@@ -71,21 +73,18 @@ export async function getRequests() {
 	return requests;
 }
 
-export async function updateBooking(
-	bookingId,
-	status = "",
-	admin_id,
-	rejection_reason = "",
-	admin_name
-) {
-	const updateData = { status, admin_id, admin_name, rejection_reason };
+export async function updateBooking(updateData, id) {
+	if (!id) {
+		console.error("Error: Booking ID is undefined or invalid!");
+		throw new Error("Invalid booking ID");
+	}
 
-	console.log("Updated data", bookingId, { updateData });
+	console.log("data: ", { ...updateData });
 
 	const { data: updateBooking, error: updateBookingError } = await supabase
 		.from("bookings")
 		.update([{ ...updateData }])
-		.eq("id", bookingId)
+		.eq("id", id)
 		.select()
 		.single();
 

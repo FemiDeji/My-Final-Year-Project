@@ -80,24 +80,21 @@ export default function Request() {
 			toast.error("No request selected");
 			return;
 		}
-		console.log("request: ", {
-			bookingId: selectedRequest?.id,
-			rejection_reason: data?.rejection_reason,
-			admin_id: profile?.username,
-			admin_name: profile?.fullname,
-			status,
-		});
-		const updatedData = {
+		const requestData = {
 			rejection_reason: data?.rejection_reason || "",
-			admin_id: profile?.username,
+			admin_username: profile?.username,
 			admin_name: profile?.fullname,
 			status,
 		};
+
 		reviewRequest(
-			{ bookingId: selectedRequest.id, updatedData },
+			{
+				updateData: { ...requestData },
+				id: selectedRequest?.id,
+			},
 			{
 				onSuccess: () => {
-					reset({ rejection_reason: "" });
+					reset();
 					setShowRequestDetailsModal(false);
 				},
 			}
@@ -124,12 +121,10 @@ export default function Request() {
 				onClose={() => setShowRequestDetailsModal(false)}
 				showCloseButton
 				widthClass="w-full">
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					className="xs:py-4 xs:px-0 p-4 flex flex-col gap-3 justify-center items-center w-full">
+				<div className="xs:py-4 xs:px-0 p-4 flex flex-col justify-center items-center gap-3">
 					<div
 						className="grid grid-cols-2 xs:flex xs:flex-col w-full 
-						 gap-2 items-center text-left ">
+						gap-2 items-center text-left">
 						{selectedRequest &&
 							Object.entries(selectedRequest)
 								.filter(([key]) => !exemptedKeys.includes(key))
@@ -139,60 +134,63 @@ export default function Request() {
 									);
 								})}
 					</div>
-
-					{showRejection && (
-						<div className="text-left w-full">
-							<CustomTextarea
-								label={"Reason"}
-								name="rejection_reason"
-								register={register("rejection_reason", {
-									required: showRejection ? "Reason is required" : false,
-								})}
-								error={errors?.rejection_reason?.message}
-								row={3}
-								placeholder={"Write your reason for rejection here."}
-							/>
-						</div>
-					)}
-					{!showRejection && (
-						<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
-							<CustomButton
-								label={"Reject"}
-								bgColor="#DFE6EC"
-								bordered
-								borderSize="lg"
-								onClick={() => setShowRejection(true)}
-							/>
-							<CustomButton
-								label={"Approve"}
-								bgColor="#f2c008"
-								bordered
-								borderSize="lg"
-								type="submit"
-								onClick={() => setStatus("Approved")}
-							/>
-						</div>
-					)}
-					{showRejection && (
-						<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
-							<CustomButton
-								label={"Cancel"}
-								bgColor="#DFE6EC"
-								bordered
-								borderSize="lg"
-								onClick={() => setShowRejection(false)}
-							/>
-							<CustomButton
-								label={"Reject"}
-								bgColor="#f2c008"
-								bordered
-								borderSize="lg"
-								type="submit"
-								onClick={() => setStatus("Rejected")}
-							/>
-						</div>
-					)}
-				</form>
+					<form
+						onSubmit={handleSubmit(onSubmit)}
+						className="flex flex-col gap-3 justify-center items-center w-full">
+						{showRejection && (
+							<div className="text-left w-full">
+								<CustomTextarea
+									label={"Reason"}
+									name="rejection_reason"
+									register={register("rejection_reason", {
+										required: showRejection ? "Reason is required" : false,
+									})}
+									error={errors?.rejection_reason?.message}
+									row={3}
+									placeholder={"Write your reason for rejection here."}
+								/>
+							</div>
+						)}
+						{!showRejection && (
+							<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
+								<CustomButton
+									label={"Reject"}
+									bgColor="#DFE6EC"
+									bordered
+									borderSize="lg"
+									onClick={() => setShowRejection(true)}
+								/>
+								<CustomButton
+									label={"Approve"}
+									bgColor="#f2c008"
+									bordered
+									borderSize="lg"
+									type="submit"
+									onClick={() => setStatus("Approved")}
+								/>
+							</div>
+						)}
+						{showRejection && (
+							<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
+								<CustomButton
+									label={"Cancel"}
+									bgColor="#DFE6EC"
+									bordered
+									borderSize="lg"
+									onClick={() => setShowRejection(false)}
+								/>
+								<CustomButton
+									label={"Reject"}
+									bgColor="#f2c008"
+									bordered
+									borderSize="lg"
+									type="submit"
+									onClick={() => setStatus("Declined")}
+								/>
+							</div>
+						)}
+					</form>
+				</div>
 			</GeneralModal>
 			{(isPending || isReviewing) && (
 				<CustomBackdrop

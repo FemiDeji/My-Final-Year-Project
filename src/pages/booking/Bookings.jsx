@@ -34,14 +34,16 @@ export default function Bookings() {
 		email: "Email",
 		end_date: "Return date",
 		guardian_name: "Guardian",
-		guardian_phone: "Guardian contact",
+		guardian_phone: "Guardian No",
 		purpose: "Purpose",
 		start_date: "Start date",
 		type: "Type",
 		status: "Status",
 		username: "Matric No",
 		num_days: "Duration",
-		admin_id: "Admin ID",
+		admin_username: "Admin Id",
+		rejection_reason: "Reason",
+		admin_name: "Admin Name",
 	};
 
 	const handleViewClick = (id) => {

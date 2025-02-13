@@ -44,7 +44,7 @@ export default function UpdateUserDataForm() {
 		if (profile) {
 			const newData = {
 				username: profile?.username || "",
-				email: user?.email || "",
+				email: user?.user?.email || "",
 				fullname: profile?.fullname || "",
 				guardian_name: profile?.guardian_name || "",
 				guardian_phone: profile?.guardian_phone || "",
@@ -62,7 +62,7 @@ export default function UpdateUserDataForm() {
 				setValue(key, newData[key]);
 			});
 		}
-	}, [profile, setValue, user?.email]);
+	}, [profile, setValue, user?.user?.email]);
 
 	const handleAvatarChange = (e) => {
 		const file = e.target.files[0];
