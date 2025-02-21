@@ -153,10 +153,9 @@ export default function Login() {
 					<div className="flex justify-end items-end gap-3 ml-auto lg:w-[55%]">
 						<CustomButton
 							label={"Cancel"}
-							bgColor="#E46561"
+							bgColor="#DFE6EC"
 							bordered
 							borderSize="lg"
-							textColor="white"
 							onClick={() => setForgotPasswordModal(false)}
 						/>
 						<CustomButton
