@@ -39,15 +39,17 @@ export default function ResetPassword() {
 	};
 
 	useEffect(() => {
-		const hashParams = new URLSearchParams(location.hash.replace("#", "?"));
-		const errorCode = hashParams.get("error_code");
+		const params = new URLSearchParams(
+			location.search || location.hash.replace("#", "?")
+		);
+		const errorCode = params.get("error_code");
 
 		if (errorCode === "otp_expired") {
 			navigate("/reset-password-expired");
 		} else {
 			setIsChecking(false);
 		}
-	}, [location.hash, navigate]);
+	}, [location.hash, location.search, navigate]);
 
 	if (isChecking) {
 		return <CustomBackdrop open={true} text={"Checking link..."} />;
