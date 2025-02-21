@@ -1,3 +1,4 @@
+import axios from "axios";
 import supabase, { supabaseUrl } from "./supabase";
 
 export async function signup({
@@ -191,6 +192,32 @@ export async function updateCurrentUser({
 			.eq("auth_id", userId);
 
 		if (profileError) throw new Error(profileError.message);
+	}
+
+	return data;
+}
+
+export async function sendPasswordResetEmail(email) {
+	const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+		redirectTo: `${window.location.origin}/reset-password`,
+	});
+
+	if (error) {
+		console.error("Could not reset", error);
+		throw new Error(error.message);
+	}
+
+	return data;
+}
+
+export async function updatePassword(newPassword) {
+	const { data, error } = await supabase.auth.updateUser({
+		password: newPassword,
+	});
+
+	if (error) {
+		console.error("Error updating password", error);
+		throw new Error(error.message);
 	}
 
 	return data;

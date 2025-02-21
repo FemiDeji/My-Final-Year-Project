@@ -12,6 +12,8 @@ import CreateBookingForm from "./pages/booking/CreateBookingForm";
 import ProtectedRoute from "./pages/auth/ProtectedRoute";
 import Request from "./pages/request/Request";
 import Unauthorized from "./pages/Unauthorized";
+import ResetPassword from "./pages/auth/ResetPassword";
+import ResetPasswordExpired from "./pages/auth/ResetPasswordExpired";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -23,6 +25,11 @@ function App() {
 					<Route index element={<Navigate replace to="/dashboard" />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<SignUp />} />
+					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route
+						path="/reset-password-expired"
+						element={<ResetPasswordExpired />}
+					/>
 					<Route
 						path="/dashboard"
 						element={
