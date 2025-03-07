@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
 	const [submitType, setSubmitType] = useState("");
-	const [passType, setPassType] = useState("short");
+	const [passType, setPassType] = useState("Short");
 	const [userDetails, setUserDetails] = useState(null);
 	const today = new Date().toISOString().split("T")[0];
 	const navigate = useNavigate();
@@ -63,17 +63,12 @@ export default function CreateBookingForm() {
 
 			setValue("num_days", days);
 		}
-	}, [startDate, endDate, setValue, passType]);
+	}, [startDate, endDate, setValue]);
 
 	const passTypeOptions = [
 		{ key: "Short", value: "Short pass" },
 		{ key: "Long", value: "Long pass" },
 	];
-
-	const handlePassTypeOptionChange = (type) => {
-		setPassType(type);
-		setValue("type", type);
-	};
 
 	const handleReset = () => {
 		setValue("destination", "");
@@ -180,6 +175,7 @@ export default function CreateBookingForm() {
 						error={errors?.fullname?.message}
 					/>
 				</div>
+				{console.log("type", getValues().type)}
 				<div className="flex flex-row xs:flex-col gap-3">
 					<CustomInput
 						name="email"
@@ -241,9 +237,9 @@ export default function CreateBookingForm() {
 						label={"Pass Type"}
 						readOnly={isDisabled}
 						options={passTypeOptions}
+						onChange={setPassType}
 						optionKey="key"
 						optionLabel="value"
-						onChange={handlePassTypeOptionChange}
 						register={register(
 							"type",
 							submitType === "general" && !passType
@@ -261,18 +257,19 @@ export default function CreateBookingForm() {
 						disabled={isDisabled}
 						register={register(
 							"startDate",
-							submitType === "general" && passType === "long"
+							submitType === "general" && passType === "Long"
 								? {
 										required: "Start date is required",
 										validate: (value) =>
-											(passType === "long" && value <= getValues().endDate) ||
+											(passType === "Long" && value <= getValues().endDate) ||
 											"Start date cannot be after end date",
 								  }
 								: false
 						)}
 						error={errors?.startDate?.message}
 					/>
-					{passType === "long" && (
+
+					{passType === "Long" && (
 						<CustomInput
 							name="endDate"
 							label={"End Date"}
@@ -280,7 +277,7 @@ export default function CreateBookingForm() {
 							disabled={isDisabled}
 							register={register(
 								"endDate",
-								(submitType === "general" || passType === "long") && {
+								(submitType === "general" || passType === "Long") && {
 									required: "End date is required",
 									validate: (value) =>
 										// console.log(value < getValues().startDate),
@@ -299,7 +296,7 @@ export default function CreateBookingForm() {
 						label={"Number of Days"}
 						register={register("num_days", {
 							validate: (value) => {
-								if (passType === "long" && Number(value < 0)) {
+								if (passType === "Long" && Number(value < 0)) {
 									return "A long pass must be more than a day";
 								}
 								return true;

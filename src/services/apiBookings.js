@@ -1,7 +1,7 @@
 import supabase from "./supabase";
 
 export async function createUpdateBooking(newBooking) {
-	let status = "pending";
+	let status = "Pending";
 	const { data, error } = await supabase
 		.from("bookings")
 		.insert([{ ...newBooking, status }])
@@ -33,7 +33,7 @@ export async function getBookings() {
 		.from("profiles")
 		.select("id")
 		.eq("auth_id", user.id)
-		.eq("status", "Pending");
+		.single();
 
 	if (profilesError) {
 		console.error("Error fetching profile", profilesError.message);
@@ -49,7 +49,8 @@ export async function getBookings() {
 	const { data: bookings, error: bookingsError } = await supabase
 		.from("bookings")
 		.select("*")
-		.eq("user_id", profiles[0].id);
+		.eq("user_id", profiles.id)
+		.eq("status", "Pending");
 
 	if (bookingsError) {
 		console.error("Error fecthing booking", bookingsError.message);

@@ -114,10 +114,14 @@ export default function SignUp() {
 						<div className="w-full flex flex-col justify-center items-center gap-4">
 							<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 								<CustomInput
-									label={"Username"}
+									label={"Matric No"}
 									name="username"
 									register={register("username", {
 										required: "Username is required",
+										pattern: {
+											value: /^\d{2}\/d{4}$/,
+											message: "Matric no invalid. Use a valid format.",
+										},
 									})}
 									error={errors?.username?.message}
 									placeholder={activeType === "user" ? "02/1021" : "SN09245"}

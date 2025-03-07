@@ -14,7 +14,7 @@ export default function CustomStatusLabel({ status }) {
 	const statusConfig = {
 		pending: {
 			colorClass: "bg-general-mid-grey text-white",
-			iconClass: "text-white",
+			iconClass: "text-[#36454F]",
 			icon: <IoEllipsisHorizontalCircle size={16} />,
 			label: "Pending",
 		},
@@ -32,7 +32,7 @@ export default function CustomStatusLabel({ status }) {
 		},
 		unknown: {
 			colorClass: "bg-general-mid-grey text-general-gray",
-			iconClass: "text-general-gray",
+			iconClass: "text-general-grey",
 			icon: <CiCircleMore size={16} />,
 			label: "Unknown",
 		},
@@ -47,7 +47,7 @@ export default function CustomStatusLabel({ status }) {
 			className={`flex gap-2 content-center items-center text-center text-[11px] xs:text-[9px] w-[70%] justify-center rounded-full py-1 px-8 font-bold ${colorClass}`}
 			style={{ backgroundColor: backgroundColor, color: textColor }}>
 			<span className={`${iconClass}`}>{icon}</span>
-			<span>{label}</span>
+			<span className={`${iconClass}`}>{label}</span>
 		</div>
 	);
 }
