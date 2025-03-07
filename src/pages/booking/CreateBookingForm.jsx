@@ -11,6 +11,7 @@ import { states } from "../../helpers/states";
 import { dateDifference } from "../../helpers/dateAndTime";
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
@@ -19,6 +20,7 @@ export default function CreateBookingForm() {
 	const [userDetails, setUserDetails] = useState(null);
 	const today = new Date().toISOString().split("T")[0];
 	const navigate = useNavigate();
+	const [withinLocation, setWithinLocation] = useState(null);
 
 	const {
 		register,
@@ -78,6 +80,39 @@ export default function CreateBookingForm() {
 
 		reset();
 	};
+
+	useEffect(() => {
+		if (!navigator.geolocation) {
+			toast.error("Geolocation is not supported by your browser");
+		}
+
+		navigator.geolocation.getCurrentPosition(
+			(position) => {
+				const { latitude, longitude } = position.coords;
+				console.log("User location", latitude, longitude);
+
+				const allowedLatitude = 7.737564333771149;
+				const allowedLongitude = 4.444108162049442;
+				const range = 0.01;
+
+				const isWithinLocation =
+					Math.abs(latitude - allowedLatitude) <= range &&
+					Math.abs(longitude - allowedLongitude) <= range;
+
+				if (!isWithinLocation) {
+					toast.error(
+						"You must be within the university campus to book a pass."
+					);
+					return;
+				}
+				setWithinLocation(isWithinLocation);
+			},
+			(error) => {
+				toast.error("Failed to get location. Please enable your location.");
+				console.error("Geolocation error:", error.message);
+			}
+		);
+	}, []);
 
 	const onSubmit = async (data) => {
 		if (submitType === "fetchProfile") {
@@ -150,6 +185,7 @@ export default function CreateBookingForm() {
 							label={"Matric No"}
 							register={register("username")}
 							placeholder={"09/9876"}
+							readOnly={!withinLocation}
 						/>
 
 						{(isDisabled || !username) && (
