@@ -2,6 +2,7 @@ import supabase from "./supabase";
 
 export async function createUpdateBooking(newBooking) {
 	let status = "Pending";
+
 	const { data, error } = await supabase
 		.from("bookings")
 		.insert([{ ...newBooking, status }])
@@ -58,6 +59,36 @@ export async function getBookings() {
 	}
 
 	return bookings;
+}
+
+export async function getFilteredBookings({
+	role,
+	userId,
+	start_date,
+	end_date,
+	priority,
+}) {
+	let query = supabase.from("bookings").select("*").eq("status", "Pending");
+
+	if (role === "user" && userId) {
+		query = query.eq("user_id", userId);
+	}
+
+	if (start_date && end_date) {
+		query = query.gte("start_date", start_date).lte("end_date", end_date);
+	}
+
+	if (priority) {
+		query = query.eq("priority", priority);
+	}
+
+	const { data: filteredBooking, error: bookingError } = await query;
+
+	if (bookingError) {
+		console.error("Error fetching filtered bookings", bookingError.message);
+	}
+
+	return filteredBooking;
 }
 
 export async function getRequests() {

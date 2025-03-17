@@ -7,9 +7,7 @@ export async function getHistory(role, userId) {
 		.in("status", ["Approved", "Declined"]);
 
 	if (role === "user" && userId) {
-		query = query.eq("user_id", userId).in("status", ["Approved", "Declined"]);
-	} else {
-		query = query.in("status", ["Approved", "Declined"]);
+		query = query.eq("user_id", userId);
 	}
 
 	const { data: requests, error: requestsError } = await query;
@@ -22,20 +20,23 @@ export async function getHistory(role, userId) {
 	return requests;
 }
 
-export async function getFilteredHistory(
+export async function getFilteredHistory({
 	role,
 	userId,
 	status,
 	start_date,
-	end_date
-) {
-	let query = supabase.from("bookings").select("*");
+	end_date,
+}) {
+	let query = supabase
+		.from("bookings")
+		.select("*")
+		.in("status", ["Approved", "Declined"]);
 
 	if (role === "user" && userId) {
 		query = query.eq("user_id", userId);
 	}
 
-	if (status) {
+	if (status && ["Approved", "Declined"].includes(status)) {
 		query = query.eq("status", status);
 	}
 

@@ -31,6 +31,7 @@ export default function Request() {
 		{ key: "end_date", value: "Return Date" },
 		{ key: "num_days", value: "Duration" },
 		{ key: "status", value: "Status" },
+		{ key: "priority", value: "Priority" },
 	];
 
 	const exemptedKeys = [
@@ -39,6 +40,7 @@ export default function Request() {
 		"created_at",
 		"rejection_reason",
 		"admin_name",
+		"admin_username",
 	];
 
 	const labels = {
@@ -58,6 +60,7 @@ export default function Request() {
 		phone: "Phone",
 		room: "Room",
 		fullname: "Full Name",
+		priority: "Priority",
 	};
 
 	console.log(requests);

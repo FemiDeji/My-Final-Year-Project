@@ -21,6 +21,7 @@ export default function CreateBookingForm() {
 	const today = new Date().toISOString().split("T")[0];
 	const navigate = useNavigate();
 	const [withinLocation, setWithinLocation] = useState(null);
+	const [priority, setPriority] = useState("");
 
 	const {
 		register,
@@ -58,19 +59,17 @@ export default function CreateBookingForm() {
 
 	const startDate = watch("startDate");
 	const endDate = watch("endDate");
-
-	useEffect(() => {
-		if (startDate && endDate) {
-			const days = dateDifference(startDate, endDate);
-
-			setValue("num_days", days);
-		}
-	}, [startDate, endDate, setValue]);
+	const purpose = watch("purpose");
 
 	const passTypeOptions = [
 		{ key: "Short", value: "Short pass" },
 		{ key: "Long", value: "Long pass" },
 	];
+
+	const priorityLevels = {
+		High: ["medical check-up", "emergency", "family crisis", "funeral", "SDF"],
+		Mid: ["wedding", "conference", "official assignment", "document update"],
+	};
 
 	const handleReset = () => {
 		setValue("destination", "");
@@ -80,38 +79,69 @@ export default function CreateBookingForm() {
 
 		reset();
 	};
+	useEffect(() => {
+		if (startDate && endDate) {
+			const days = dateDifference(startDate, endDate);
+
+			setValue("num_days", days);
+		}
+	}, [startDate, endDate, setValue]);
 
 	useEffect(() => {
-		if (!navigator.geolocation) {
-			toast.error("Geolocation is not supported by your browser");
-		}
-
-		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				const { latitude, longitude } = position.coords;
-				console.log("User location", latitude, longitude);
-
-				const allowedLatitude = 7.737564333771149;
-				const allowedLongitude = 4.444108162049442;
-				const range = 0.01;
-
-				const isWithinLocation =
-					Math.abs(latitude - allowedLatitude) <= range &&
-					Math.abs(longitude - allowedLongitude) <= range;
-
-				if (!isWithinLocation) {
-					toast.error(
-						"You must be within the university campus to book a pass."
-					);
-					return;
-				}
-				setWithinLocation(isWithinLocation);
-			},
-			(error) => {
-				toast.error("Failed to get location. Please enable your location.");
-				console.error("Geolocation error:", error.message);
+		const refinedPurpose = purpose.toLowerCase();
+		if (purpose) {
+			if (
+				priorityLevels.High.some((word) =>
+					refinedPurpose.includes(word.toLowerCase())
+				)
+			) {
+				setPriority("High");
+			} else if (
+				priorityLevels.Mid.some((word) =>
+					refinedPurpose.includes(word.toLowerCase())
+				)
+			) {
+				setPriority("Mid");
+			} else {
+				setPriority("Normal");
 			}
-		);
+		}
+	}, [purpose, priorityLevels.High, priorityLevels.Mid]);
+
+	useEffect(() => {
+		const checkLocation = () => {
+			if (!navigator.geolocation) {
+				toast.error("Geolocation is not supported by your browser");
+			}
+
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					const { latitude, longitude } = position.coords;
+
+					const allowedLatitude = 7.737564333771149;
+					const allowedLongitude = 4.444108162049442;
+					const range = 0.01;
+
+					const isWithinLocation =
+						Math.abs(latitude - allowedLatitude) <= range &&
+						Math.abs(longitude - allowedLongitude) <= range;
+
+					if (!isWithinLocation) {
+						toast.error(
+							"You must be within the university campus to book a pass."
+						);
+						return;
+					}
+					setWithinLocation(isWithinLocation);
+				},
+				(error) => {
+					toast.error("Failed to get location. Please enable your location.");
+					console.error("Geolocation error:", error.message);
+				}
+			);
+		};
+
+		checkLocation();
 	}, []);
 
 	const onSubmit = async (data) => {
@@ -152,6 +182,7 @@ export default function CreateBookingForm() {
 				destination: data.destination,
 				purpose: data.purpose,
 				num_days: data.num_days,
+				priority,
 			};
 
 			createUpdateBooking(bookingData, { onSuccess: () => handleReset() });
@@ -283,6 +314,7 @@ export default function CreateBookingForm() {
 								: false
 						)}
 						error={errors?.type?.message}
+						initialValue="Short"
 					/>
 				</div>
 				<div className="flex flex-row xs:flex-col gap-3">
@@ -373,6 +405,7 @@ export default function CreateBookingForm() {
 						error={errors?.purpose?.message}
 					/>
 				</div>
+
 				<div className="flex flex-row justify-center xs:justify-end items-center xs:items-end gap-3 w-[30%] ml-auto xs:w-full xs:m-0">
 					<CustomButton
 						label={"Cancel"}

@@ -23,7 +23,7 @@ function TableRowItem({
 			);
 		} else if (key === "workItemNumber") {
 			return dataList[key]; // Render Work Item No. if present
-		} else if (key === "status") {
+		} else if (key === "status" || key === "priority") {
 			return <CustomStatusLabel status={dataList[key]} />;
 		} else if (key === "transactionType" || key === "status") {
 			return <CustomStatusLabel type={dataList[key]} />;
@@ -48,7 +48,9 @@ function TableRowItem({
 	};
 
 	return (
-		<tr className="w-full hover:bg-gray-100 cursor-pointer text-[12px] xs:text-[10.5px] text-[#323c47] bg-white border border-y-2 text-left xs:table-row">
+		<tr
+			className="w-full hover:bg-gray-100 cursor-pointer text-[12px] xs:text-[10.5px] text-[rgb(50,60,71)] bg-white border border-y-2 text-left xs:table-row"
+			onClick={() => onViewClick(dataList[navKey])}>
 			{/* Render each data cell */}
 			{headers.map(({ key }, index) => (
 				<td

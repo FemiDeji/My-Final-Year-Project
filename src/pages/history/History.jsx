@@ -1,6 +1,5 @@
 import { FaFilter } from "react-icons/fa";
 import CustomButton from "../../components/CustomButton";
-import CustomSearchField from "../../components/CustomSearchField";
 import Layout from "../../components/Layout";
 import Table from "../../components/Table";
 import useHistory from "../../hooks/history/useHistory";
@@ -11,14 +10,18 @@ import CustomSelectField from "../../components/CustomSelectField";
 import { useState } from "react";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import useFilterHistory from "../../hooks/history/useFilterHistory";
+import CustomLabelValue from "../../components/CustomLabelValue";
 
 export default function History() {
-	const { history, isPending } = useHistory();
-	const { filterHistory, isFiltering } = useFilterHistory();
 	const today = new Date().toISOString().split("T")[0];
+	const beginningOfYear = new Date(new Date().getFullYear(), 0, 1)
+		.toISOString()
+		.split("T")[0];
 	const [selectedStatus, setSelectedStatus] = useState("");
 	const [showFilterModal, setShowFilterModal] = useState(false);
 	const [filteredHistory, setFilteredHistory] = useState([]);
+	const [selectedHistory, setSelectedHistory] = useState(null);
+	const [showHistoryDetailsModal, setShowHistoryDetailsModal] = useState(false);
 
 	const {
 		handleSubmit,
@@ -28,8 +31,10 @@ export default function History() {
 		setValue,
 		reset,
 	} = useForm({
-		defaultValues: { start_date: today, end_date: today, status: "" },
+		defaultValues: { start_date: beginningOfYear, end_date: today, status: "" },
 	});
+	const { history, isPending } = useHistory();
+	const { filterHistory, isFiltering } = useFilterHistory();
 
 	const statusOption = [
 		{ key: "Approved", value: "Approved" },
@@ -46,6 +51,36 @@ export default function History() {
 		{ key: "end_date", value: "Return Date" },
 		{ key: "num_days", value: "Duration" },
 		{ key: "status", value: "Status" },
+		{ key: "priority", value: "Priority" },
+	];
+
+	const labels = {
+		department: "Department",
+		destination: "Destination",
+		email: "Email",
+		end_date: "Return date",
+		guardian_name: "Guardian",
+		guardian_phone: "Guardian No",
+		purpose: "Purpose",
+		start_date: "Start date",
+		type: "Type",
+		status: "Status",
+		username: "Matric No",
+		num_days: "Duration",
+		admin_username: "Admin Id",
+		rejection_reason: "Reason",
+		admin_name: "Admin Name",
+		priority: "Priority",
+	};
+
+	const exemptedKeys = [
+		"id",
+		"user_id",
+		"created_at",
+		"fullname",
+		"phone",
+		"room",
+		"email",
 	];
 
 	const handleReset = () => {
@@ -53,6 +88,11 @@ export default function History() {
 		setSelectedStatus("");
 
 		reset();
+	};
+
+	const handleViewClick = (id) => {
+		const result = history.find((historyId) => historyId.id == id);
+		result ? setSelectedHistory({ ...result }) : null;
 	};
 
 	const onSubmit = async (data) => {
@@ -71,19 +111,14 @@ export default function History() {
 		}
 	};
 
+	console.log("data", filteredHistory);
+
 	const tableData = filteredHistory.length > 0 ? filteredHistory : history;
 
 	return (
 		<Layout title={"History"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
-					{/* <div className="lg:w-[40%]">
-						<CustomSearchField
-							placeholder={"Search history"}
-							borderRadius={"lg"}
-							name={"searchHistory"}
-						/>
-					</div> */}
 					<div className="lg:w-[20%]">
 						<CustomButton
 							label={"Filter History"}
@@ -97,9 +132,35 @@ export default function History() {
 					</div>
 				</div>
 				<div className="mt-1">
-					<Table headers={headers} data={tableData ?? []} />
+					<Table
+						headers={headers}
+						data={tableData ?? []}
+						isView
+						onViewClick={(id) => {
+							handleViewClick(id);
+							setShowHistoryDetailsModal(true);
+						}}
+					/>
 				</div>
 			</div>
+			{showHistoryDetailsModal && (
+				<GeneralModal
+					isOpen={showHistoryDetailsModal}
+					onClose={() => setShowHistoryDetailsModal(false)}
+					showCloseButton
+					widthClass="w-full">
+					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-4">
+						{selectedHistory &&
+							Object.entries(selectedHistory)
+								.filter(([key]) => !exemptedKeys.includes(key))
+								.map(([a, b]) => {
+									return (
+										<CustomLabelValue value={b} label={labels[a]} key={a} />
+									);
+								})}
+					</div>
+				</GeneralModal>
+			)}
 			<GeneralModal
 				isOpen={showFilterModal}
 				showCloseButton

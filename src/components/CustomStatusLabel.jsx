@@ -1,7 +1,10 @@
 import { CiCircleMore } from "react-icons/ci";
+import { CgDanger } from "react-icons/cg";
 import { FaXmark } from "react-icons/fa6";
 import { IoMdCheckmark } from "react-icons/io";
 import { IoEllipsisHorizontalCircle } from "react-icons/io5";
+import { MdWarning } from "react-icons/md";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 /* eslint-disable react/prop-types */
 export default function CustomStatusLabel({ status }) {
@@ -25,15 +28,33 @@ export default function CustomStatusLabel({ status }) {
 			label: "Declined",
 		},
 		approved: {
-			colorClass: "bg-general-green text-white",
+			colorClass: "bg-general-green ",
 			iconClass: "text-white",
 			icon: <IoMdCheckmark size={16} />,
 			label: "Approved",
 		},
-		unknown: {
-			colorClass: "bg-general-mid-grey text-general-gray",
+		normal: {
+			colorClass: "bg-[#2196F3] ",
+			iconClass: "text-white",
+			icon: <AiOutlineInfoCircle size={16} />,
+			label: "Normal",
+		},
+		mid: {
+			colorClass: "bg-[#FC6A21]",
 			iconClass: "text-general-grey",
-			icon: <CiCircleMore size={16} />,
+			icon: <MdWarning size={16} />,
+			label: "Mid",
+		},
+		high: {
+			colorClass: "bg-[#FF0000] ",
+			iconClass: "text-white",
+			icon: <CgDanger size={16} />,
+			label: "High",
+		},
+		unknown: {
+			colorClass: "bg-general-mid-grey ",
+			iconClass: "text-[#36454F]",
+			icon: <IoEllipsisHorizontalCircle size={16} />,
 			label: "Unknown",
 		},
 	};
