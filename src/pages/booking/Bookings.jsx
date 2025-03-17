@@ -90,7 +90,6 @@ export default function Bookings() {
 		const result = bookings.find((bookingId) => bookingId.id == id);
 		result ? setSelectedBooking({ ...result }) : null;
 	};
-	console.log("selected booking", selectedBooking);
 
 	const headers = [
 		{ key: "destination", value: "Destination" },
@@ -118,8 +117,6 @@ export default function Bookings() {
 			console.log("Error filtering bookings", err);
 		}
 	};
-
-	console.log("filtered bookings", filteredBookings);
 
 	const tableData = filteredBookings.length > 0 ? filteredBookings : bookings;
 

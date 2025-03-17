@@ -17,7 +17,7 @@ export default function History() {
 	const beginningOfYear = new Date(new Date().getFullYear(), 0, 1)
 		.toISOString()
 		.split("T")[0];
-	const [selectedStatus, setSelectedStatus] = useState("");
+
 	const [showFilterModal, setShowFilterModal] = useState(false);
 	const [filteredHistory, setFilteredHistory] = useState([]);
 	const [selectedHistory, setSelectedHistory] = useState(null);
@@ -85,7 +85,6 @@ export default function History() {
 
 	const handleReset = () => {
 		setValue("status", "");
-		setSelectedStatus("");
 
 		reset();
 	};
@@ -110,8 +109,6 @@ export default function History() {
 			console.log("Error filtering history", err);
 		}
 	};
-
-	console.log("data", filteredHistory);
 
 	const tableData = filteredHistory.length > 0 ? filteredHistory : history;
 
@@ -161,73 +158,73 @@ export default function History() {
 					</div>
 				</GeneralModal>
 			)}
-			<GeneralModal
-				isOpen={showFilterModal}
-				showCloseButton
-				onClose={() => {
-					setShowFilterModal(false);
-					handleReset();
-				}}
-				widthClass="xs:w-full w-[50%]">
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					className="text-left py-4 xs:py-3 flex flex-col gap-3">
-					<div className="flex flex-col justify-center items-center gap-3">
-						<CustomInput
-							label={"Start date"}
-							name="start_date"
-							type="date"
-							register={register("start_date", {
-								validate: (value) =>
-									value <= getValues().end_date ||
-									"Start date cannot be after end date",
-							})}
-							error={errors?.start_date?.message}
+			{showFilterModal && (
+				<GeneralModal
+					isOpen={showFilterModal}
+					showCloseButton
+					onClose={() => {
+						setShowFilterModal(false);
+						handleReset();
+					}}
+					widthClass="xs:w-full w-[50%]">
+					<form
+						onSubmit={handleSubmit(onSubmit)}
+						className="text-left py-4 xs:py-3 flex flex-col gap-3">
+						<div className="flex flex-col justify-center items-center gap-3">
+							<CustomInput
+								label={"Start date"}
+								name="start_date"
+								type="date"
+								register={register("start_date", {
+									validate: (value) =>
+										value <= getValues().end_date ||
+										"Start date cannot be after end date",
+								})}
+								error={errors?.start_date?.message}
+							/>
+							<CustomInput
+								label={"End date"}
+								name="end_date"
+								type="date"
+								register={register("end_date", {
+									validate: (value) =>
+										value >= getValues().start_date ||
+										"End date cannot be before start date",
+								})}
+								error={errors?.end_date?.message}
+							/>
+						</div>
+						<CustomSelectField
+							label={"Status"}
+							name={"status"}
+							options={statusOption}
+							optionKey="key"
+							optionLabel="value"
+							register={register("status")}
+							error={errors?.status?.message}
 						/>
-						<CustomInput
-							label={"End date"}
-							name="end_date"
-							type="date"
-							register={register("end_date", {
-								validate: (value) =>
-									value >= getValues().start_date ||
-									"End date cannot be before start date",
-							})}
-							error={errors?.end_date?.message}
-						/>
-					</div>
-					<CustomSelectField
-						label={"Status"}
-						name={"status"}
-						options={statusOption}
-						optionKey="key"
-						optionLabel="value"
-						register={register("status", { required: "Status is required" })}
-						error={errors?.status?.message}
-						onChange={setSelectedStatus}
-						initialValue={selectedStatus}
-					/>
-					<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
-						<CustomButton
-							label={"Cancel"}
-							bgColor="#DFE6EC"
-							bordered
-							borderSize="lg"
-							onClick={() => {
-								handleReset();
-								setShowFilterModal(false);
-							}}
-						/>
-						<CustomButton
-							label={"Filter"}
-							bgColor="#f2c008"
-							bordered
-							borderSize="lg"
-							type="submit"
-						/>
-					</div>
-				</form>
-			</GeneralModal>
+						<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
+							<CustomButton
+								label={"Cancel"}
+								bgColor="#DFE6EC"
+								bordered
+								borderSize="lg"
+								onClick={() => {
+									handleReset();
+									setShowFilterModal(false);
+								}}
+							/>
+							<CustomButton
+								label={"Filter"}
+								bgColor="#f2c008"
+								bordered
+								borderSize="lg"
+								type="submit"
+							/>
+						</div>
+					</form>
+				</GeneralModal>
+			)}
 			{(isPending || isFiltering) && (
 				<CustomBackdrop open={true} text={"Please wait..."} />
 			)}

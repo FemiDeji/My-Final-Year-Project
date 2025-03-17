@@ -63,7 +63,7 @@ function CustomSelectField({
 					{...register}
 					disabled={readOnly}
 					defaultValue={selectedValue}
-					className={`bg-transparent w-full h-[2.3rem] outline-none pl-2 `}
+					className={`bg-transparent xs:text-xs w-full h-[2.3rem] outline-none pl-2 `}
 					value={selectedValue}
 					name={name}
 					id={name}
