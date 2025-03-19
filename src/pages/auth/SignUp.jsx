@@ -119,8 +119,12 @@ export default function SignUp() {
 									register={register("username", {
 										required: "Username is required",
 										pattern: {
-											value: /^\d{2}\/d{4}$/,
-											message: "Matric no invalid. Use a valid format.",
+											value:
+												activeType === "user" ? /^\d{2}\/d{4}$/ : /^SN\d{6}$/,
+											message:
+												activeType === "user"
+													? "Matric no invalid. Use a valid format."
+													: "Admin ID invalid. Use a valid format.",
 										},
 									})}
 									error={errors?.username?.message}
@@ -160,31 +164,34 @@ export default function SignUp() {
 									placeholder={"09013647832"}
 								/>
 							</div>
-							<div className="w-full xs:flex-col flex justify-center items-start gap-3">
-								<CustomInput
-									label={"Department"}
-									name="department"
-									register={register("department", {
-										required: "Department is required",
-									})}
-									error={errors?.department?.message}
-									placeholder={"Computer Science"}
-								/>
-								{activeType === "user" && (
+							{activeType === "user" && (
+								<div className="w-full xs:flex-col flex justify-center items-start gap-3">
+									<CustomInput
+										label={"Department"}
+										name="department"
+										register={register("department", {
+											required:
+												activeType === "user"
+													? "Department is required"
+													: false,
+										})}
+										error={errors?.department?.message}
+										placeholder={"Computer Science"}
+									/>
 									<CustomInput
 										label={"Guardian/Parent Name"}
 										name="guardian_name"
 										register={register(
 											"guardian_name",
 											activeType === "user" && {
-												required: "This field is required",
+												required: "Guardian name field is required",
 											}
 										)}
 										error={errors?.guardian_name?.message}
 										placeholder={"Jane Doe"}
 									/>
-								)}
-							</div>
+								</div>
+							)}
 							{activeType === "user" && (
 								<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 									<CustomInput
@@ -194,6 +201,10 @@ export default function SignUp() {
 											"room",
 											activeType === "user" && {
 												required: "Room Number is required",
+												pattern: {
+													value: /^[A-I](1[0-9]|2[0-2]|\d)$/,
+													message: "Invalid room number.",
+												},
 											}
 										)}
 										error={errors?.room?.message}
