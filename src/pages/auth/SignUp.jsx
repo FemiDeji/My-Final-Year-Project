@@ -120,7 +120,7 @@ export default function SignUp() {
 										required: "Username is required",
 										pattern: {
 											value:
-												activeType === "user" ? /^\d{2}\/d{4}$/ : /^SN\d{6}$/,
+												activeType === "user" ? /^\d{2}\/\d{4}$/ : /^SN\d{6}$/,
 											message:
 												activeType === "user"
 													? "Matric no invalid. Use a valid format."

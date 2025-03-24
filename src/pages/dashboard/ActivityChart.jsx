@@ -19,7 +19,7 @@ export default function ActivityChart({ data }) {
 						<Pie
 							data={data}
 							dataKey="bookings"
-							nameKey="name"
+							nameKey="month"
 							cx="50%"
 							cy="50%"
 							outerRadius="65%"
@@ -32,12 +32,12 @@ export default function ActivityChart({ data }) {
 								<Cell
 									key={`cell-${index}`}
 									fill={COLORS[index % COLORS.length]}
-									fontSize={"75%"}
+									fontSize={"70%"}
 								/>
 							))}
 						</Pie>
 						<Tooltip />
-						<Legend wrapperStyle={{ fontSize: "14px", textAlign: "center" }} />
+						<Legend wrapperStyle={{ fontSize: "12px", textAlign: "center" }} />
 					</PieChart>
 				</ResponsiveContainer>
 			</div>

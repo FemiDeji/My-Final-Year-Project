@@ -23,6 +23,8 @@ export default function Bookings() {
 
 	const { bookings, isPending } = useBookings();
 	const { filterBookings, isPending: isFiltering } = useFilterBookings();
+	const [pageNumber, setPageNumber] = useState(1);
+	const [pageSize] = useState(10);
 
 	const today = new Date().toISOString().split("T")[0];
 	const beginningOfYear = new Date(new Date().getFullYear(), 0, 1)
@@ -52,6 +54,9 @@ export default function Bookings() {
 		"phone",
 		"room",
 		"email",
+		"admin_username",
+		"admin_name",
+		"rejection_reason",
 	];
 
 	const priorityOptions = [
@@ -80,9 +85,6 @@ export default function Bookings() {
 		status: "Status",
 		username: "Matric No",
 		num_days: "Duration",
-		admin_username: "Admin Id",
-		rejection_reason: "Reason",
-		admin_name: "Admin Name",
 		priority: "Priority",
 	};
 
@@ -120,28 +122,47 @@ export default function Bookings() {
 
 	const tableData = filteredBookings.length > 0 ? filteredBookings : bookings;
 
+	const startIndex = (pageNumber - 1) * pageSize;
+	const endIndex = startIndex + pageSize;
+	const paginatedData = tableData?.slice(startIndex, endIndex);
+
 	return (
 		<Layout title={"Bookings"}>
 			<div className="bg-white rounded-lg shadow-sm flex flex-col w-full p-3">
-				<div className="flex gap-4 justify-end items-center">
-					<div className="lg:w-[20%]">
-						<CustomButton
-							label={"Filter History"}
-							bgColor="#f2c008"
-							textColor="#002855"
-							bordered
-							borderSize="lg"
-							onClick={() => setShowFilterModal(true)}>
-							<FaFilter />
-						</CustomButton>
-					</div>
-					<div className="lg:w-[20%]">
+				<div className="flex gap-4 justify-end items-center xs:flex xs:justify-between">
+					{filteredBookings.length === 0 && (
+						<div className="lg:w-[20%] xs:w-[45%]">
+							<CustomButton
+								label={"Filter Bookings"}
+								bgColor="#f2c008"
+								textColor="#002855"
+								bordered
+								borderSize="lg"
+								onClick={() => setShowFilterModal(true)}>
+								<FaFilter />
+							</CustomButton>
+						</div>
+					)}
+					{filteredBookings.length > 0 && (
+						<div className="lg:w-[20%] xs:w-[45%]">
+							<CustomButton
+								label={"Clear FIlter"}
+								bgColor="#f2c008"
+								textColor="#002855"
+								bordered
+								borderSize="lg"
+								onClick={() => setFilteredBookings([])}>
+								<FaFilter />
+							</CustomButton>
+						</div>
+					)}
+					<div className="lg:w-[20%] xs:w-[45%]">
 						<CustomButton
 							label={"Book Pass"}
 							bgColor="#f2c008"
 							textColor="#002855"
 							bordered
-							onClick={() => navigate("/new-booking")}>
+							onClick={() => navigate("/bookings/new")}>
 							<FaPlus />
 						</CustomButton>
 					</div>
@@ -149,12 +170,16 @@ export default function Bookings() {
 				<div>
 					<Table
 						headers={headers}
-						data={tableData ?? []}
+						data={paginatedData ?? []}
 						isView
 						onViewClick={(id) => {
 							setShowBookingDetailsModal(true);
 							handleViewClick(id);
 						}}
+						totalCount={tableData?.length ?? 0}
+						currentPage={pageNumber}
+						onPageChange={setPageNumber}
+						pageSize={pageSize}
 					/>
 				</div>
 			</div>
@@ -163,6 +188,7 @@ export default function Bookings() {
 					isOpen={showBookingDetailsModal}
 					onClose={() => setShowBookingDetailsModal(false)}
 					showCloseButton
+					height="80vh"
 					widthClass="w-full">
 					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-4">
 						{selectedBooking &&

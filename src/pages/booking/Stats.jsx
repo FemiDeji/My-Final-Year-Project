@@ -4,8 +4,10 @@ import Stat from "../../components/Stat";
 import { LuBook, LuBookCheck, LuBookDown, LuBookX } from "react-icons/lu";
 import useUser from "../../hooks/auth/useUser";
 
-export default function Stats({ bookings, numDays, confirmedBookings }) {
+export default function Stats({ bookings, numApproved, numDeclined }) {
 	const { profile } = useUser();
+
+	const numBookings = bookings?.length;
 
 	return (
 		<div className="flex flex-row xs:flex-col w-full justify-between items-center gap-3">
@@ -14,7 +16,7 @@ export default function Stats({ bookings, numDays, confirmedBookings }) {
 					title={"Bookings"}
 					icon={<LuBook className="text-2xl xs:text-xl" strokeWidth={1.5} />}
 					color={"#002855"}
-					value={100}
+					value={numBookings}
 				/>
 			)}
 			{profile?.role === "admin" && (
@@ -24,20 +26,20 @@ export default function Stats({ bookings, numDays, confirmedBookings }) {
 						<LuBookDown className="text-2xl xs:text-xl" strokeWidth={1.5} />
 					}
 					color={"#002855"}
-					value={100}
+					value={numBookings}
 				/>
 			)}
 			<Stat
 				title={"Approved"}
 				icon={<LuBookCheck className="text-2xl xs:text-xl" strokeWidth={1.5} />}
 				color={"#002855"}
-				value={40}
+				value={numApproved}
 			/>
 			<Stat
 				title={"Declined"}
 				icon={<LuBookX className="text-2xl xs:text-xl" strokeWidth={1.5} />}
 				color={"#002855"}
-				value={18}
+				value={numDeclined}
 			/>
 		</div>
 	);

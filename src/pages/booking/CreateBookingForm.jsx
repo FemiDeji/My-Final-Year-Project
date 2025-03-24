@@ -345,13 +345,15 @@ export default function CreateBookingForm() {
 							disabled={isDisabled}
 							register={register(
 								"endDate",
-								(submitType === "general" || passType === "Long") && {
-									required: "End date is required",
-									validate: (value) =>
-										// console.log(value < getValues().startDate),
-										value >= getValues().startDate ||
-										"End date cannot be before start date",
-								}
+								submitType === "general" && passType === "Long"
+									? {
+											required: "End date is required",
+											validate: (value) =>
+												// console.log(value < getValues().startDate),
+												value >= getValues().startDate ||
+												"End date cannot be before start date",
+									  }
+									: false
 							)}
 							error={errors?.endDate?.message}
 						/>

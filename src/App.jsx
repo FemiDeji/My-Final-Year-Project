@@ -63,7 +63,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/new-booking"
+						path="/bookings/new"
 						element={
 							<ProtectedRoute authUser={["user"]}>
 								<CreateBookingForm />

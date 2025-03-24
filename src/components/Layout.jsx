@@ -6,6 +6,7 @@ import Header from "./Header";
 import SideBar from "./SideBar";
 import { useLocation } from "react-router-dom";
 import { isGeneralRoute } from "../helpers/Route";
+import CustomButton from "./CustomButton";
 
 export default function Layout({
 	title,
@@ -16,6 +17,15 @@ export default function Layout({
 	divider = false,
 	status = "",
 	children,
+	button = false,
+	borderSize,
+	bordered,
+	bgColor,
+	textColor,
+	btnChildren,
+	btnOnClick,
+	label,
+	disabled,
 }) {
 	const [showIconsOnly, setShowIconsOnly] = useState(false);
 	const [showSidebarGeneralList, setShowSidebarGeneralList] = useState(false);
@@ -49,11 +59,7 @@ export default function Layout({
 			<div className="flex min-h-screen h-full">
 				<div
 					className={`flex h-full 
-						${
-							showIconsOnly
-								? "lg:w-[7%] md:w-[6%] xl:w-[5%]"
-								: "lg:w-[22%] mg:w-[15%] xl:w-[18%]"
-						}
+						${showIconsOnly ? "lg:w-[7%] xl:w-[5%]" : "lg:w-[22%] xl:w-[18%]"}
 					`}>
 					<SideBar
 						showIconsOnly={showIconsOnly}
@@ -69,26 +75,42 @@ export default function Layout({
 				<div
 					className={`flex flex-col right-0 gap-3 bg-[whitesmoke] mt-[3.8rem] xs:mt-[3.5rem] ml-1 ${
 						showIconsOnly
-							? "lg:w-[93%] xl:w-[95%]"
+							? "lg:w-[93%] xl:w-[94%]"
 							: "lg:w-[78%] xl:w-[82%] xs:w-full"
 					}`}>
-					{title && (
-						<div className="px-8 xs:px-4 xs:pt-5 pt-8 flex flex-row justify-between items-center">
-							<CustomLayoutHeader
-								title={title}
-								subtitle={subtitle}
-								backArrow={backArrow}
-								onClick={onClick}
-								filters={filters}
-							/>
-						</div>
-					)}
-					{status && (
-						<div className="flex flex-row gap-2 justify-center items-center">
-							<span className="font-semibold">Status:</span>
-							<CustomStatusLabel status={status} />
-						</div>
-					)}
+					<div className="flex justify-between items-center pt-8 px-8 xs:px-4 xs:pt-5">
+						{title && (
+							<div className="flex flex-row justify-between items-center">
+								<CustomLayoutHeader
+									title={title}
+									subtitle={subtitle}
+									backArrow={backArrow}
+									onClick={onClick}
+									filters={filters}
+								/>
+							</div>
+						)}
+						{button && (
+							<div className="w-[20%] lg:w-[22%] xs:w-[45%] whitespace-nowrap xl:w-[15%]">
+								<CustomButton
+									disabled={disabled}
+									bgColor={bgColor}
+									textColor={textColor}
+									bordered={bordered}
+									borderSize={borderSize}
+									label={label}
+									onClick={btnOnClick}>
+									{btnChildren}
+								</CustomButton>
+							</div>
+						)}
+						{status && (
+							<div className="flex flex-row gap-2 justify-center items-center">
+								<span className="font-semibold">Status:</span>
+								<CustomStatusLabel status={status} />
+							</div>
+						)}
+					</div>
 					{divider && (
 						<div className="h-[0.15rem] w-full bg-[#e3e3e3] max-w-full shadow-lg"></div>
 					)}

@@ -127,3 +127,53 @@ export async function updateBooking(updateData, id) {
 
 	return updateBooking;
 }
+
+export async function getRecentBookings() {
+	const thirtyDaysAgo = new Date();
+	thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		console.error("Error fetching user", userError.message);
+
+		return null;
+	}
+
+	const { data: profiles, error: profilesError } = await supabase
+		.from("profiles")
+		.select("id, role")
+		.eq("auth_id", user.id)
+		.single();
+
+	if (profilesError) {
+		console.error("Error fetching profile", profilesError.message);
+		return null;
+	}
+
+	// Ensure a profile exists before proceeding
+	if (!profiles || profiles.length === 0) {
+		console.error("No profile found for this user.");
+		return null;
+	}
+
+	let query = supabase
+		.from("bookings")
+		.select("*")
+		.gte("created_at", thirtyDaysAgo.toISOString());
+
+	if (profiles.role === "user") {
+		query = query.eq("user_id", profiles.id);
+	}
+
+	const { data: recentBookings, error: recentBookingsError } = await query;
+
+	if (recentBookingsError) {
+		console.error("Error fetching recent bookings", recentBookingsError);
+	}
+
+	return recentBookings;
+}

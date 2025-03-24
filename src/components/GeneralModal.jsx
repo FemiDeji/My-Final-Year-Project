@@ -11,7 +11,7 @@ function GeneralModal({
 	transparent = false,
 	zIndex = 100000,
 	widthClass = "w-1/2",
-	height = "auto",
+	height = "80vh",
 	classname,
 	class2,
 }) {

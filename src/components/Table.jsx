@@ -62,39 +62,40 @@ function Table({
 	const formatWorkItemNumber = (index) => String(index + 1).padStart(5, "0");
 
 	return (
-		<div className="overflow-x-auto mb-8 mt-2 w-full rounded-lg">
-			<table className="w-full text-sm xs:text-xs text-left rtl:text-right bg-gray-50 dark:text-gray-300 text-general-blue">
-				<TableHeader
-					headers={addOptionalColumnsToHeaders(headers)}
-					hasActions={hasActions}
-					showCheckbox={showCheckbox}
-				/>
-				<tbody>
-					{data?.map((dataItem, index) => (
-						<TableRowItem
-							key={index}
-							headers={addOptionalColumnsToHeaders(headers)}
-							dataList={{
-								checkbox: showCheckbox ? <input type="checkbox" /> : null,
-								serialNumber: showSerialNumber ? index + 1 : null, // Simple incrementing SN
-								workItemNumber: showWorkItemNumber
-									? formatWorkItemNumber(index)
-									: null,
-								...dataItem,
-								sn: index + 1,
-							}}
-							onViewClick={onViewClick}
-							viewTitle={viewTitle}
-							isView={isView}
-							navKey={navKey}
-							onDownload={onDownload}
-							isDownload={isDownolad}
-						/>
-					))}
-				</tbody>
-			</table>
-			{data && data.length < 1 && <CustomNoRecordFound />}
-
+		<>
+			<div className="overflow-x-auto mb-8 mt-2 w-full rounded-lg">
+				<table className="w-full text-sm xs:text-xs text-left rtl:text-right bg-gray-50 dark:text-gray-300 text-general-blue">
+					<TableHeader
+						headers={addOptionalColumnsToHeaders(headers)}
+						hasActions={hasActions}
+						showCheckbox={showCheckbox}
+					/>
+					<tbody>
+						{data?.map((dataItem, index) => (
+							<TableRowItem
+								key={index}
+								headers={addOptionalColumnsToHeaders(headers)}
+								dataList={{
+									checkbox: showCheckbox ? <input type="checkbox" /> : null,
+									serialNumber: showSerialNumber ? index + 1 : null, // Simple incrementing SN
+									workItemNumber: showWorkItemNumber
+										? formatWorkItemNumber(index)
+										: null,
+									...dataItem,
+									sn: index + 1,
+								}}
+								onViewClick={onViewClick}
+								viewTitle={viewTitle}
+								isView={isView}
+								navKey={navKey}
+								onDownload={onDownload}
+								isDownload={isDownolad}
+							/>
+						))}
+					</tbody>
+				</table>
+				{data && data.length < 1 && <CustomNoRecordFound />}
+			</div>
 			<div className="w-full mt-5">
 				<Pagination
 					totalCount={totalCount}
@@ -103,7 +104,7 @@ function Table({
 					pageSize={pageSize}
 				/>
 			</div>
-		</div>
+		</>
 	);
 }
 

@@ -37,7 +37,7 @@ export default function BookingSummary({ data }) {
 							))}
 						</Pie>
 						<Tooltip />
-						<Legend wrapperStyle={{ fontSize: "14px", textAlign: "center" }} />
+						<Legend wrapperStyle={{ fontSize: "12px", textAlign: "center" }} />
 					</PieChart>
 				</ResponsiveContainer>
 			</div>
