@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import useUser from "../../hooks/auth/useUser";
 import useCustomFileDownload from "../../helpers/useCustomFileDownload";
 import { convertToDateTime } from "../../helpers/dateAndTime";
+import useDownloadHistory from "../../hooks/history/useDownloadHistory";
 
 export default function History() {
 	const today = new Date().toISOString().split("T")[0];
@@ -52,6 +53,7 @@ export default function History() {
 	});
 	const { history, isPending } = useHistory();
 	const { filterHistory, isFiltering } = useFilterHistory();
+	const { downloadHistory, isDownloading } = useDownloadHistory();
 
 	const startDate = watch("start_date");
 	const endDate = watch("end_date");
@@ -174,7 +176,7 @@ export default function History() {
 
 	const handleDownload = async (data) => {
 		try {
-			const downloadedData = await filterHistory({
+			const downloadedData = await downloadHistory({
 				status: data.status,
 				start_date: data.start_date,
 				end_date: data.end_date,
@@ -184,6 +186,7 @@ export default function History() {
 				toast.success("No history available for the selected date range");
 				return;
 			}
+			setPageNumber(1);
 			setShowHistoryDownloadModal(false);
 			downloadAs(data.docFormat, downloadedData);
 			setDownloadableData(downloadedData);
@@ -421,7 +424,7 @@ export default function History() {
 					</form>
 				</GeneralModal>
 			)}
-			{(isPending || isFiltering) && (
+			{(isPending || isFiltering || isDownloading) && (
 				<CustomBackdrop open={true} text={"Please wait..."} />
 			)}
 		</Layout>

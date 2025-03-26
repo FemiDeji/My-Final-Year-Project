@@ -114,21 +114,25 @@ export default function SignUp() {
 						<div className="w-full flex flex-col justify-center items-center gap-4">
 							<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 								<CustomInput
-									label={"Matric No"}
+									label={activeType === "user" ? "Matric No" : "Staff No"}
 									name="username"
 									register={register("username", {
 										required: "Username is required",
 										pattern: {
 											value:
-												activeType === "user" ? /^\d{2}\/\d{4}$/ : /^SN\d{6}$/,
+												activeType === "user"
+													? /^\d{2}\/\d{4}$/
+													: /^AU\/\d{4}-\d{4}$/,
 											message:
 												activeType === "user"
-													? "Matric no invalid. Use a valid format."
-													: "Admin ID invalid. Use a valid format.",
+													? "Matric number is invalid. Use a valid format."
+													: "Staff number is invalid. Use a valid format.",
 										},
 									})}
 									error={errors?.username?.message}
-									placeholder={activeType === "user" ? "02/1021" : "SN09245"}
+									placeholder={
+										activeType === "user" ? "02/1021" : "AU/2024-0151"
+									}
 								/>
 								<CustomInput
 									label={"Fullname"}
