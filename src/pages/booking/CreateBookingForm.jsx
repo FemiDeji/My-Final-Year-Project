@@ -120,7 +120,7 @@ export default function CreateBookingForm() {
 
 					const allowedLatitude = 7.737564333771149;
 					const allowedLongitude = 4.444108162049442;
-					const range = 0.01;
+					const range = 100;
 
 					const isWithinLocation =
 						Math.abs(latitude - allowedLatitude) <= range &&
