@@ -77,7 +77,7 @@ export default function CustomStatusLabel({ status }) {
 
 	return (
 		<div
-			className={`flex gap-2 content-center items-center text-center text-[11px] xs:text-[9px] w-[70%] justify-center rounded-full py-1 px-8 font-bold ${colorClass}`}
+			className={`flex gap-2 content-center items-center text-center text-[11px] xs:text-[9px] w-[70%] justify-center rounded-full py-1 px-9 font-bold ${colorClass}`}
 			style={{ backgroundColor: backgroundColor, color: textColor }}>
 			<span className={`${iconClass}`}>{icon}</span>
 			<span className={`${iconClass}`}>{label}</span>

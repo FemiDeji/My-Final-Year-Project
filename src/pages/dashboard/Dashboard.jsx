@@ -63,8 +63,6 @@ export default function Dashboard() {
 		frequency: monthlyData[month].totalDays / monthlyData[month].bookings || 0,
 	}));
 
-	console.log("data", data);
-
 	return (
 		<Layout title={"Dashboard"}>
 			<div className="w-full flex flex-col gap-3 xs:gap-6">

@@ -30,7 +30,7 @@ export async function getFilteredHistory({
 	start_date,
 	end_date,
 }) {
-	let statusFilter = ["Declined"];
+	let statusFilter = ["Declined", "Checked in"];
 
 	if (role === "security") {
 		statusFilter = ["Checked in"];

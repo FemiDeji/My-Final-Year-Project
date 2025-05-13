@@ -70,7 +70,7 @@ export default function SideBar({
 					} xs:gap-1 gap-2`}>
 					{!showIconsOnly && (
 						<div className="text-[0.75rem] font-medium xs:text-[12px]">
-							{`PBMS ${
+							{`PBS ${
 								profile?.role === "user"
 									? "STUDENT"
 									: profile?.role === "admin"

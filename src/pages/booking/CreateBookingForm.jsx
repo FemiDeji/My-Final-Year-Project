@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import CustomTextarea from "../../components/CustomTextarea";
 import { states } from "../../helpers/states";
-import { dateDifference } from "../../helpers/dateAndTime";
+import {
+	combineDateWithCurrentTime,
+	dateDifference,
+	getDistanceInMeters,
+} from "../../helpers/dateAndTime";
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -120,11 +124,19 @@ export default function CreateBookingForm() {
 
 					const allowedLatitude = 7.737564333771149;
 					const allowedLongitude = 4.444108162049442;
-					const range = 100;
+					const distanceAllowed = getDistanceInMeters(
+						latitude,
+						longitude,
+						allowedLatitude,
+						allowedLongitude
+					);
+					// const range = 100;
+					const allowedRadius = 50;
 
-					const isWithinLocation =
-						Math.abs(latitude - allowedLatitude) <= range &&
-						Math.abs(longitude - allowedLongitude) <= range;
+					// const isWithinLocation =
+					// 	Math.abs(latitude - allowedLatitude) <= range &&
+					// 	Math.abs(longitude - allowedLongitude) <= range;
+					const isWithinLocation = distanceAllowed <= allowedRadius;
 
 					if (!isWithinLocation) {
 						toast.error(
@@ -173,8 +185,8 @@ export default function CreateBookingForm() {
 				department: data.department,
 				phone: data.phone,
 				room: data.room,
-				start_date: data.startDate,
-				end_date: data.endDate,
+				start_date: combineDateWithCurrentTime(data.startDate),
+				end_date: combineDateWithCurrentTime(data.endDate),
 				user_id: userDetails.id,
 				guardian_name: data.guardian_name,
 				guardian_phone: data.guardian_phone,
@@ -186,7 +198,6 @@ export default function CreateBookingForm() {
 			};
 
 			createUpdateBooking(bookingData, { onSuccess: () => handleReset() });
-			console.log("Data", { ...data });
 		}
 	};
 
