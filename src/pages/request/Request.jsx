@@ -173,7 +173,7 @@ export default function Request() {
 		<Layout title={"Requests"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
-					{requests.length > 0 && (
+					{requests?.length > 0 && (
 						<div className="lg:w-[20%] ml-auto">
 							<CustomButton
 								label={"Filter Request"}

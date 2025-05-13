@@ -204,7 +204,7 @@ export default function History() {
 	return (
 		<Layout
 			title={"History"}
-			button={history.length > 0}
+			button={history?.length > 0}
 			bgColor={"#f2c008"}
 			textColor={"#002855"}
 			borderSize={"lg"}
@@ -214,7 +214,7 @@ export default function History() {
 			label={"Download History"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
-					{history.length > 0 && (
+					{history?.length > 0 && (
 						<div className="lg:w-[22%] xs:w-[40%]">
 							<CustomButton
 								label={"Filter History"}

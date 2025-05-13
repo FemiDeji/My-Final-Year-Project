@@ -158,7 +158,7 @@ export default function Bookings() {
 					)}
 					<div className="lg:w-[20%] xs:w-[45%]">
 						<CustomButton
-							label={"Book Pass"}
+							label={"New Booking"}
 							bgColor="#f2c008"
 							textColor="#002855"
 							bordered

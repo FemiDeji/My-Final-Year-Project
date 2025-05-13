@@ -3,8 +3,15 @@
 import Stat from "../../components/Stat";
 import { LuBook, LuBookCheck, LuBookDown, LuBookX } from "react-icons/lu";
 import useUser from "../../hooks/auth/useUser";
+import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
 
-export default function Stats({ bookings, numApproved, numDeclined }) {
+export default function Stats({
+	bookings,
+	numApproved,
+	numDeclined,
+	numCheckedIn,
+	numCheckedOut,
+}) {
 	const { profile } = useUser();
 
 	const numBookings = bookings?.length;
@@ -29,18 +36,50 @@ export default function Stats({ bookings, numApproved, numDeclined }) {
 					value={numBookings}
 				/>
 			)}
-			<Stat
-				title={"Approved"}
-				icon={<LuBookCheck className="text-2xl xs:text-xl" strokeWidth={1.5} />}
-				color={"#002855"}
-				value={numApproved}
-			/>
-			<Stat
-				title={"Declined"}
-				icon={<LuBookX className="text-2xl xs:text-xl" strokeWidth={1.5} />}
-				color={"#002855"}
-				value={numDeclined}
-			/>
+			{(profile?.role === "user" || profile?.role === "admin") && (
+				<>
+					<Stat
+						title={"Approved"}
+						icon={
+							<LuBookCheck className="text-2xl xs:text-xl" strokeWidth={1.5} />
+						}
+						color={"#002855"}
+						value={numApproved}
+					/>
+					<Stat
+						title={"Declined"}
+						icon={<LuBookX className="text-2xl xs:text-xl" strokeWidth={1.5} />}
+						color={"#002855"}
+						value={numDeclined}
+					/>
+				</>
+			)}
+			{profile?.role === "security" && (
+				<>
+					<Stat
+						title={"Checked Out"}
+						icon={
+							<HiOutlineLogout
+								className="text-2xl xs:text-xl"
+								strokeWidth={1.5}
+							/>
+						}
+						color={"#002855"}
+						value={numCheckedOut}
+					/>
+					<Stat
+						title={"Checked In"}
+						icon={
+							<HiOutlineLogin
+								className="text-2xl xs:text-xl"
+								strokeWidth={1.5}
+							/>
+						}
+						color={"#002855"}
+						value={numCheckedIn}
+					/>
+				</>
+			)}
 		</div>
 	);
 }

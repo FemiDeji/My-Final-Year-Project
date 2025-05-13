@@ -192,7 +192,8 @@ export async function getRecentBookings() {
 	let query = supabase
 		.from("bookings")
 		.select("*")
-		.gte("created_at", thirtyDaysAgo.toISOString());
+		.gte("created_at", thirtyDaysAgo.toISOString())
+		.gte("updated_at", thirtyDaysAgo.toISOString());
 
 	if (profiles.role === "user") {
 		query = query.eq("user_id", profiles.id);

@@ -37,17 +37,11 @@ export default function Login() {
 	});
 
 	const onSubmit = (data) => {
-		console.log("original data", {
-			identifier: data.identifier,
-			password: data.password,
-			email: data.email,
-		});
 		const encryptedData = newEncryptData({
 			identifier: data.identifier,
 			password: data.password,
 			email: data.email,
 		});
-		console.log("encrypt data", encryptedData);
 		login(encryptedData, { onSettled: () => reset() });
 		console.log("decrypt data", newDecryptData(encryptedData));
 	};
