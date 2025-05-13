@@ -32,7 +32,7 @@ export default function BookingSummary({ data }) {
 								<Cell
 									key={`cell-${index}`}
 									fill={COLORS[index % COLORS.length]}
-									fontSize={"75%"}
+									fontSize={"65%"}
 								/>
 							))}
 						</Pie>

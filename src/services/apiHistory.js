@@ -1,10 +1,13 @@
 import supabase from "./supabase";
 
 export async function getHistory(role, userId) {
-	let query = supabase
-		.from("bookings")
-		.select("*")
-		.in("status", ["Approved", "Declined"]);
+	let statusFilter = ["Declined"];
+
+	if (role === "security") {
+		statusFilter = ["Checked in"];
+	}
+
+	let query = supabase.from("bookings").select("*").in("status", statusFilter);
 
 	if (role === "user" && userId) {
 		query = query.eq("user_id", userId);
@@ -27,16 +30,19 @@ export async function getFilteredHistory({
 	start_date,
 	end_date,
 }) {
-	let query = supabase
-		.from("bookings")
-		.select("*")
-		.in("status", ["Approved", "Declined"]);
+	let statusFilter = ["Declined"];
+
+	if (role === "security") {
+		statusFilter = ["Checked in"];
+	}
+
+	let query = supabase.from("bookings").select("*").in("status", statusFilter);
 
 	if (role === "user" && userId) {
 		query = query.eq("user_id", userId);
 	}
 
-	if (status && ["Approved", "Declined"].includes(status)) {
+	if (status && statusFilter.includes(status)) {
 		query = query.eq("status", status);
 	}
 

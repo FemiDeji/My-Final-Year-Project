@@ -26,7 +26,7 @@ export default function Request() {
 	const [showFilterModal, setShowFilterModal] = useState(false);
 	const [filteredRequests, setFilteredRequest] = useState([]);
 
-	const { requests, isPending } = useRequests();
+	const { requests, isPending } = useRequests(profile?.role);
 	const { filterBookings, isPending: isFiltering } = useFilterBookings();
 
 	const today = new Date().toISOString().split("T")[0];
@@ -76,7 +76,7 @@ export default function Request() {
 		priority: "Priority",
 	};
 
-	console.log(requests);
+	// console.log(requests);
 
 	const {
 		handleSubmit,
@@ -117,12 +117,25 @@ export default function Request() {
 			toast.error("No request selected");
 			return;
 		}
-		const requestData = {
-			rejection_reason: data?.rejection_reason || "",
-			admin_username: profile?.username,
-			admin_name: profile?.fullname,
-			status,
-		};
+		let requestData;
+
+		if (profile?.role === "admin") {
+			requestData = {
+				rejection_reason: data?.rejection_reason || "",
+				admin_username: profile?.username,
+				admin_name: profile?.fullname,
+				status,
+			};
+		} else if (profile?.role === "security") {
+			requestData = {
+				security_username: profile?.username,
+				security_name: profile?.fullname,
+				status,
+			};
+		} else {
+			toast.error("Unauthorized role");
+			return;
+		}
 
 		reviewRequest(
 			{
@@ -160,17 +173,19 @@ export default function Request() {
 		<Layout title={"Requests"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
-					<div className="lg:w-[20%] ml-auto">
-						<CustomButton
-							label={"Filter History"}
-							bgColor="#f2c008"
-							textColor="#002855"
-							bordered
-							borderSize="lg"
-							onClick={() => setShowFilterModal(true)}>
-							<FaFilter />
-						</CustomButton>
-					</div>
+					{requests.length > 0 && (
+						<div className="lg:w-[20%] ml-auto">
+							<CustomButton
+								label={"Filter Request"}
+								bgColor="#f2c008"
+								textColor="#002855"
+								bordered
+								borderSize="lg"
+								onClick={() => setShowFilterModal(true)}>
+								<FaFilter />
+							</CustomButton>
+						</div>
+					)}
 				</div>
 				<div>
 					<Table
@@ -221,7 +236,7 @@ export default function Request() {
 									/>
 								</div>
 							)}
-							{!showRejection && (
+							{!showRejection && profile?.role === "admin" && (
 								<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
 									<CustomButton
 										label={"Reject"}
@@ -240,7 +255,7 @@ export default function Request() {
 									/>
 								</div>
 							)}
-							{showRejection && (
+							{showRejection && profile?.role === "admin" && (
 								<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
 									<CustomButton
 										label={"Cancel"}
@@ -259,6 +274,18 @@ export default function Request() {
 									/>
 								</div>
 							)}
+							{profile?.role === "security" && (
+								<div className="ml-auto mt-2 w-[20%] xs:w-full">
+									<CustomButton
+										label={"Checkout"}
+										bgColor="#f2c008"
+										bordered
+										borderSize="lg"
+										type="submit"
+										onClick={() => setStatus("Checked out")}
+									/>
+								</div>
+							)}
 						</form>
 					</div>
 				</GeneralModal>
@@ -271,6 +298,7 @@ export default function Request() {
 						setShowFilterModal(false);
 						handleReset();
 					}}
+					height="60vh"
 					widthClass="xs:w-full w-[50%]">
 					<form
 						onSubmit={handleSubmit(onFilter)}
@@ -299,15 +327,17 @@ export default function Request() {
 								error={errors?.end_date?.message}
 							/>
 						</div>
-						<CustomSelectField
-							label={"Priority"}
-							name={"priority"}
-							options={priorityOptions}
-							optionKey="key"
-							optionLabel="value"
-							register={register("priority")}
-							error={errors?.priority?.message}
-						/>
+						{profile?.role === "admin" && (
+							<CustomSelectField
+								label={"Priority"}
+								name={"priority"}
+								options={priorityOptions}
+								optionKey="key"
+								optionLabel="value"
+								register={register("priority")}
+								error={errors?.priority?.message}
+							/>
+						)}
 						<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
 							<CustomButton
 								label={"Cancel"}

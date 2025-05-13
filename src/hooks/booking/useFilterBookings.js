@@ -19,11 +19,11 @@ export default function useFilterBookings() {
 			getFilteredBookings({ role, userId, start_date, end_date, priority }),
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(["filtered-bookings", data]);
-			toast.success("Bookings filtered successfully");
+			toast.success("Filtered successfully");
 		},
 		onError: (err) => {
-			console.error("Unable to filter bookings", err);
-			toast.error("Failed to filter bookings");
+			console.error("Unable to filter data", err);
+			toast.error("Failed to filter data");
 		},
 	});
 

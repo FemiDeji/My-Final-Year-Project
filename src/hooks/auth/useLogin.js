@@ -9,8 +9,7 @@ export default function useLogin() {
 	const navigate = useNavigate();
 
 	const { mutate: login, isPending: isLogginIn } = useMutation({
-		mutationFn: ({ identifier, password }) =>
-			loginApi({ identifier, password }),
+		mutationFn: (encryptedData) => loginApi(encryptedData),
 		onSuccess: ({ data: authData, profile }) => {
 			console.log("User", authData);
 			console.log("Profile", profile);

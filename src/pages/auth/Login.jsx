@@ -10,6 +10,7 @@ import CustomBackdrop from "../../components/CustomBackdrop";
 import useLogin from "../../hooks/auth/useLogin";
 import useUser from "../../hooks/auth/useUser";
 import useSendPasswordResetEmail from "../../hooks/auth/useSendPasswordResetEmail";
+import { newDecryptData, newEncryptData } from "../../helpers/encrypto";
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -36,7 +37,19 @@ export default function Login() {
 	});
 
 	const onSubmit = (data) => {
-		login({ ...data }, { onSettled: () => reset({ data: "" }) });
+		console.log("original data", {
+			identifier: data.identifier,
+			password: data.password,
+			email: data.email,
+		});
+		const encryptedData = newEncryptData({
+			identifier: data.identifier,
+			password: data.password,
+			email: data.email,
+		});
+		console.log("encrypt data", encryptedData);
+		login(encryptedData, { onSettled: () => reset() });
+		console.log("decrypt data", newDecryptData(encryptedData));
 	};
 
 	const onSendPasswordReset = (data) => {
@@ -74,7 +87,7 @@ export default function Login() {
 							Welcome
 						</div>
 						<div className="text-general-blue text-sm font-medium">
-							PASS-BOOK MANAGEMENT SYSTEM
+							PASS-BOOKING SYSTEM
 						</div>
 						<div className="w-full">
 							<CustomInput

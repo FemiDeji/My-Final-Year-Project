@@ -1,3 +1,5 @@
+import { newDecryptData } from "../helpers/encrypto";
+import { VITE_PASSWORD_REDIRECT } from "../helpers/envData";
 import supabase, { supabaseUrl } from "./supabase";
 
 export async function signup({
@@ -13,7 +15,18 @@ export async function signup({
 	guardian_name,
 	guardian_phone,
 }) {
-	// Step 1: Sign up the user in the auth table
+	// Step 1: Check if user already exist
+	const { data: existingUser, error: existingUserError } = await supabase
+		.from("profiles")
+		.select("id")
+		.or(`email.eq.${email}, username.eq.${username}`)
+		.single();
+
+	if (existingUser) {
+		throw new Error("User with this email or username already exisits");
+	}
+
+	// Step 2: Sign up the user in the auth table
 	const { data, error } = await supabase.auth.signUp({
 		email,
 		password,
@@ -26,7 +39,7 @@ export async function signup({
 
 	const user = data.user;
 
-	// Step 2: Insert data into the profiles table
+	// Step 3: Insert data into the profiles table
 
 	if (user) {
 		const { error: profileError } = await supabase.from("profiles").insert({
@@ -74,8 +87,9 @@ export async function signup({
 }
  */
 
-export async function login({ identifier, password }) {
+export async function login(encryptedData) {
 	// Step 1: Check if the identifier is a username or email
+	const { identifier, password } = newDecryptData(encryptedData);
 
 	const { data: profile, error: profileError } = await supabase
 		.from("profiles")
@@ -198,7 +212,7 @@ export async function updateCurrentUser({
 
 export async function sendPasswordResetEmail(email) {
 	const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-		redirectTo: `https://pass-book-management-system.vercel.app/reset-password`,
+		redirectTo: VITE_PASSWORD_REDIRECT,
 	});
 
 	if (error) {

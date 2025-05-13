@@ -14,6 +14,7 @@ import Request from "./pages/request/Request";
 import Unauthorized from "./pages/Unauthorized";
 import ResetPassword from "./pages/auth/ResetPassword";
 import ResetPasswordExpired from "./pages/auth/ResetPasswordExpired";
+import Pass from "./pages/pass/Pass";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -33,7 +34,7 @@ function App() {
 					<Route
 						path="/dashboard"
 						element={
-							<ProtectedRoute authUser={["user", "admin"]}>
+							<ProtectedRoute authUser={["user", "admin", "security"]}>
 								<Dashboard />
 							</ProtectedRoute>
 						}
@@ -47,9 +48,17 @@ function App() {
 						}
 					/>
 					<Route
+						path="/pass"
+						element={
+							<ProtectedRoute authUser={["user"]}>
+								<Pass />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
 						path="/history"
 						element={
-							<ProtectedRoute authUser={["user", "admin"]}>
+							<ProtectedRoute authUser={["user", "admin", "security"]}>
 								<History />
 							</ProtectedRoute>
 						}
@@ -57,7 +66,7 @@ function App() {
 					<Route
 						path="/settings"
 						element={
-							<ProtectedRoute authUser={["user", "admin"]}>
+							<ProtectedRoute authUser={["user", "admin", "security"]}>
 								<Settings />
 							</ProtectedRoute>
 						}
@@ -73,7 +82,7 @@ function App() {
 					<Route
 						path="/requests"
 						element={
-							<ProtectedRoute authUser={["admin"]}>
+							<ProtectedRoute authUser={["admin", "security"]}>
 								<Request />
 							</ProtectedRoute>
 						}

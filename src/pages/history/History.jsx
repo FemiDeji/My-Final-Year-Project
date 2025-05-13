@@ -204,7 +204,7 @@ export default function History() {
 	return (
 		<Layout
 			title={"History"}
-			button
+			button={history.length > 0}
 			bgColor={"#f2c008"}
 			textColor={"#002855"}
 			borderSize={"lg"}
@@ -214,7 +214,7 @@ export default function History() {
 			label={"Download History"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
-					{filteredHistory.length === 0 && (
+					{history.length > 0 && (
 						<div className="lg:w-[22%] xs:w-[40%]">
 							<CustomButton
 								label={"Filter History"}
@@ -312,15 +312,17 @@ export default function History() {
 								error={errors?.end_date?.message}
 							/>
 						</div>
-						<CustomSelectField
-							label={"Status"}
-							name={"status"}
-							options={statusOption}
-							optionKey="key"
-							optionLabel="value"
-							register={register("status")}
-							error={errors?.status?.message}
-						/>
+						{profile?.role === "admin" && (
+							<CustomSelectField
+								label={"Status"}
+								name={"status"}
+								options={statusOption}
+								optionKey="key"
+								optionLabel="value"
+								register={register("status")}
+								error={errors?.status?.message}
+							/>
+						)}
 						<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
 							<CustomButton
 								label={"Cancel"}
@@ -395,15 +397,17 @@ export default function History() {
 							})}
 							error={errors?.end_date?.message}
 						/>
-						<CustomSelectField
-							label={"Status"}
-							name={"status"}
-							options={statusOption}
-							optionKey="key"
-							optionLabel="value"
-							register={register("status")}
-							error={errors?.status?.message}
-						/>
+						{profile?.role === "admin" && (
+							<CustomSelectField
+								label={"Status"}
+								name={"status"}
+								options={statusOption}
+								optionKey="key"
+								optionLabel="value"
+								register={register("status")}
+								error={errors?.status?.message}
+							/>
+						)}
 						<div className="flex justify-center items-center lg:w-full lg:ml-auto gap-3 mt-3 xs:justify-between xs:w-full">
 							<CustomButton
 								label={"Cancel"}

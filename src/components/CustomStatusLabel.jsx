@@ -4,6 +4,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import { IoEllipsisHorizontalCircle } from "react-icons/io5";
 import { MdWarning } from "react-icons/md";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
 
 /* eslint-disable react/prop-types */
 export default function CustomStatusLabel({ status }) {
@@ -31,6 +32,18 @@ export default function CustomStatusLabel({ status }) {
 			iconClass: "text-white",
 			icon: <IoMdCheckmark size={16} />,
 			label: "Approved",
+		},
+		"checked out": {
+			colorClass: "bg-[#8E44AD]",
+			iconClass: "text-white",
+			icon: <HiOutlineLogout size={16} />,
+			label: "Checked out",
+		},
+		"checked in": {
+			colorClass: "bg-general-green ",
+			iconClass: "text-white",
+			icon: <HiOutlineLogin size={16} />,
+			label: "Checkedin",
 		},
 		normal: {
 			colorClass: "bg-[#2196F3] ",

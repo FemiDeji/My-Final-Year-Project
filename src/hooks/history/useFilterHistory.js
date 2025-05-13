@@ -19,11 +19,11 @@ export default function useFilterHistory() {
 			getFilteredHistory({ role, userId, status, start_date, end_date }),
 		onSuccess: (data) => {
 			queryClient.invalidateQueries(["filtered-history", data]);
-			toast.success("History filtered successfully");
+			toast.success("Filtered successfully");
 		},
 		onError: (err) => {
-			console.error("Unable to filter history", err);
-			toast.error("Failed to filter history");
+			console.error("Unable to filter data", err);
+			toast.error("Failed to filter data");
 		},
 	});
 

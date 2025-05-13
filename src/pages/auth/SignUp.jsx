@@ -20,6 +20,7 @@ export default function SignUp() {
 	const { signup, isSigningUp } = useSignup();
 	const {
 		register,
+		reset,
 		formState: { errors },
 		handleSubmit,
 		getValues,
@@ -52,6 +53,7 @@ export default function SignUp() {
 	const roleOptions = [
 		{ label: "User", value: "user" },
 		{ label: "Admin", value: "admin" },
+		{ label: "Security", value: "security" },
 	];
 
 	const handleLevelChange = (level) => {
@@ -62,6 +64,7 @@ export default function SignUp() {
 	const handleRoleChange = (role) => {
 		setActiveType(role);
 		setValue("role", role);
+		reset();
 	};
 
 	const onSubmit = (data) => {
@@ -79,9 +82,10 @@ export default function SignUp() {
 					className="object-cover h-full"
 				/>
 			</div>
-			<div className="xs:w-full xs:h-screen w-[50%] flex flex-col justify-center items-center h-screen overflow-y-auto py-5">
+			<div
+				className={`xs:w-full xs:h-screen w-[50%] flex flex-col justify-center items-center h-screen overflow-y-auto`}>
 				<div className="w-full h-screen min-h-screen">
-					<div className="w-full flex justify-center items-center lg:hidden">
+					<div className="w-full flex justify-center items-center">
 						<img
 							src="AU_logo.jpg"
 							alt="AU logo"
@@ -90,15 +94,15 @@ export default function SignUp() {
 					</div>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className="flex flex-col justify-center items-center gap-2 w-full p-5 min-h-screen">
-						<div className="flex xs:flex-col xs:items-start flex-row justify-between items-center w-full mb-3">
-							<div className="text-general-blue font-semibold text-xl xl:text-base text-left">
-								Welcome
+						className="flex flex-col justify-start items-center gap-2 w-full px-5 min-h-screen">
+						<div className="flex xs:flex-col xs:items-start flex-col justify-between items-center w-full mb-3 gap-5 lg:gap-8">
+							<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
+								Welcome To
 								<div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
-									PASS-BOOK MANAGEMENT SYSTEM
+									PASS-BOOKING SYSTEM
 								</div>
 							</div>
-							<div className="xs:pl-5 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center">
+							<div className="xs:pl-5 lg:pl-5 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center lg:mr-auto">
 								<span className="text-general-blue text-[1rem] xs:text-[0.9rem] font-medium">
 									Role:{" "}
 								</span>

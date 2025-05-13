@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import { delayAction } from "../helpers/custom";
 import useUser from "../hooks/auth/useUser";
 import { LuBook, LuBookDown } from "react-icons/lu";
+import { IoTicketOutline } from "react-icons/io5";
 
 export default function SideBar({
 	showIconsOnly,
@@ -68,8 +69,14 @@ export default function SideBar({
 						!showIconsOnly ? "ml-3 xs:ml-1" : ""
 					} xs:gap-1 gap-2`}>
 					{!showIconsOnly && (
-						<div className="text-[0.8rem] font-medium xs:text-[12px]">
-							{`PBMS ${profile?.role === "user" ? "STUDENT" : "ADMIN"} PORTAL`}
+						<div className="text-[0.75rem] font-medium xs:text-[12px]">
+							{`PBMS ${
+								profile?.role === "user"
+									? "STUDENT"
+									: profile?.role === "admin"
+									? "ADMIN"
+									: "SECURITY"
+							} PORTAL`}
 						</div>
 					)}
 					<div
@@ -116,7 +123,17 @@ export default function SideBar({
 						</LinkItem>
 					)}
 
-					{profile?.role === "admin" && (
+					{profile?.role === "user" && (
+						<LinkItem
+							text={"Pass"}
+							url={"/pass"}
+							showIconOnly={showIconsOnly}
+							setIsSidebarOpen={setIsSidebarOpen}>
+							<IoTicketOutline />
+						</LinkItem>
+					)}
+
+					{(profile?.role === "admin" || profile?.role === "security") && (
 						<LinkItem
 							text={"Requests"}
 							url={"/requests"}

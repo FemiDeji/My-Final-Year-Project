@@ -14,6 +14,10 @@ export default function useSignup() {
 				navigate("/login");
 			}, 2000);
 		},
+		onError: (err) => {
+			console.log("error", err);
+			toast.error(err.message || "Something went wrong. Please try again.");
+		},
 	});
 	return { signup, isSigningUp };
 }

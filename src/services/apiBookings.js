@@ -68,7 +68,13 @@ export async function getFilteredBookings({
 	end_date,
 	priority,
 }) {
-	let query = supabase.from("bookings").select("*").eq("status", "Pending");
+	let statusFilter = ["Pending"];
+
+	if (role === "security") {
+		statusFilter = ["Approved", "Checked out"];
+	}
+
+	let query = supabase.from("bookings").select("*").in("status", statusFilter);
 
 	if (role === "user" && userId) {
 		query = query.eq("user_id", userId);
@@ -91,11 +97,17 @@ export async function getFilteredBookings({
 	return filteredBooking;
 }
 
-export async function getRequests() {
+export async function getRequests(role) {
+	let statusFilter = ["Pending"];
+
+	if (role === "security") {
+		statusFilter = ["Approved", "Checked out"];
+	}
+
 	const { data: requests, error: requestsError } = await supabase
 		.from("bookings")
 		.select("*")
-		.eq("status", "Pending");
+		.in("status", statusFilter);
 
 	if (requestsError) {
 		console.log("Error fetching requests", requestsError.message);
@@ -105,9 +117,26 @@ export async function getRequests() {
 	return requests;
 }
 
+export async function getPasses(role, userId) {
+	let query = supabase.from("bookings").select("*").eq("status", "Approved");
+
+	if (role === "user" && userId) {
+		query = query.eq("user_id", userId);
+	}
+
+	const { data: passes, error: passesError } = await query;
+
+	if (passesError) {
+		console.error("Error fetching passes", passesError.message);
+		throw new Error("Passes could not be fetched");
+	}
+
+	return passes;
+}
+
 export async function updateBooking(updateData, id) {
 	if (!id) {
-		console.error("Error: Booking ID is undefined or invalid!");
+		console.error("Error: Booking ID is undefined orr invalid!");
 		throw new Error("Invalid booking ID");
 	}
 

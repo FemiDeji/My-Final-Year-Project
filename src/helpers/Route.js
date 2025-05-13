@@ -3,4 +3,5 @@ export const isGeneralRoute = [
 	"/bookings",
 	"/history",
 	"/bookings/new",
+	"/pass",
 ];
