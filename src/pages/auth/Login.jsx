@@ -160,6 +160,7 @@ export default function Login() {
 						setForgotPasswordModal(false);
 						reset({ email: "" });
 					}}
+					height="25vh"
 					widthClass="xs:w-full lg:w-[45%]">
 					<form
 						onSubmit={handleSubmit(onSendPasswordReset)}
@@ -182,7 +183,7 @@ export default function Login() {
 							/>
 						</div>
 
-						<div className="flex justify-end items-end gap-3 ml-auto lg:w-[55%] xs:w-full">
+						<div className="flex justify-end items-end gap-3 ml-auto lg:w-full xs:w-full">
 							<CustomButton
 								label={"Cancel"}
 								bgColor="#DFE6EC"
