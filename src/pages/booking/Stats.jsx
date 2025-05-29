@@ -18,7 +18,7 @@ export default function Stats({
 
 	return (
 		<div className="flex flex-row xs:flex-col w-full justify-between items-center gap-3">
-			{profile?.role === "user" && (
+			{(profile?.role === "user" || profile?.role === "super-admin") && (
 				<Stat
 					title={"Bookings"}
 					icon={<LuBook className="text-2xl xs:text-xl" strokeWidth={1.5} />}
@@ -26,7 +26,7 @@ export default function Stats({
 					value={numBookings}
 				/>
 			)}
-			{profile?.role === "admin" && (
+			{(profile?.role === "admin" || profile?.role === "super-admin") && (
 				<Stat
 					title={"Requests"}
 					icon={
@@ -36,7 +36,9 @@ export default function Stats({
 					value={numBookings}
 				/>
 			)}
-			{(profile?.role === "user" || profile?.role === "admin") && (
+			{(profile?.role === "user" ||
+				profile?.role === "admin" ||
+				profile?.role === "super-admin") && (
 				<>
 					<Stat
 						title={"Approved"}

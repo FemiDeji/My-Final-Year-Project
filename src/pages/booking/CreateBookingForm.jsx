@@ -11,21 +11,33 @@ import { states } from "../../helpers/states";
 import {
 	combineDateWithCurrentTime,
 	dateDifference,
-	getDistanceInMeters,
 } from "../../helpers/dateAndTime";
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import useUser from "../../hooks/auth/useUser";
+import useCheckLocation from "../../hooks/useCheckLocation";
+import { formatDate } from "date-fns";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
 	const [submitType, setSubmitType] = useState("");
 	const [passType, setPassType] = useState("Short");
 	const [userDetails, setUserDetails] = useState(null);
-	const today = new Date().toISOString().split("T")[0];
 	const navigate = useNavigate();
-	const [withinLocation, setWithinLocation] = useState(null);
 	const [priority, setPriority] = useState("");
+	const today = new Date().toISOString().split("T")[0];
+
+	const { profile: currentUser } = useUser();
+
+	const addDays = (date, days) => {
+		const result = new Date(date);
+		result.setDate(result.getDate() + days);
+		return result.toISOString().split("T")[0];
+	};
+
+	const startOffset = passType === "Long" ? 2 : 1;
+	const defaultStartDate = addDays(new Date(), startOffset);
+	const defaultEndDate = defaultStartDate;
 
 	const {
 		register,
@@ -47,16 +59,18 @@ export default function CreateBookingForm() {
 			guardian_phone: "",
 			phone: "",
 			room: "",
-			type: "",
+			type: passType,
 			destination: "",
 			purpose: "",
-			startDate: today,
-			endDate: today,
+			startDate: defaultStartDate,
+			endDate: defaultEndDate,
 			num_days: 0,
 		},
 	});
 
 	const { createUpdateBooking, isBooking } = useCreateUpdateBooking();
+	const { withinLocation, locationChecked, RetryModal, locationCheckLoading } =
+		useCheckLocation();
 
 	const username = watch("username");
 	const isDisabled = !watch("fullname");
@@ -84,12 +98,12 @@ export default function CreateBookingForm() {
 		reset();
 	};
 	useEffect(() => {
-		if (startDate && endDate) {
+		if (startDate && endDate && passType === "Long") {
 			const days = dateDifference(startDate, endDate);
 
 			setValue("num_days", days);
 		}
-	}, [startDate, endDate, setValue]);
+	}, [startDate, endDate, setValue, passType]);
 
 	useEffect(() => {
 		const refinedPurpose = purpose.toLowerCase();
@@ -112,50 +126,6 @@ export default function CreateBookingForm() {
 		}
 	}, [purpose, priorityLevels.High, priorityLevels.Mid]);
 
-	useEffect(() => {
-		const checkLocation = () => {
-			if (!navigator.geolocation) {
-				toast.error("Geolocation is not supported by your browser");
-			}
-
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					const { latitude, longitude } = position.coords;
-
-					const allowedLatitude = 7.737564333771149;
-					const allowedLongitude = 4.444108162049442;
-					const distanceAllowed = getDistanceInMeters(
-						latitude,
-						longitude,
-						allowedLatitude,
-						allowedLongitude
-					);
-					// const range = 100;
-					const allowedRadius = 50;
-
-					// const isWithinLocation =
-					// 	Math.abs(latitude - allowedLatitude) <= range &&
-					// 	Math.abs(longitude - allowedLongitude) <= range;
-					const isWithinLocation = distanceAllowed <= allowedRadius;
-
-					if (!isWithinLocation) {
-						toast.error(
-							"You must be within the university campus to book a pass."
-						);
-						return;
-					}
-					setWithinLocation(isWithinLocation);
-				},
-				(error) => {
-					toast.error("Failed to get location. Please enable your location.");
-					console.error("Geolocation error:", error.message);
-				}
-			);
-		};
-
-		checkLocation();
-	}, []);
-
 	const onSubmit = async (data) => {
 		if (submitType === "fetchProfile") {
 			try {
@@ -169,7 +139,6 @@ export default function CreateBookingForm() {
 					setValue("level", response.level);
 					setValue("guardian_name", response.guardian_name);
 					setValue("guardian_phone", response.guardian_phone);
-					setValue("guardian_name", response.guardian_name);
 					setValue("phone", response.phone);
 					setValue("room", response.room);
 				}
@@ -216,7 +185,10 @@ export default function CreateBookingForm() {
 	}, [username, setValue]);
 
 	return (
-		<Layout title={"New Booking"}>
+		<Layout
+			title={`New ${
+				currentUser?.role === "super-admin" ? "Request" : "Booking"
+			}`}>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col gap-5 mt-5 text-left py-2">
@@ -225,23 +197,27 @@ export default function CreateBookingForm() {
 						<CustomInput
 							name="username"
 							label={"Matric No"}
-							register={register("username")}
+							register={register("username", {
+								pattern: {
+									value: /^\d{2}\/\d{4}$/,
+									message: "Matric number is invalid. Use a valid format",
+								},
+							})}
+							error={errors?.username?.message}
 							placeholder={"09/9876"}
 							readOnly={!withinLocation}
 						/>
 
-						{(isDisabled || !username) && (
+						{isDisabled && username?.length === 7 && !errors?.username && (
 							<div className="w-full flex justify-end items-center">
-								{username?.length === 7 && (
-									<button
-										className="lg:w-[30%] xs:w-[35%] text-center text-[11px] mt-2 border rounded-full bg-general-yellow px-2 py-1 text-general-blue font-semibold ml-auto"
-										onClick={() => {
-											setSubmitType("fetchProfile");
-										}}
-										type="submit">
-										Fetch
-									</button>
-								)}
+								<button
+									className="lg:w-[30%] xs:w-[35%] text-center text-[11px] mt-2 border rounded-full bg-general-yellow px-2 py-1 text-general-blue font-semibold ml-auto"
+									onClick={() => {
+										setSubmitType("fetchProfile");
+									}}
+									type="submit">
+									Fetch
+								</button>
 							</div>
 						)}
 					</div>
@@ -253,7 +229,7 @@ export default function CreateBookingForm() {
 						error={errors?.fullname?.message}
 					/>
 				</div>
-				{console.log("type", getValues().type)}
+
 				<div className="flex flex-row xs:flex-col gap-3">
 					<CustomInput
 						name="email"
@@ -310,6 +286,7 @@ export default function CreateBookingForm() {
 						error={errors?.guardian_phone?.message}
 						readOnly
 					/>
+
 					<CustomSelectField
 						name="type"
 						label={"Pass Type"}
@@ -331,19 +308,39 @@ export default function CreateBookingForm() {
 				<div className="flex flex-row xs:flex-col gap-3">
 					<CustomInput
 						name="startDate"
-						label={"Start Date"}
+						label={`${passType === "Long" ? "Start" : ""} Date`}
 						type="date"
 						disabled={isDisabled}
 						register={register(
 							"startDate",
-							submitType === "general" && passType === "Long"
-								? {
-										required: "Start date is required",
-										validate: (value) =>
-											(passType === "Long" && value <= getValues().endDate) ||
-											"Start date cannot be after end date",
-								  }
-								: false
+
+							{
+								required:
+									submitType === "general" ? "Start date is required" : false,
+								validate: (value) => {
+									const today = new Date();
+									today.setHours(0, 0, 0, 0);
+
+									const selectedDate = new Date(value);
+									selectedDate.setHours(0, 0, 0, 0);
+
+									const diffInDays = Math.floor(
+										(selectedDate - today) / (1000 * 60 * 60 * 24)
+									);
+
+									if (passType === "Short" && diffInDays <= 0) {
+										return "Short pass must be booked a day ahead";
+									}
+
+									if (passType === "Long" && diffInDays <= 1) {
+										return "Long pass must be booked at least 2 days ahead";
+									}
+
+									if (passType === "Long" && value <= getValues().endDate) {
+										return "Start date cannot be after end date";
+									}
+								},
+							}
 						)}
 						error={errors?.startDate?.message}
 					/>
@@ -372,20 +369,23 @@ export default function CreateBookingForm() {
 				</div>
 
 				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomInput
-						name="num_days"
-						label={"Number of Days"}
-						register={register("num_days", {
-							validate: (value) => {
-								if (passType === "Long" && Number(value < 0)) {
-									return "A long pass must be more than a day";
-								}
-								return true;
-							},
-						})}
-						readOnly
-						error={errors?.num_days?.message}
-					/>
+					{passType === "Long" && (
+						<CustomInput
+							name="num_days"
+							label={"Number of Days"}
+							register={register("num_days", {
+								validate: (value) => {
+									if (passType === "Long" && Number(value < 0)) {
+										return "A long pass must be more than a day";
+									}
+									return true;
+								},
+							})}
+							readOnly
+							error={errors?.num_days?.message}
+						/>
+					)}
+
 					<CustomSelectField
 						name="destination"
 						label={"Destination"}
@@ -426,7 +426,9 @@ export default function CreateBookingForm() {
 						bordered
 						borderSize="lg"
 						onClick={() => {
-							navigate("/bookings");
+							navigate(
+								currentUser?.role === "super-admin" ? "/requests" : "/bookings"
+							);
 							reset();
 						}}
 						disabled={isBooking}
@@ -444,10 +446,19 @@ export default function CreateBookingForm() {
 					/>
 				</div>
 			</form>
+			{locationCheckLoading ? (
+				<CustomBackdrop open={true} text={"Checking location..."} />
+			) : (
+				RetryModal
+			)}
 			{(isPending || isBooking) && (
 				<CustomBackdrop
 					open={true}
-					text={isBooking ? "Please wait..." : "Fetching profile..."}
+					text={
+						isBooking || !locationChecked
+							? "Please wait..."
+							: "Fetching profile..."
+					}
 				/>
 			)}
 		</Layout>

@@ -46,11 +46,11 @@ function CustomSelectField({
 				// } relative`}
 				className={`${singleLine ? "w-[70%]" : "w-full"} ${
 					!readOnly && !disabled ? "bg-transparent" : "bg-gray-50"
-				} h-[3.6rem] border-2 rounded-${borderSize} px-3  outline-none ${
+				} h-[3.7rem] border-2 rounded-${borderSize} px-0.5 outline-none ${
 					error ? "border-red-400" : "border-gray-300"
 				}`}>
 				<legend
-					className={`text-sm text-gray-500 font-[500] text-left px-2 ${
+					className={`text-sm text-gray-500 bg-transparent xs:text-[12px] text-left px-2 ${
 						singleLine ? "w-[30%]" : ""
 					}`}
 					htmlFor={htmlFor}>

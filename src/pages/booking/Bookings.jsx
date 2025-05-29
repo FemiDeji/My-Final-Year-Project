@@ -57,6 +57,9 @@ export default function Bookings() {
 		"admin_username",
 		"admin_name",
 		"rejection_reason",
+		"security_username",
+		"security_name",
+		"late_checkin",
 	];
 
 	const priorityOptions = [
@@ -76,16 +79,17 @@ export default function Bookings() {
 		department: "Department",
 		destination: "Destination",
 		email: "Email",
-		end_date: "Return date",
+		end_date: "Return Date",
 		guardian_name: "Guardian",
 		guardian_phone: "Guardian No",
 		purpose: "Purpose",
-		start_date: "Start date",
+		start_date: "Start Date",
 		type: "Type",
 		status: "Status",
 		username: "Matric No",
 		num_days: "Duration",
 		priority: "Priority",
+		updated_at: "Updated At",
 	};
 
 	const handleViewClick = (id) => {
@@ -131,7 +135,7 @@ export default function Bookings() {
 			<div className="bg-white rounded-lg shadow-sm flex flex-col w-full p-3">
 				<div className="flex gap-4 justify-end items-center xs:flex xs:justify-between">
 					{filteredBookings.length === 0 && (
-						<div className="lg:w-[20%] xs:w-[45%]">
+						<div className="lg:w-[20%] xs:w-[50%]">
 							<CustomButton
 								label={"Filter Bookings"}
 								bgColor="#f2c008"

@@ -10,6 +10,7 @@ import useUser from "../hooks/auth/useUser";
 import { useState } from "react";
 import { delayAction } from "../helpers/custom";
 import UserAvatar from "../pages/auth/UserAvatar";
+import { convertToDateTime } from "../helpers/dateAndTime";
 
 export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 	const { logout, isLoggingOut } = useLogout();
@@ -51,19 +52,24 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 					<div className="lg:hidden">
 						<UserAvatar />
 					</div>
-					<div
-						className="flex gap-2 items-center xs:hidden text-general-light-red"
-						onClick={() => {
-							setIsLoading(true);
-							delayAction(() => {
-								setIsLoading(false);
-								logout();
-							}, 2000);
-						}}>
-						<span>
-							<HiMiniArrowRightOnRectangle size={20} />
-						</span>
-						<span>Log Out</span>
+					<div className="flex flex-col gap-0.5 xs:hidden">
+						<div className="text-[11px] text-general-blue font-medium">
+							{convertToDateTime(user?.user?.last_sign_in_at)}
+						</div>
+						<div
+							className="flex gap-2 items-center xs:hidden text-general-light-red"
+							onClick={() => {
+								setIsLoading(true);
+								delayAction(() => {
+									setIsLoading(false);
+									logout();
+								}, 2000);
+							}}>
+							<span>
+								<HiMiniArrowRightOnRectangle size={20} />
+							</span>
+							<span>Log Out</span>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -11,10 +11,11 @@ import { useForm } from "react-hook-form";
 import useUser from "../../hooks/auth/useUser";
 import useReviewRequest from "../../hooks/request/useReviewRequest";
 import toast from "react-hot-toast";
-import { FaFilter } from "react-icons/fa";
+import { FaFilter, FaPlus } from "react-icons/fa";
 import CustomInput from "../../components/CustomInput";
 import CustomSelectField from "../../components/CustomSelectField";
 import useFilterBookings from "../../hooks/booking/useFilterBookings";
+import { useNavigate } from "react-router-dom";
 
 export default function Request() {
 	const [selectedRequest, setSelectedRequest] = useState(null);
@@ -28,6 +29,8 @@ export default function Request() {
 
 	const { requests, isPending } = useRequests(profile?.role);
 	const { filterBookings, isPending: isFiltering } = useFilterBookings();
+
+	const navigate = useNavigate();
 
 	const today = new Date().toISOString().split("T")[0];
 	const beginningOfYear = new Date(new Date().getFullYear(), 0, 1)
@@ -54,17 +57,19 @@ export default function Request() {
 		"rejection_reason",
 		"admin_name",
 		"admin_username",
+		"security_username",
+		"security_name",
 	];
 
 	const labels = {
 		department: "Department",
 		destination: "Destination",
 		email: "Email",
-		end_date: "Return date",
+		end_date: "Return Date",
 		guardian_name: "Guardian",
 		guardian_phone: "Guardian contact",
 		purpose: "Purpose",
-		start_date: "Start date",
+		start_date: "Start Date",
 		type: "Type",
 		status: "Status",
 		username: "Matric No",
@@ -74,6 +79,8 @@ export default function Request() {
 		room: "Room",
 		fullname: "Full Name",
 		priority: "Priority",
+		updated_at: "Updated At",
+		late_checkin: "Late Checkin",
 	};
 
 	// console.log(requests);
@@ -119,7 +126,7 @@ export default function Request() {
 		}
 		let requestData;
 
-		if (profile?.role === "admin") {
+		if (profile?.role === "admin" || profile?.role === "super-admin") {
 			requestData = {
 				rejection_reason: data?.rejection_reason || "",
 				admin_username: profile?.username,
@@ -172,9 +179,9 @@ export default function Request() {
 	return (
 		<Layout title={"Requests"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
-				<div className="flex justify-end items-center gap-3 w-full">
+				<div className="flex lg:justify-end xs:justify-center items-center gap-3 w-full">
 					{requests?.length > 0 && (
-						<div className="lg:w-[20%] ml-auto">
+						<div className="lg:w-[20%] xs:w-full lg:ml-auto">
 							<CustomButton
 								label={"Filter Request"}
 								bgColor="#f2c008"
@@ -183,6 +190,19 @@ export default function Request() {
 								borderSize="lg"
 								onClick={() => setShowFilterModal(true)}>
 								<FaFilter />
+							</CustomButton>
+						</div>
+					)}
+					{profile?.role === "super-admin" && (
+						<div className="lg:w-[20%] xs:w-full">
+							<CustomButton
+								label={"New Request"}
+								bgColor="#f2c008"
+								textColor="#002855"
+								bordered
+								borderSize="lg"
+								onClick={() => navigate("/requests/new")}>
+								<FaPlus />
 							</CustomButton>
 						</div>
 					)}
@@ -236,48 +256,52 @@ export default function Request() {
 									/>
 								</div>
 							)}
-							{!showRejection && profile?.role === "admin" && (
-								<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
-									<CustomButton
-										label={"Reject"}
-										bgColor="#DFE6EC"
-										bordered
-										borderSize="lg"
-										onClick={() => setShowRejection(true)}
-									/>
-									<CustomButton
-										label={"Approve"}
-										bgColor="#f2c008"
-										bordered
-										borderSize="lg"
-										type="submit"
-										onClick={() => setStatus("Approved")}
-									/>
-								</div>
-							)}
-							{showRejection && profile?.role === "admin" && (
-								<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
-									<CustomButton
-										label={"Cancel"}
-										bgColor="#DFE6EC"
-										bordered
-										borderSize="lg"
-										onClick={() => setShowRejection(false)}
-									/>
-									<CustomButton
-										label={"Reject"}
-										bgColor="#f2c008"
-										bordered
-										borderSize="lg"
-										type="submit"
-										onClick={() => setStatus("Declined")}
-									/>
-								</div>
-							)}
+							{!showRejection &&
+								(profile?.role === "admin" ||
+									profile?.role === "super-admin") && (
+									<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
+										<CustomButton
+											label={"Reject"}
+											bgColor="#DFE6EC"
+											bordered
+											borderSize="lg"
+											onClick={() => setShowRejection(true)}
+										/>
+										<CustomButton
+											label={"Approve"}
+											bgColor="#f2c008"
+											bordered
+											borderSize="lg"
+											type="submit"
+											onClick={() => setStatus("Approved")}
+										/>
+									</div>
+								)}
+							{showRejection &&
+								(profile?.role === "admin" ||
+									profile?.role === "super-admin") && (
+									<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
+										<CustomButton
+											label={"Cancel"}
+											bgColor="#DFE6EC"
+											bordered
+											borderSize="lg"
+											onClick={() => setShowRejection(false)}
+										/>
+										<CustomButton
+											label={"Reject"}
+											bgColor="#f2c008"
+											bordered
+											borderSize="lg"
+											type="submit"
+											onClick={() => setStatus("Declined")}
+										/>
+									</div>
+								)}
 							{profile?.role === "security" && (
 								<div className="ml-auto mt-2 w-[20%] xs:w-full">
 									<CustomButton
-										label={"Checkout"}
+										label={"Check out"}
 										bgColor="#f2c008"
 										bordered
 										borderSize="lg"
@@ -327,7 +351,7 @@ export default function Request() {
 								error={errors?.end_date?.message}
 							/>
 						</div>
-						{profile?.role === "admin" && (
+						{(profile?.role === "admin" || profile?.role === "super-admin") && (
 							<CustomSelectField
 								label={"Priority"}
 								name={"priority"}

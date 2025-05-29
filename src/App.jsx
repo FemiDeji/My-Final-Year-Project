@@ -34,7 +34,8 @@ function App() {
 					<Route
 						path="/dashboard"
 						element={
-							<ProtectedRoute authUser={["user", "admin", "security"]}>
+							<ProtectedRoute
+								authUser={["user", "admin", "security", "super-admin"]}>
 								<Dashboard />
 							</ProtectedRoute>
 						}
@@ -50,7 +51,8 @@ function App() {
 					<Route
 						path="/pass"
 						element={
-							<ProtectedRoute authUser={["user"]}>
+							<ProtectedRoute
+								authUser={["user", "super-admin", "admin", "security"]}>
 								<Pass />
 							</ProtectedRoute>
 						}
@@ -58,7 +60,8 @@ function App() {
 					<Route
 						path="/history"
 						element={
-							<ProtectedRoute authUser={["user", "admin", "security"]}>
+							<ProtectedRoute
+								authUser={["user", "admin", "security", "super-admin"]}>
 								<History />
 							</ProtectedRoute>
 						}
@@ -82,8 +85,16 @@ function App() {
 					<Route
 						path="/requests"
 						element={
-							<ProtectedRoute authUser={["admin", "security"]}>
+							<ProtectedRoute authUser={["admin", "security", "super-admin"]}>
 								<Request />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/requests/new"
+						element={
+							<ProtectedRoute authUser={["super-admin"]}>
+								<CreateBookingForm />
 							</ProtectedRoute>
 						}
 					/>

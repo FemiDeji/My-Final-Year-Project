@@ -3,10 +3,12 @@ import { createUpdateBooking as createUpdateBookingApi } from "../../services/ap
 import toast from "react-hot-toast";
 import { delayAction } from "../../helpers/custom";
 import { useNavigate } from "react-router-dom";
+import useUser from "../auth/useUser";
 
 export default function useCreateUpdateBooking() {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
+	const { profile } = useUser();
 
 	const {
 		mutateAsync: createUpdateBooking,
@@ -17,9 +19,13 @@ export default function useCreateUpdateBooking() {
 		onSuccess: (data) => {
 			console.log("Data", data);
 			queryClient.invalidateQueries(["bookings", data]);
-			toast.success("Booking successfully created");
+			toast.success(
+				`${
+					profile?.role === "super-admin" ? "Request" : "Booking"
+				} successfully`
+			);
 			delayAction(() => {
-				navigate("/bookings");
+				navigate(profile?.role === "super-admin" ? "/requests" : "/bookings");
 			}, 2000);
 		},
 		onError: (err) => {

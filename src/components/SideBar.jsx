@@ -19,6 +19,7 @@ import { delayAction } from "../helpers/custom";
 import useUser from "../hooks/auth/useUser";
 import { LuBook, LuBookDown } from "react-icons/lu";
 import { IoTicketOutline } from "react-icons/io5";
+import { convertToDateTime } from "../helpers/dateAndTime";
 
 export default function SideBar({
 	showIconsOnly,
@@ -28,7 +29,7 @@ export default function SideBar({
 }) {
 	const { logout, isLoggingOut } = useLogout();
 	const [isLoading, setIsLoading] = useState(false);
-	const { profile } = useUser();
+	const { profile, user } = useUser();
 	const sideBarRef = useRef(null);
 
 	useEffect(() => {
@@ -67,15 +68,17 @@ export default function SideBar({
 				<div
 					className={`flex justify-center items-center ${
 						!showIconsOnly ? "ml-3 xs:ml-1" : ""
-					} xs:gap-1 gap-2`}>
+					} xs:gap-1 gap-1`}>
 					{!showIconsOnly && (
-						<div className="text-[0.75rem] font-medium xs:text-[12px]">
+						<div className="text-[0.74rem] font-medium xs:text-[12px]">
 							{`PBS ${
 								profile?.role === "user"
 									? "STUDENT"
 									: profile?.role === "admin"
 									? "ADMIN"
-									: "SECURITY"
+									: profile?.role === "security"
+									? "SECURITY"
+									: "SUPER ADMIN"
 							} PORTAL`}
 						</div>
 					)}
@@ -123,17 +126,9 @@ export default function SideBar({
 						</LinkItem>
 					)}
 
-					{profile?.role === "user" && (
-						<LinkItem
-							text={"Pass"}
-							url={"/pass"}
-							showIconOnly={showIconsOnly}
-							setIsSidebarOpen={setIsSidebarOpen}>
-							<IoTicketOutline />
-						</LinkItem>
-					)}
-
-					{(profile?.role === "admin" || profile?.role === "security") && (
+					{(profile?.role === "admin" ||
+						profile?.role === "security" ||
+						profile?.role === "super-admin") && (
 						<LinkItem
 							text={"Requests"}
 							url={"/requests"}
@@ -144,6 +139,14 @@ export default function SideBar({
 					)}
 
 					<LinkItem
+						text={"Pass"}
+						url={"/pass"}
+						showIconOnly={showIconsOnly}
+						setIsSidebarOpen={setIsSidebarOpen}>
+						<IoTicketOutline />
+					</LinkItem>
+
+					<LinkItem
 						text={"History"}
 						url={"/history"}
 						showIconOnly={showIconsOnly}
@@ -151,28 +154,35 @@ export default function SideBar({
 						<MdOutlineHistoryToggleOff />
 					</LinkItem>
 
-					<LinkItem
-						text={"Settings"}
-						url={"/settings"}
-						showIconOnly={showIconsOnly}
-						setIsSidebarOpen={setIsSidebarOpen}>
-						<HiOutlineCog6Tooth />
-					</LinkItem>
+					{!profile?.role === "super-admin" && (
+						<LinkItem
+							text={"Settings"}
+							url={"/settings"}
+							showIconOnly={showIconsOnly}
+							setIsSidebarOpen={setIsSidebarOpen}>
+							<HiOutlineCog6Tooth />
+						</LinkItem>
+					)}
 				</div>
 
-				<div
-					className="flex gap-2 items-center lg:hidden xs:ml-3 mt-28 text-general-light-red xs:w-full xs:mb-10"
-					onClick={() => {
-						setIsLoading(true);
-						delayAction(() => {
-							setIsLoading(false);
-							logout();
-						}, 2000);
-					}}>
-					<span>
-						<HiMiniArrowRightOnRectangle size={18} />
-					</span>
-					<span className="xs:text-sm font-medium">Log Out</span>
+				<div className="lg:hidden flex flex-col gap-2 xs:ml-3 mt-28 xs:w-full xs:mb-10">
+					<div className="text-[10.5px] text-general-blue font-medium">
+						{convertToDateTime(user?.user?.last_sign_in_at)}
+					</div>
+					<div
+						className=" items-center  text-general-light-red xs:w-full flex gap-2"
+						onClick={() => {
+							setIsLoading(true);
+							delayAction(() => {
+								setIsLoading(false);
+								logout();
+							}, 2000);
+						}}>
+						<span>
+							<HiMiniArrowRightOnRectangle size={18} />
+						</span>
+						<span className="xs:text-sm font-medium">Log Out</span>
+					</div>
 				</div>
 			</div>
 			{(isLoggingOut || isLoading) && (

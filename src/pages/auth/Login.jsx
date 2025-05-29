@@ -21,6 +21,8 @@ export default function Login() {
 	const { isPending } = useUser();
 	const { sendPasswordResetEmail, isPending: isSending } =
 		useSendPasswordResetEmail();
+	const isIdle = sessionStorage.getItem("isIdle") ? true : false;
+	const [showIdleModal, setShowIdleModal] = useState(isIdle);
 
 	const {
 		register,
@@ -42,7 +44,7 @@ export default function Login() {
 			password: data.password,
 			email: data.email,
 		});
-		login(encryptedData, { onSettled: () => reset() });
+		login(encryptedData, { onSuccess: () => reset() });
 		console.log("decrypt data", newDecryptData(encryptedData));
 	};
 
@@ -54,6 +56,12 @@ export default function Login() {
 				setForgotPasswordModal(false);
 			},
 		});
+	};
+
+	const handleCloseIdleModal = () => {
+		sessionStorage.removeItem("isIdle");
+		sessionStorage.clear();
+		setShowIdleModal(false);
 	};
 
 	return (
@@ -92,7 +100,6 @@ export default function Login() {
 										? "Username or Email is required"
 										: false,
 								})}
-								placeholder={"e.g. user@gmail.com or 02/1021"}
 								error={errors?.identifier?.message}
 							/>
 						</div>
@@ -153,59 +160,89 @@ export default function Login() {
 						</div>
 					</form>
 				</div>
-				<GeneralModal
-					isOpen={forgotPasswordModal}
-					showCloseButton={true}
-					onClose={() => {
-						setForgotPasswordModal(false);
-						reset({ email: "" });
-					}}
-					height="25vh"
-					widthClass="xs:w-full lg:w-[45%]">
-					<form
-						onSubmit={handleSubmit(onSendPasswordReset)}
-						className="text-left flex justify-center items-center flex-col gap-3 py-3">
-						<div className="w-full">
-							<CustomInput
-								label={"Email"}
-								name="email"
-								register={register(
-									"email",
-									forgotPasswordModal && {
-										required: "Email is required",
-										pattern: {
-											value: /^[^s@]+@[^s@]+.[^s@]+$/,
-											message: "Invalid email format",
-										},
-									}
-								)}
-								error={errors?.email?.message}
-							/>
-						</div>
+				{forgotPasswordModal && (
+					<GeneralModal
+						isOpen={forgotPasswordModal}
+						showCloseButton={true}
+						onClose={() => {
+							setForgotPasswordModal(false);
+							reset({ email: "" });
+						}}
+						height="25vh"
+						widthClass="xs:w-full lg:w-[45%]">
+						<form
+							onSubmit={handleSubmit(onSendPasswordReset)}
+							className="text-left flex justify-center items-center flex-col gap-3 py-3">
+							<div className="w-full">
+								<CustomInput
+									label={"Email"}
+									name="email"
+									register={register(
+										"email",
+										forgotPasswordModal && {
+											required: "Email is required",
+											pattern: {
+												value: /^[^s@]+@[^s@]+.[^s@]+$/,
+												message: "Invalid email format",
+											},
+										}
+									)}
+									error={errors?.email?.message}
+								/>
+							</div>
 
-						<div className="flex justify-end items-end gap-3 ml-auto lg:w-full xs:w-full">
-							<CustomButton
-								label={"Cancel"}
-								bgColor="#DFE6EC"
-								textColor="#002855"
-								bordered
-								borderSize="lg"
-								onClick={() => {
-									setForgotPasswordModal(false);
-									reset({ email: "" });
-								}}
-							/>
-							<CustomButton
-								label={"Reset"}
-								bgColor="#f2c008"
-								textColor="#002855"
-								bordered
-								borderSize="lg"
-								type="submit"
-							/>
+							<div className="flex justify-end items-end gap-3 ml-auto lg:w-full xs:w-full">
+								<CustomButton
+									label={"Cancel"}
+									bgColor="#DFE6EC"
+									textColor="#002855"
+									bordered
+									borderSize="lg"
+									onClick={() => {
+										setForgotPasswordModal(false);
+										reset({ email: "" });
+									}}
+								/>
+								<CustomButton
+									label={"Reset"}
+									bgColor="#f2c008"
+									textColor="#002855"
+									bordered
+									borderSize="lg"
+									type="submit"
+								/>
+							</div>
+						</form>
+					</GeneralModal>
+				)}
+				{showIdleModal && (
+					<GeneralModal
+						isOpen={showIdleModal}
+						height="18vh"
+						classname={"xs:w-full lg:w-[30%]"}>
+						<div className="flex flex-col justify-center items-center gap-2">
+							{isIdle && (
+								<div className="text-[12px]">
+									<p className="font-medium">
+										You are logged out due to inactivity.
+									</p>
+									<p> Please login again</p>
+								</div>
+							)}
+							<div className="flex flex-col justify-center items-center lg:w-[25%] xs:w-full">
+								<CustomButton
+									label={"OK"}
+									bgColor="#f2c008"
+									textColor="white"
+									bordered
+									type="button"
+									borderSize="lg"
+									onClick={handleCloseIdleModal}
+								/>
+							</div>
 						</div>
-					</form>
-				</GeneralModal>
+					</GeneralModal>
+				)}
 			</div>
 			{(isLoading || isLogginIn || isPending || isSending) && (
 				<CustomBackdrop

@@ -32,7 +32,7 @@ export async function getBookings() {
 
 	const { data: profiles, error: profilesError } = await supabase
 		.from("profiles")
-		.select("id")
+		.select("id, role, username")
 		.eq("auth_id", user.id)
 		.single();
 
@@ -47,11 +47,16 @@ export async function getBookings() {
 		return null;
 	}
 
-	const { data: bookings, error: bookingsError } = await supabase
-		.from("bookings")
-		.select("*")
-		.eq("user_id", profiles.id)
-		.eq("status", "Pending");
+	let query = supabase.from("bookings").select("*").eq("status", "Pending");
+
+	// If not super-admin, filter by user_id
+	if (profiles?.role !== "super-admin") {
+		query = query.or(
+			`user_id.eq.${profiles.id}, username.eq.${profiles.username}`
+		);
+	}
+
+	const { data: bookings, error: bookingsError } = await query;
 
 	if (bookingsError) {
 		console.error("Error fecthing booking", bookingsError.message);
@@ -101,7 +106,7 @@ export async function getRequests(role) {
 	let statusFilter = ["Pending"];
 
 	if (role === "security") {
-		statusFilter = ["Approved", "Checked out"];
+		statusFilter = ["Approved"];
 	}
 
 	const { data: requests, error: requestsError } = await supabase
@@ -118,10 +123,14 @@ export async function getRequests(role) {
 }
 
 export async function getPasses(role, userId) {
-	let query = supabase.from("bookings").select("*").eq("status", "Approved");
+	let query = supabase.from("bookings").select("*");
 
-	if (role === "user" && userId) {
-		query = query.eq("user_id", userId);
+	if (role !== "user") {
+		query = query.eq("status", "Checked out");
+	} else if (role === "user" && userId) {
+		query = query
+			.eq("user_id", userId)
+			.in("status", ["Approved", "Checked out"]);
 	}
 
 	const { data: passes, error: passesError } = await query;

@@ -7,8 +7,12 @@ export async function getProfiles(username) {
 		.eq("username", username)
 		.single();
 
+	if (!data) {
+		throw new Error("User not found");
+	}
+
 	if (error) {
-		throw new Error(error.message);
+		throw new Error("Failed to fetch user");
 	}
 
 	return data;

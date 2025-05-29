@@ -13,7 +13,8 @@ export default function useGetProfile() {
 			toast.success("Profile fetched successfully");
 		},
 		onError: (err) => {
-			toast.error(err.message);
+			console.error(err.message);
+			toast.error(err.message || "Failed to fetch profile");
 		},
 	});
 
