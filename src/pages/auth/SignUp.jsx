@@ -8,12 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import useSignup from "../../hooks/auth/useSignup";
 import CustomBackdrop from "../../components/CustomBackdrop";
+import { delayAction } from "../../helpers/custom";
 
 export default function SignUp() {
 	const [levels, setLevels] = useState("");
 	const [activeType, setActiveType] = useState("user");
 	const [showPassword, setShowPassword] = useState(false);
 	const [showPassword2, setShowPassword2] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -316,7 +318,13 @@ export default function SignUp() {
 									bgColor="#f2c008"
 									bordered
 									borderSize="lg"
-									onClick={() => navigate("/login")}
+									onClick={() => {
+										setIsLoading(true);
+										delayAction(() => {
+											setIsLoading(false);
+											navigate("/login");
+										}, 2000);
+									}}
 									disabled={isSigningUp}
 								/>
 							</div>
@@ -335,7 +343,9 @@ export default function SignUp() {
 					</form>
 				</div>
 			</div>
-			{isSigningUp && <CustomBackdrop open={true} text={"Please wait..."} />}
+			{(isSigningUp || isLoading) && (
+				<CustomBackdrop open={true} text={"Please wait..."} />
+			)}
 		</div>
 	);
 }
