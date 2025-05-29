@@ -194,7 +194,7 @@ export default function Bookings() {
 					showCloseButton
 					height="80vh"
 					widthClass="w-full">
-					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-4">
+					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-1">
 						{selectedBooking &&
 							Object.entries(selectedBooking)
 								.filter(([key]) => !exemptedKeys.includes(key))

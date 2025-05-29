@@ -226,7 +226,7 @@ export default function Request() {
 					onClose={() => setShowRequestDetailsModal(false)}
 					showCloseButton
 					widthClass="w-full">
-					<div className="xs:py-4 xs:px-0 p-4 flex flex-col justify-center items-center gap-3">
+					<div className="xs:py-4 xs:px-0 p-1 flex flex-col justify-center items-center gap-3">
 						<div
 							className="grid grid-cols-2 xs:flex xs:flex-col w-full 
 						gap-2 items-center text-left">
