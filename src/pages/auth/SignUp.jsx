@@ -103,24 +103,24 @@ export default function SignUp() {
 						</div>
 					</div>
 					<form onSubmit={handleSubmit(onSubmit)}>
+						<div className="flex xs:flex-col xs:items-start flex-col justify-between items-center w-full mb-3 gap-5 lg:gap-8 mt-3 xs:pl-4">
+							<div className="xs:pl-5 lg:pl-5 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center lg:mr-auto">
+								<span className="text-general-blue text-[1rem] xs:text-[0.9rem] font-medium">
+									Role:{" "}
+								</span>
+								<CustomOptionsFilter
+									options={roleOptions}
+									setActiveType={handleRoleChange}
+									activeType={activeType}
+									className="xs:text-[0.8rem]"
+									btnClassName="xs:text-[0.8rem]"
+								/>
+							</div>
+						</div>
 						<div
 							className={`flex flex-col justify-start items-center gap-2 w-full px-5 ${
-								activeType === "user" ? "h-[70vh] overflow-y-auto" : "h-auto"
+								activeType === "user" ? "h-[65vh] overflow-y-auto" : "h-auto"
 							}`}>
-							<div className="flex xs:flex-col xs:items-start flex-col justify-between items-center w-full mb-3 gap-5 lg:gap-8">
-								<div className="xs:pl-5 lg:pl-5 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center lg:mr-auto">
-									<span className="text-general-blue text-[1rem] xs:text-[0.9rem] font-medium">
-										Role:{" "}
-									</span>
-									<CustomOptionsFilter
-										options={roleOptions}
-										setActiveType={handleRoleChange}
-										activeType={activeType}
-										className="xs:text-[0.8rem]"
-										btnClassName="xs:text-[0.8rem]"
-									/>
-								</div>
-							</div>
 							<div className="w-full flex flex-col justify-center items-center gap-4">
 								<div className="w-full xs:flex-col flex justify-center items-start gap-3">
 									<CustomInput
