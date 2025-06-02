@@ -203,7 +203,7 @@ export default function Pass() {
 									})}
 						</div>
 						{isLate && (
-							<div className="p-1">
+							<div className="p-1 text-left">
 								<CustomTextarea
 									register={register("late_checkin", {
 										validate: (value) =>
