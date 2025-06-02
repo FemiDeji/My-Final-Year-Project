@@ -239,7 +239,7 @@ export default function Pass() {
 					showCloseButton
 					onClose={() => setShowFilterModal(false)}
 					classname={"xs:w-full"}
-					height="42vh">
+					height="40vh">
 					<form className="p-1 text-left flex flex-col gap-2">
 						<CustomInput
 							type="date"
