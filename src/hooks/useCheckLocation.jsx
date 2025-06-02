@@ -87,7 +87,7 @@ export default function useCheckLocation() {
 				isOpen={showRetryModal}
 				showCloseButton
 				onClose={() => setShowRetryModal(false)}
-				height="25vh"
+				height="23vh"
 				classname="xs:w-full lg:w-[30%]">
 				<div className="flex flex-col justify-center items-center gap-2">
 					<p className="text-base xs:text-[12px] text-center">
