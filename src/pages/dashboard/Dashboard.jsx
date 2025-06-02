@@ -31,7 +31,7 @@ export default function Dashboard() {
 	).length;
 
 	const bookingData = [
-		{ name: "Total Bookings", value: recentBookings?.length },
+		{ name: "Bookings", value: recentBookings?.length },
 		{ name: "Approved", value: numApproved },
 		{ name: "Rejected", value: numDeclined },
 		...(profile?.role === "security"
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
 	return (
 		<Layout title={"Dashboard"}>
-			<div className="w-full flex flex-col gap-3 xs:gap-6">
+			<div className="w-full flex flex-col gap-3 xs:gap-3 xs:overflow-y-auto">
 				<Stats
 					bookings={recentBookings}
 					numApproved={numApproved}

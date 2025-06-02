@@ -63,7 +63,7 @@ export default function ProtectedRoute({ children, authUser = [] }) {
 	return hasAccess ? (
 		<>
 			{children}
-			<GeneralModal isOpen={showModal} height="18vh" classname={"xs:w-full"}>
+			<GeneralModal isOpen={showModal} height="17vh" classname={"xs:w-full"}>
 				<div className="flex flex-col justify-center items-center gap-2 text-[12]x">
 					<p className="text-[12px] font-medium">{"You've been inactive"}</p>
 					<p className="text-[12px]">You will be logged out in 1 minute.</p>

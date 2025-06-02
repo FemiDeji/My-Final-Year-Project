@@ -13,7 +13,7 @@ export default function ActivityChart({ data }) {
 
 	return (
 		<div className="flex w-full justify-center items-center">
-			<div className="w-full h-[290px] xs:h-[220px]">
+			<div className="w-full min-h-[290px] xs:h-[220px] h-full">
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie
@@ -22,8 +22,8 @@ export default function ActivityChart({ data }) {
 							nameKey="month"
 							cx="50%"
 							cy="50%"
-							outerRadius="65%"
-							innerRadius="24%"
+							outerRadius="60%"
+							innerRadius="20%"
 							fill="#82ca9d"
 							label={({ name, percent }) =>
 								`${name}: ${(percent * 100).toFixed(0)}%`
@@ -33,6 +33,7 @@ export default function ActivityChart({ data }) {
 									key={`cell-${index}`}
 									fill={COLORS[index % COLORS.length]}
 									fontSize={"70%"}
+									style={{ outline: "none" }}
 								/>
 							))}
 						</Pie>

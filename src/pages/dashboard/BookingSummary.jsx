@@ -13,7 +13,7 @@ export default function BookingSummary({ data }) {
 
 	return (
 		<div className="w-full items-center justify-center flex">
-			<div className="w-full xs:h-[210px] h-[270px]">
+			<div className="w-full xs:h-[220px] min-h-[270px] h-full">
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie
@@ -22,8 +22,8 @@ export default function BookingSummary({ data }) {
 							nameKey={"name"}
 							cy={"50%"}
 							cx={"50%"}
-							outerRadius="65%"
-							innerRadius="24%"
+							outerRadius="60%"
+							innerRadius="20%"
 							fill="#8884d8"
 							label={({ name, percent }) =>
 								`${name}: ${(percent * 100).toFixed(0)}%`
@@ -33,6 +33,7 @@ export default function BookingSummary({ data }) {
 									key={`cell-${index}`}
 									fill={COLORS[index % COLORS.length]}
 									fontSize={"65%"}
+									style={{ outline: "none" }}
 								/>
 							))}
 						</Pie>
