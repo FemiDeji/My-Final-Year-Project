@@ -6,6 +6,7 @@ import useLogout from "../../hooks/auth/useLogout";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { useState } from "react";
 import useUpdateUser from "../../hooks/auth/useUpdateUser";
+import { General_Grey, General_Yellow } from "../../constants/colors";
 
 export default function UpdatePasswordForm() {
 	const { updateUser, isUpdating } = useUpdateUser();

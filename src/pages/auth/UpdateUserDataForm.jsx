@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import useUpdateUser from "../../hooks/auth/useUpdateUser";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import CustomSelectField from "../../components/CustomSelectField";
+import { General_Grey, General_Yellow } from "../../constants/colors";
 
 export default function UpdateUserDataForm() {
 	const { user, profile } = useUser();

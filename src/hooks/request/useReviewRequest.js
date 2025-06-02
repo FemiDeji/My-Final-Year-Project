@@ -12,12 +12,12 @@ export default function useReviewRequest() {
 	} = useMutation({
 		mutationFn: ({ updateData, id }) => updateBooking(updateData, id),
 		onSuccess: (data) => {
-			toast.success("Request updated successdfully");
+			toast.success("Request reviewed successdfully");
 			queryClient.invalidateQueries(["bookings", data]);
 		},
 		onError: (err) => {
 			console.log("Error", err.message);
-			toast.error("Request could not be updated");
+			toast.error("Request could not be reviewed!");
 		},
 	});
 

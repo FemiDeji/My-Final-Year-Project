@@ -17,6 +17,7 @@ import {
 	General_Grey,
 	General_Yellow,
 } from "../../constants/colors";
+import { PAGE_SIZE } from "../../constants/texts";
 
 export default function Bookings() {
 	const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Bookings() {
 	const { bookings, isPending } = useBookings();
 	const { filterBookings, isPending: isFiltering } = useFilterBookings();
 	const [pageNumber, setPageNumber] = useState(1);
-	const [pageSize] = useState(10);
+	const [pageSize] = useState(PAGE_SIZE);
 
 	const today = new Date().toISOString().split("T")[0];
 	const beginningOfYear = new Date(new Date().getFullYear(), 0, 1)
@@ -129,7 +130,7 @@ export default function Bookings() {
 		}
 	};
 
-	const tableData = filteredBookings.length > 0 ? filteredBookings : bookings;
+	const tableData = filteredBookings?.length > 0 ? filteredBookings : bookings;
 
 	const startIndex = (pageNumber - 1) * pageSize;
 	const endIndex = startIndex + pageSize;

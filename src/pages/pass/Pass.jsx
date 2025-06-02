@@ -19,12 +19,18 @@ import {
 import { FaFilter } from "react-icons/fa";
 import CustomInput from "../../components/CustomInput";
 import CustomSelectField from "../../components/CustomSelectField";
+import { PAGE_SIZE } from "../../constants/texts";
+import useCheckIn from "../../hooks/pass/useCheckIn";
+import FileInput from "../../components/FileInput";
 
 export default function Pass() {
 	const [showPassDetails, setShowPassDetails] = useState(false);
 	const [selectedPass, setSelectedPass] = useState(null);
 	const [status, setStatus] = useState("");
 	const [showFilterModal, setShowFilterModal] = useState(false);
+	const [filterPass, setFilterPass] = useState([]);
+	const [pageNumber, setPageNumber] = useState(1);
+	const [pageSize] = useState(PAGE_SIZE);
 
 	const now = new Date();
 	const today = new Date();
@@ -33,6 +39,7 @@ export default function Pass() {
 	const { profile } = useUser();
 	const { passes, isPending } = usePasses();
 	const { filteredPasses, isPending: isFiltering } = useFilterPasses();
+	const { checkIn, isPending: isCheckingIn } = useCheckIn();
 
 	const {
 		handleSubmit,
@@ -46,6 +53,7 @@ export default function Pass() {
 			start_date: convertToDateTime(beginningOfYear, DATE_REQUEST_FORMAT) || "",
 			end_date: convertToDateTime(today, DATE_REQUEST_FORMAT) || "",
 			priority: "Mid",
+			image_evidence: null,
 		},
 	});
 
@@ -69,6 +77,7 @@ export default function Pass() {
 		"rejection_reason",
 		"security_username",
 		"security_name",
+		"image_evidence",
 	];
 
 	const labels = {
@@ -101,7 +110,7 @@ export default function Pass() {
 		{ key: "High", value: "High" },
 	];
 
-	const isLate = (() => {
+	const isLateCheckin = (() => {
 		if (!selectedPass?.end_date) return false;
 
 		const endDate = new Date(selectedPass?.end_date);
@@ -136,10 +145,26 @@ export default function Pass() {
 		setSelectedPass({ ...result });
 	};
 
-	const onFilterPasses = (data) => {};
+	const onFilterPasses = async (data) => {
+		try {
+			const response = await filteredPasses({
+				start_date: data.start_date,
+				end_date: data.end_date,
+				priority: data.priority,
+			});
+			console.log("res", response);
+			setShowFilterModal(false);
+			setFilterPass(response);
+			reset();
+		} catch (err) {
+			console.log("err", err);
+		}
+		console.log({ ...data, status });
+		reset();
+	};
 
 	const onSubmit = (data) => {
-		console.log(data);
+		console.log({ status, reason: data.late_checkin });
 		if (!selectedPass?.id) {
 			console.error("Error: No pass selected");
 			toast.error("No pass selected");
@@ -149,11 +174,40 @@ export default function Pass() {
 			toast.error("Pass not approved yet");
 			return;
 		}
-		if (isLate && !data.late_checkin) {
+		if (isLateCheckin && !data.late_checkin) {
 			toast.error("You're late. Please provide a reason.");
 			return;
 		}
+
+		checkIn(
+			{
+				updateData: {
+					status,
+					late_checkin: data.late_checkin,
+				},
+				id: selectedPass?.id,
+			},
+			{
+				onSuccess: () => {
+					reset();
+					setShowPassDetails(false);
+				},
+			}
+		);
+
+		console.log("data", {
+			updateData: {
+				status,
+				late_checkin: data.late_checkin,
+			},
+			id: selectedPass?.id,
+		});
 	};
+
+	const passData = filterPass?.length > 0 ? filterPass : passes;
+	const startIndex = (pageNumber - 1) * pageSize;
+	const endIndex = startIndex + pageSize;
+	const paginatedData = passData?.slice(startIndex, endIndex);
 
 	return (
 		<Layout title={"Pass"}>
@@ -175,12 +229,16 @@ export default function Pass() {
 				<div>
 					<Table
 						headers={requestHeaders}
-						data={passes ?? []}
+						data={paginatedData ?? []}
 						isView
 						onViewClick={(id) => {
 							handleViewClick(id);
 							setShowPassDetails(true);
 						}}
+						totalCount={passData?.length ?? 0}
+						currentPage={pageNumber}
+						onPageChange={setPageNumber}
+						pageSize={pageSize}
 					/>
 				</div>
 			</div>
@@ -202,20 +260,54 @@ export default function Pass() {
 										);
 									})}
 						</div>
-						{isLate && (
-							<div className="p-1 text-left">
-								<CustomTextarea
-									register={register("late_checkin", {
-										validate: (value) =>
-											isLate && !value
-												? "Reason is required for late checkin"
-												: false,
-									})}
-									error={errors?.late_checkin?.message}
-									placeholder={"Write your reason for being late here."}
-								/>
-							</div>
-						)}
+						<div
+							className={`p-1 text-left ${
+								!isLateCheckin ? "hidden" : "block"
+							}`}>
+							<CustomTextarea
+								register={register("late_checkin", {
+									validate: (value) => {
+										if (isLateCheckin && !value) {
+											return "Reason is required for late checkin";
+										}
+										return true;
+									},
+								})}
+								error={errors?.late_checkin?.message}
+								placeholder={"Write your reason for being late here."}
+							/>
+						</div>
+						<div
+							className={`${
+								!isLateCheckin ? "hidden" : "block"
+							} p-1 text-left`}>
+							<FileInput
+								label={"Upload Image (optional)"}
+								name="image_evidence"
+								type="file"
+								error={errors?.image_evidence?.message}
+								register={register("image_evidence", {
+									validate: {
+										validType: (value) => {
+											const file = value?.[0];
+											if (!file) return true;
+											return (
+												["image/jpeg", "image.png"].includes(file.type) ||
+												"Only JPEG or PNG images are allowed"
+											);
+										},
+										validSize: (value) => {
+											const file = value?.[0];
+											if (!file) return true;
+											return (
+												file.size <= 2 * 1024 * 1024 ||
+												"File must be less than 2 MB."
+											);
+										},
+									},
+								})}
+							/>
+						</div>
 						{profile?.role === "user" &&
 							selectedPass?.status === "Checked out" && (
 								<div className="ml-auto mt-2 w-[20%] lg:pr-1 xs:w-full xs:px-1">
@@ -226,7 +318,7 @@ export default function Pass() {
 										borderSize="lg"
 										type="submit"
 										onClick={() =>
-											setStatus(isLate ? "Late Checkin" : "Checked in")
+											setStatus(isLateCheckin ? "Late Checkin" : "Checked in")
 										}
 									/>
 								</div>
@@ -241,8 +333,10 @@ export default function Pass() {
 					showCloseButton
 					onClose={() => setShowFilterModal(false)}
 					classname={"xs:w-full"}
-					height="37vh">
-					<form className="p-1 text-left flex flex-col gap-2 items-center justify-center">
+					height="35vh">
+					<form
+						onSubmit={handleSubmit(onFilterPasses)}
+						className="p-1 text-left flex flex-col gap-2 items-center justify-center">
 						<CustomInput
 							type="date"
 							name="start_date"
@@ -286,8 +380,11 @@ export default function Pass() {
 				</GeneralModal>
 			)}
 
-			{(isPending || isFiltering) && (
-				<CustomBackdrop open={true} text={"Fetching data..."} />
+			{(isPending || isFiltering || isCheckingIn) && (
+				<CustomBackdrop
+					open={true}
+					text={isCheckingIn ? "Please wait..." : "Fetching data..."}
+				/>
 			)}
 		</Layout>
 	);

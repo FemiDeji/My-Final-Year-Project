@@ -224,7 +224,7 @@ export default function Login() {
 				{showIdleModal && (
 					<GeneralModal
 						isOpen={showIdleModal}
-						height="18vh"
+						height="17vh"
 						classname={"xs:w-full lg:w-[30%]"}>
 						<div className="flex flex-col justify-center items-center gap-2">
 							{isIdle && (

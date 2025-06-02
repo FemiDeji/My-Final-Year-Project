@@ -154,7 +154,7 @@ export default function SideBar({
 						<MdOutlineHistoryToggleOff />
 					</LinkItem>
 
-					{!profile?.role === "super-admin" && (
+					{profile?.role !== "super-admin" && (
 						<LinkItem
 							text={"Settings"}
 							url={"/settings"}

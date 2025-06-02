@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function createUpdateBooking(newBooking) {
 	let status = "Pending";
@@ -239,7 +239,50 @@ export async function updateBooking(updateData, id) {
 		throw new Error("Invalid booking ID");
 	}
 
-	console.log("data: ", { ...updateData });
+	const { data: updateBooking, error: updateBookingError } = await supabase
+		.from("bookings")
+		.update([{ ...updateData }])
+		.eq("id", id)
+		.select()
+		.single();
+
+	if (updateBookingError) {
+		console.error("Error updating status: ", updateBookingError.message);
+		throw new Error("Booking could not be updated");
+	}
+
+	return updateBooking;
+}
+
+export async function checkInUser(updateData, id, imageFile) {
+	if (!id) {
+		console.error("Error: Booking ID is undefined orr invalid!");
+		throw new Error("Invalid booking ID");
+	}
+
+	if (imageFile) {
+		// Check file size is not more than 2MB
+		const maxSize = 2 * 1024 * 1024;
+		if (imageFile.size > maxSize) {
+			throw new Error("Max image size allowed is 2MB.");
+		}
+
+		// Generate unique image file name
+		const ext = imageFile.name.split(".").pop();
+		const fileName = `${id}_${Date.now()}.${ext}`;
+
+		// Upload to supabase
+		const { error: storageError } = await supabase.storage
+			.from("evidence")
+			.upload(fileName, imageFile);
+
+		if (storageError) {
+			console.error("Upload failed", storageError);
+			throw new Error("Failed to upload image!!");
+		}
+		const imageURL = `${supabaseUrl}/storage/v1/object/public/evidence/${fileName}`;
+		updateData.image_evidence = imageURL;
+	}
 
 	const { data: updateBooking, error: updateBookingError } = await supabase
 		.from("bookings")

@@ -2,10 +2,8 @@
 export default function CustomTextarea({
 	label,
 	register,
-	type = "text",
 	placeholder,
-	name = "",
-	required = true,
+	required = false,
 	readOnly = false,
 	error = "",
 	maxLength,
@@ -29,9 +27,7 @@ export default function CustomTextarea({
 				{/* Spread the register function return value */}
 				<textarea
 					{...register}
-					type={type}
 					placeholder={placeholder}
-					name={name}
 					id={name}
 					readOnly={readOnly}
 					disabled={disabled}
