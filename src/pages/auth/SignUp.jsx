@@ -98,7 +98,8 @@ export default function SignUp() {
 						/>
 					</div>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<div className="flex flex-col justify-start items-center gap-2 w-full px-5 h-screen">
+						<div
+							className={`flex flex-col justify-start items-center gap-2 w-full px-5 h-auto`}>
 							<div className="flex xs:flex-col xs:items-start flex-col justify-between items-center w-full mb-3 gap-5 lg:gap-8">
 								<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
 									Welcome To
