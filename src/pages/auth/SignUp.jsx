@@ -119,7 +119,7 @@ export default function SignUp() {
 						</div>
 						<div
 							className={`flex flex-col justify-start items-center gap-2 w-full px-5 ${
-								activeType === "user" ? "h-[60vh] overflow-y-auto" : "h-[60vh]"
+								activeType === "user" ? "h-[60vh] overflow-y-auto" : "h-auto"
 							}`}>
 							<div className="w-full flex flex-col justify-center items-center gap-4">
 								<div className="w-full xs:flex-col flex justify-center items-start gap-3">
