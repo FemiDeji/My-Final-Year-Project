@@ -225,7 +225,9 @@ export default function Pass() {
 										bordered
 										borderSize="lg"
 										type="submit"
-										onClick={() => setStatus("Checked in")}
+										onClick={() =>
+											setStatus(isLate ? "Late Checkin" : "Checked in")
+										}
 									/>
 								</div>
 							)}
@@ -239,7 +241,7 @@ export default function Pass() {
 					showCloseButton
 					onClose={() => setShowFilterModal(false)}
 					classname={"xs:w-full"}
-					height="40vh">
+					height="37vh">
 					<form className="p-1 text-left flex flex-col gap-2 items-center justify-center">
 						<CustomInput
 							type="date"
