@@ -78,7 +78,7 @@ export default function SignUp() {
 	return (
 		<div
 			className={`flex flex-row justify-center items-center w-full h-screen ${
-				activeType === "user" ? "overflow-y-auto" : ""
+				activeType === "user" ? "overflow-y-auto min-h-screen" : ""
 			}`}>
 			<div className="flex flex-col justify-center items-center h-full xs:hidden w-[50%] ">
 				<img
