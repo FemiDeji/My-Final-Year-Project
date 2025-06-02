@@ -16,6 +16,11 @@ import CustomInput from "../../components/CustomInput";
 import CustomSelectField from "../../components/CustomSelectField";
 import useFilterBookings from "../../hooks/booking/useFilterBookings";
 import { useNavigate } from "react-router-dom";
+import {
+	General_Blue,
+	General_Grey,
+	General_Yellow,
+} from "../../constants/colors";
 
 export default function Request() {
 	const [selectedRequest, setSelectedRequest] = useState(null);
@@ -184,8 +189,8 @@ export default function Request() {
 						<div className="lg:w-[20%] xs:w-full lg:ml-auto">
 							<CustomButton
 								label={"Filter Request"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								onClick={() => setShowFilterModal(true)}>
@@ -197,8 +202,8 @@ export default function Request() {
 						<div className="lg:w-[20%] xs:w-full">
 							<CustomButton
 								label={"New Request"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								onClick={() => navigate("/requests/new")}>
@@ -262,14 +267,14 @@ export default function Request() {
 									<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
 										<CustomButton
 											label={"Reject"}
-											bgColor="#DFE6EC"
+											bgColor={General_Grey}
 											bordered
 											borderSize="lg"
 											onClick={() => setShowRejection(true)}
 										/>
 										<CustomButton
 											label={"Approve"}
-											bgColor="#f2c008"
+											bgColor={General_Yellow}
 											bordered
 											borderSize="lg"
 											type="submit"
@@ -283,14 +288,14 @@ export default function Request() {
 									<div className="flex flex-row gap-3 ml-auto w-[40%] xs:w-full">
 										<CustomButton
 											label={"Cancel"}
-											bgColor="#DFE6EC"
+											bgColor={General_Grey}
 											bordered
 											borderSize="lg"
 											onClick={() => setShowRejection(false)}
 										/>
 										<CustomButton
 											label={"Reject"}
-											bgColor="#f2c008"
+											bgColor={General_Yellow}
 											bordered
 											borderSize="lg"
 											type="submit"
@@ -302,7 +307,7 @@ export default function Request() {
 								<div className="ml-auto mt-2 w-[20%] xs:w-full">
 									<CustomButton
 										label={"Check out"}
-										bgColor="#f2c008"
+										bgColor={General_Yellow}
 										bordered
 										borderSize="lg"
 										type="submit"
@@ -365,7 +370,7 @@ export default function Request() {
 						<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
 							<CustomButton
 								label={"Cancel"}
-								bgColor="#DFE6EC"
+								bgColor={General_Grey}
 								bordered
 								borderSize="lg"
 								onClick={() => {
@@ -375,8 +380,9 @@ export default function Request() {
 							/>
 							<CustomButton
 								label={"Filter"}
-								bgColor="#f2c008"
+								bgColor={General_Yellow}
 								bordered
+								textColor={General_Blue}
 								borderSize="lg"
 								type="submit"
 							/>

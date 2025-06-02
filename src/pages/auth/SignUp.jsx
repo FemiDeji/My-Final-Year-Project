@@ -9,6 +9,7 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import useSignup from "../../hooks/auth/useSignup";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import { delayAction } from "../../helpers/custom";
+import { General_Blue, General_Yellow } from "../../constants/colors";
 
 export default function SignUp() {
 	const [levels, setLevels] = useState("");
@@ -314,8 +315,8 @@ export default function SignUp() {
 							<div className="xs:w-[40%] w-[30%]">
 								<CustomButton
 									label={"Back to Login"}
-									textColor="#002855"
-									bgColor="#f2c008"
+									textColor={General_Blue}
+									bgColor={General_Yellow}
 									bordered
 									borderSize="lg"
 									onClick={() => {
@@ -331,8 +332,8 @@ export default function SignUp() {
 							<div className="w-[30%]">
 								<CustomButton
 									label={"Sign up"}
-									textColor="#002855"
-									bgColor="#f2c008"
+									textColor={General_Blue}
+									bgColor={General_Yellow}
 									bordered
 									borderSize="lg"
 									type="submit"

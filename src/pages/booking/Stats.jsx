@@ -4,6 +4,7 @@ import Stat from "../../components/Stat";
 import { LuBook, LuBookCheck, LuBookDown, LuBookX } from "react-icons/lu";
 import useUser from "../../hooks/auth/useUser";
 import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
+import { General_Blue } from "../../constants/colors";
 
 export default function Stats({
 	bookings,
@@ -22,7 +23,7 @@ export default function Stats({
 				<Stat
 					title={"Bookings"}
 					icon={<LuBook className="text-2xl xs:text-xl" strokeWidth={1.5} />}
-					color={"#002855"}
+					color={General_Blue}
 					value={numBookings}
 				/>
 			)}
@@ -32,7 +33,7 @@ export default function Stats({
 					icon={
 						<LuBookDown className="text-2xl xs:text-xl" strokeWidth={1.5} />
 					}
-					color={"#002855"}
+					color={General_Blue}
 					value={numBookings}
 				/>
 			)}
@@ -45,13 +46,13 @@ export default function Stats({
 						icon={
 							<LuBookCheck className="text-2xl xs:text-xl" strokeWidth={1.5} />
 						}
-						color={"#002855"}
+						color={General_Blue}
 						value={numApproved}
 					/>
 					<Stat
 						title={"Declined"}
 						icon={<LuBookX className="text-2xl xs:text-xl" strokeWidth={1.5} />}
-						color={"#002855"}
+						color={General_Blue}
 						value={numDeclined}
 					/>
 				</>
@@ -66,7 +67,7 @@ export default function Stats({
 								strokeWidth={1.5}
 							/>
 						}
-						color={"#002855"}
+						color={General_Blue}
 						value={numCheckedOut}
 					/>
 					<Stat
@@ -77,7 +78,7 @@ export default function Stats({
 								strokeWidth={1.5}
 							/>
 						}
-						color={"#002855"}
+						color={General_Blue}
 						value={numCheckedIn}
 					/>
 				</>

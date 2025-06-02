@@ -10,60 +10,43 @@ import CustomButton from "../../components/CustomButton";
 import toast from "react-hot-toast";
 import CustomTextarea from "../../components/CustomTextarea";
 import { useForm } from "react-hook-form";
+import useFilterPasses from "../../hooks/pass/useFilterPasses";
+import { General_Blue, General_Yellow } from "../../constants/colors";
+import {
+	convertToDateTime,
+	DATE_REQUEST_FORMAT,
+} from "../../helpers/dateAndTime";
+import { FaFilter } from "react-icons/fa";
+import CustomInput from "../../components/CustomInput";
+import CustomSelectField from "../../components/CustomSelectField";
 
 export default function Pass() {
 	const [showPassDetails, setShowPassDetails] = useState(false);
 	const [selectedPass, setSelectedPass] = useState(null);
 	const [status, setStatus] = useState("");
-
-	// const today = new Date().toISOString().split("T")[0];
-	// const beginningOfYear = new Date(new Date().getFullYear(), 0, 1)
-	// 	.toISOString()
-	// 	.split("T")[0];
+	const [showFilterModal, setShowFilterModal] = useState(false);
 
 	const now = new Date();
-
-	const isLate = (() => {
-		if (!selectedPass?.end_date) return false;
-
-		const endDate = new Date(selectedPass?.end_date);
-
-		// Setting 6PM as the cutoff time
-		const cutOff = new Date(endDate);
-		cutOff.setHours(18, 0, 0, 0);
-
-		const nowDateOnly = new Date(
-			now.getFullYear(),
-			now.getMonth(),
-			now.getDate()
-		);
-		const endDateOnly = new Date(
-			endDate.getFullYear(),
-			endDate.getMonth(),
-			endDate.getDate()
-		);
-
-		// Case 1: It's the same day but current time is after 6 PM
-		const isSameDayLate =
-			nowDateOnly.getTime() === endDateOnly.getTime() && now > cutOff;
-
-		// Case 2: It's after the return date regardless of time
-		const isAfterReturnDate = nowDateOnly.getTime() > endDateOnly.getTime();
-
-		return isSameDayLate || isAfterReturnDate;
-	})();
+	const today = new Date();
+	const beginningOfYear = new Date(today.getFullYear(), 0, 1);
 
 	const { profile } = useUser();
-
 	const { passes, isPending } = usePasses();
+	const { filteredPasses, isPending: isFiltering } = useFilterPasses();
 
 	const {
 		handleSubmit,
 		reset,
+		getValues,
 		register,
 		formState: { errors },
 	} = useForm({
-		defaultValues: { late_checkin: "" },
+		defaultValues: {
+			late_checkin: "",
+			start_date: convertToDateTime(beginningOfYear, DATE_REQUEST_FORMAT) || "",
+			end_date: convertToDateTime(today, DATE_REQUEST_FORMAT) || "",
+			priority: "Mid",
+		},
 	});
 
 	const requestHeaders = [
@@ -112,10 +95,48 @@ export default function Pass() {
 		late_checkin: "Late Checkin",
 	};
 
+	const priorityOptions = [
+		{ key: "Normal", value: "Normal" },
+		{ key: "Mid", value: "Mid" },
+		{ key: "High", value: "High" },
+	];
+
+	const isLate = (() => {
+		if (!selectedPass?.end_date) return false;
+
+		const endDate = new Date(selectedPass?.end_date);
+
+		// Setting 6PM as the cutoff time
+		const cutOff = new Date(endDate);
+		cutOff.setHours(18, 0, 0, 0);
+
+		const nowDateOnly = new Date(
+			now.getFullYear(),
+			now.getMonth(),
+			now.getDate()
+		);
+		const endDateOnly = new Date(
+			endDate.getFullYear(),
+			endDate.getMonth(),
+			endDate.getDate()
+		);
+
+		// Case 1: It's the same day but current time is after 6 PM
+		const isSameDayLate =
+			nowDateOnly.getTime() === endDateOnly.getTime() && now > cutOff;
+
+		// Case 2: It's after the return date regardless of time
+		const isAfterReturnDate = nowDateOnly.getTime() > endDateOnly.getTime();
+
+		return isSameDayLate || isAfterReturnDate;
+	})();
+
 	const handleViewClick = (id) => {
 		const result = passes.find((pass) => pass.id == id);
 		setSelectedPass({ ...result });
 	};
+
+	const onFilterPasses = (data) => {};
 
 	const onSubmit = (data) => {
 		console.log(data);
@@ -137,6 +158,20 @@ export default function Pass() {
 	return (
 		<Layout title={"Pass"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
+				{passes?.length > 0 && (
+					<div className="lg:w-[20%] lg:ml-auto">
+						<CustomButton
+							label={"Filter Passes"}
+							bgColor={General_Yellow}
+							textColor={General_Blue}
+							bordered
+							onClick={() => setShowFilterModal(true)}
+							borderSize="lg"
+							type="button">
+							<FaFilter />
+						</CustomButton>
+					</div>
+				)}
 				<div>
 					<Table
 						headers={requestHeaders}
@@ -150,53 +185,108 @@ export default function Pass() {
 				</div>
 			</div>
 
-			<GeneralModal
-				isOpen={showPassDetails}
-				onClose={() => setShowPassDetails(false)}
-				showCloseButton
-				widthClass="w-full">
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full gap-2 items-center text-left p-1">
-						{selectedPass &&
-							Object.entries(selectedPass)
-								.filter(([key]) => !exemptedKeys.includes(key))
-								.map(([a, b]) => {
-									return (
-										<CustomLabelValue key={a} label={labels[a]} value={b} />
-									);
-								})}
-					</div>
-					{isLate && (
-						<div className="p-4">
-							<CustomTextarea
-								register={register("late_checkin", {
-									validate: (value) =>
-										isLate && !value
-											? "Reason is required for late checkin"
-											: false,
-								})}
-								error={errors?.late_checkin?.message}
-								placeholder={"Write your reason for being late here."}
-							/>
+			{showPassDetails && (
+				<GeneralModal
+					isOpen={showPassDetails}
+					onClose={() => setShowPassDetails(false)}
+					showCloseButton
+					widthClass="w-full">
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<div className="grid grid-cols-2 xs:flex xs:flex-col w-full gap-2 items-center text-left p-1">
+							{selectedPass &&
+								Object.entries(selectedPass)
+									.filter(([key]) => !exemptedKeys.includes(key))
+									.map(([a, b]) => {
+										return (
+											<CustomLabelValue key={a} label={labels[a]} value={b} />
+										);
+									})}
 						</div>
-					)}
-					{profile?.role === "user" &&
-						selectedPass?.status === "Checked out" && (
-							<div className="ml-auto mt-2 w-[20%] lg:pr-1 xs:w-full xs:px-1">
-								<CustomButton
-									label={"Check in"}
-									bgColor="#f2c008"
-									bordered
-									borderSize="lg"
-									type="submit"
-									onClick={() => setStatus("Checked in")}
+						{isLate && (
+							<div className="p-1">
+								<CustomTextarea
+									register={register("late_checkin", {
+										validate: (value) =>
+											isLate && !value
+												? "Reason is required for late checkin"
+												: false,
+									})}
+									error={errors?.late_checkin?.message}
+									placeholder={"Write your reason for being late here."}
 								/>
 							</div>
 						)}
-				</form>
-			</GeneralModal>
+						{profile?.role === "user" &&
+							selectedPass?.status === "Checked out" && (
+								<div className="ml-auto mt-2 w-[20%] lg:pr-1 xs:w-full xs:px-1">
+									<CustomButton
+										label={"Check in"}
+										bgColor={General_Yellow}
+										bordered
+										borderSize="lg"
+										type="submit"
+										onClick={() => setStatus("Checked in")}
+									/>
+								</div>
+							)}
+					</form>
+				</GeneralModal>
+			)}
 
-			{isPending && <CustomBackdrop open={true} text={"Fetching data..."} />}
+			{showFilterModal && (
+				<GeneralModal
+					isOpen={showFilterModal}
+					showCloseButton
+					onClose={() => setShowFilterModal(false)}
+					classname={"xs:w-full"}
+					height="42vh">
+					<form className="p-1 text-left flex flex-col gap-2">
+						<CustomInput
+							type="date"
+							name="start_date"
+							label={"Start date"}
+							register={register("start_date", {
+								validate: (value) =>
+									value <= getValues().end_date ||
+									"Start date cannot be after end date.",
+							})}
+							error={errors?.start_date?.message}
+						/>
+						<CustomInput
+							label={"End date"}
+							type="date"
+							name="end_date"
+							register={register("end_date", {
+								validate: (value) =>
+									value >= getValues().start_date ||
+									"End date cannot be before start date.",
+							})}
+							error={errors?.end_date?.message}
+						/>
+						<CustomSelectField
+							label={"Priority"}
+							name={"priority"}
+							options={priorityOptions}
+							optionKey="key"
+							optionLabel="value"
+							register={register("priority")}
+							error={errors?.priority?.message}
+						/>
+						<CustomButton
+							label={"Filter"}
+							bgColor={General_Yellow}
+							bordered
+							textColor={General_Blue}
+							borderSize="lg"
+							type="submit"
+						/>
+					</form>
+				</GeneralModal>
+			)}
+
+			{(isPending || isFiltering) && (
+				<CustomBackdrop open={true} text={"Fetching data..."} />
+			)}
 		</Layout>
 	);
 }

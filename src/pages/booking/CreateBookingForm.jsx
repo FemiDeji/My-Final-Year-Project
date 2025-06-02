@@ -16,7 +16,7 @@ import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/auth/useUser";
 import useCheckLocation from "../../hooks/useCheckLocation";
-import { formatDate } from "date-fns";
+import { General_Grey, General_Yellow } from "../../constants/colors";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
@@ -25,7 +25,6 @@ export default function CreateBookingForm() {
 	const [userDetails, setUserDetails] = useState(null);
 	const navigate = useNavigate();
 	const [priority, setPriority] = useState("");
-	const today = new Date().toISOString().split("T")[0];
 
 	const { profile: currentUser } = useUser();
 
@@ -422,7 +421,7 @@ export default function CreateBookingForm() {
 				<div className="flex flex-row justify-center xs:justify-end items-center xs:items-end gap-3 w-[30%] ml-auto xs:w-full xs:m-0">
 					<CustomButton
 						label={"Cancel"}
-						bgColor="#DFE6EC"
+						bgColor={General_Grey}
 						bordered
 						borderSize="lg"
 						onClick={() => {
@@ -440,7 +439,7 @@ export default function CreateBookingForm() {
 							console.log("clicked");
 						}}
 						bordered
-						bgColor="#f2c008"
+						bgColor={General_Yellow}
 						type="submit"
 						disabled={isDisabled || isBooking}
 					/>

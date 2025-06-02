@@ -1,16 +1,40 @@
 import supabase from "./supabase";
 
-export async function getHistory(role, userId) {
-	let statusFilter = ["Declined"];
+export async function getHistory() {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
 
-	if (role === "security") {
+	if (userError) {
+		console.error("Error fetching user", userError.message);
+
+		return null;
+	}
+
+	const { data: profiles, error: profilesError } = await supabase
+		.from("profiles")
+		.select("id, role, username")
+		.eq("auth_id", user.id)
+		.single();
+
+	if (profilesError) {
+		console.error("Error fetching profile", profilesError.message);
+		return null;
+	}
+
+	let statusFilter = ["Declined", "Checked in"];
+
+	if (profiles?.role === "security") {
 		statusFilter = ["Checked in"];
 	}
 
 	let query = supabase.from("bookings").select("*").in("status", statusFilter);
 
-	if (role === "user" && userId) {
-		query = query.eq("user_id", userId);
+	if (profiles?.role === "user") {
+		query = query.or(
+			`user_id.eq.${profiles.id}, username.eq.${profiles.username}`
+		);
 	}
 
 	const { data: requests, error: requestsError } = await query;
@@ -23,23 +47,41 @@ export async function getHistory(role, userId) {
 	return requests;
 }
 
-export async function getFilteredHistory({
-	role,
-	userId,
-	status,
-	start_date,
-	end_date,
-}) {
+export async function getFilteredHistory({ status, start_date, end_date }) {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		console.error("Error fetching user", userError.message);
+
+		return null;
+	}
+
+	const { data: profiles, error: profilesError } = await supabase
+		.from("profiles")
+		.select("id, role, username")
+		.eq("auth_id", user.id)
+		.single();
+
+	if (profilesError) {
+		console.error("Error fetching profile", profilesError.message);
+		return null;
+	}
+
 	let statusFilter = ["Declined", "Checked in"];
 
-	if (role === "security") {
+	if (profiles?.role === "security") {
 		statusFilter = ["Checked in"];
 	}
 
 	let query = supabase.from("bookings").select("*").in("status", statusFilter);
 
-	if (role === "user" && userId) {
-		query = query.eq("user_id", userId);
+	if (profiles?.role === "user") {
+		query = query.or(
+			`user_id.eq.${profiles.id}, username.eq.${profiles.username}`
+		);
 	}
 
 	if (status && statusFilter.includes(status)) {

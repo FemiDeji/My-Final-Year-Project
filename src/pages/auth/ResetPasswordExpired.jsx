@@ -14,10 +14,10 @@ export default function ResetPasswordExpired() {
 				<div className="w-[35%] xs:w-[50%]">
 					<CustomButton
 						onClick={() => navigate("/login")}
-						bgColor="#f2c008"
+						bgColor={General_Yellow}
 						bordered
 						borderSize="lg"
-						textColor="#002855"
+						textColor={General_Blue}
 						label={"Back to Login"}
 					/>
 				</div>

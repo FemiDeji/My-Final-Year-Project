@@ -17,6 +17,11 @@ import useUser from "../../hooks/auth/useUser";
 import useCustomFileDownload from "../../helpers/useCustomFileDownload";
 import { convertToDateTime } from "../../helpers/dateAndTime";
 import useDownloadHistory from "../../hooks/history/useDownloadHistory";
+import {
+	General_Blue,
+	General_Grey,
+	General_Yellow,
+} from "../../constants/colors";
 
 export default function History() {
 	const today = new Date().toISOString().split("T")[0];
@@ -205,8 +210,8 @@ export default function History() {
 		<Layout
 			title={"History"}
 			button={history?.length > 0}
-			bgColor={"#f2c008"}
-			textColor={"#002855"}
+			bgColor={General_Yellow}
+			textColor={General_Blue}
 			borderSize={"lg"}
 			btnChildren={<FaCloudDownloadAlt />}
 			bordered
@@ -218,8 +223,8 @@ export default function History() {
 						<div className="lg:w-[22%] xs:w-[40%]">
 							<CustomButton
 								label={"Filter History"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								onClick={() => setShowFilterModal(true)}>
@@ -231,8 +236,8 @@ export default function History() {
 						<div className="lg:w-[22%] xs:w-[40%]">
 							<CustomButton
 								label={"Clear Filter"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								onClick={() => setFilteredHistory([])}>
@@ -326,7 +331,7 @@ export default function History() {
 						<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
 							<CustomButton
 								label={"Cancel"}
-								bgColor="#DFE6EC"
+								bgColor={General_Grey}
 								bordered
 								borderSize="lg"
 								onClick={() => {
@@ -336,7 +341,7 @@ export default function History() {
 							/>
 							<CustomButton
 								label={"Filter"}
-								bgColor="#f2C008"
+								bgColor={General_Yellow}
 								bordered
 								borderSize="lg"
 								type="submit"
@@ -411,15 +416,15 @@ export default function History() {
 						<div className="flex justify-center items-center lg:w-full lg:ml-auto gap-3 mt-3 xs:justify-between xs:w-full">
 							<CustomButton
 								label={"Cancel"}
-								textColor="#002855"
-								bgColor="#DFE6EC"
+								textColor={General_Blue}
+								bgColor={General_Grey}
 								bordered
 								borderSize="lg"
 							/>
 							<CustomButton
 								label={"Download"}
-								textColor="#002855"
-								bgColor="#f2C008"
+								textColor={General_Blue}
+								bgColor={General_Yellow}
 								bordered
 								borderSize="lg"
 								type="submit"

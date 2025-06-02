@@ -165,7 +165,7 @@ export default function SideBar({
 					)}
 				</div>
 
-				<div className="lg:hidden flex flex-col gap-2 xs:ml-3 mt-28 xs:w-full xs:mb-10">
+				<div className="lg:hidden flex flex-col gap-2 ml-3 mt-56 w-full">
 					<div className="text-[10.5px] text-general-blue font-medium">
 						{convertToDateTime(user?.user?.last_sign_in_at)}
 					</div>

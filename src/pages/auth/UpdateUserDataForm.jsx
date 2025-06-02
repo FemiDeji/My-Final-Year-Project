@@ -204,7 +204,7 @@ export default function UpdateUserDataForm() {
 					<div className="ml-auto flex justify-end items-end gap-3 w-[35%] xs:w-[100%] mt-2">
 						<CustomButton
 							label={"Cancel"}
-							bgColor="#DFE6EC"
+							bgColor={General_Grey}
 							bordered
 							borderSize="lg"
 							type="reset"
@@ -213,7 +213,7 @@ export default function UpdateUserDataForm() {
 						/>
 						<CustomButton
 							label={"Update"}
-							bgColor="#f2c008"
+							bgColor={General_Yellow}
 							bordered
 							borderSize="lg"
 							type="submit"

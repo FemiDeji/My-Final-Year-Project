@@ -12,8 +12,8 @@ export default function CustomFilter({
 				<FilterButton
 					key={key}
 					label={label}
-					bgColor={activeFilter === key ? "#002855" : "#DFE6EC"}
-					textColor={activeFilter === key ? "white" : "black"}
+					bgColor={activeFilter === key ? { General_Blue } : { General_Grey }}
+					textColor={activeFilter === key ? { General_White } : "black"}
 					bordered
 					onClick={() => onFilterChange(key)}
 					disabled={activeFilter === key}

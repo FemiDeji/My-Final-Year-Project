@@ -66,23 +66,41 @@ export async function getBookings() {
 	return bookings;
 }
 
-export async function getFilteredBookings({
-	role,
-	userId,
-	start_date,
-	end_date,
-	priority,
-}) {
+export async function getFilteredBookings({ start_date, end_date, priority }) {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		console.error("Error fetching user", userError.message);
+
+		return null;
+	}
+
+	const { data: profiles, error: profilesError } = await supabase
+		.from("profiles")
+		.select("id, role, username")
+		.eq("auth_id", user.id)
+		.single();
+
+	if (profilesError) {
+		console.error("Error fetching profile", profilesError.message);
+		return null;
+	}
+
 	let statusFilter = ["Pending"];
 
-	if (role === "security") {
+	if (profiles?.role === "security") {
 		statusFilter = ["Approved", "Checked out"];
 	}
 
 	let query = supabase.from("bookings").select("*").in("status", statusFilter);
 
-	if (role === "user" && userId) {
-		query = query.eq("user_id", userId);
+	if (profiles?.role === "user") {
+		query = query.or(
+			`user_id.eq.${profiles.id}, username.eq.${profiles.username}`
+		);
 	}
 
 	if (start_date && end_date) {
@@ -122,14 +140,36 @@ export async function getRequests(role) {
 	return requests;
 }
 
-export async function getPasses(role, userId) {
+export async function getPasses() {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		console.error("Error fetching user", userError.message);
+
+		return null;
+	}
+
+	const { data: profiles, error: profilesError } = await supabase
+		.from("profiles")
+		.select("id, role, username")
+		.eq("auth_id", user.id)
+		.single();
+
+	if (profilesError) {
+		console.error("Error fetching profile", profilesError.message);
+		return null;
+	}
+
 	let query = supabase.from("bookings").select("*");
 
-	if (role !== "user") {
+	if (profiles?.role !== "user") {
 		query = query.eq("status", "Checked out");
-	} else if (role === "user" && userId) {
+	} else if (profiles?.role === "user") {
 		query = query
-			.eq("user_id", userId)
+			.or(`user_id.eq.${profiles?.id},username.eq.${profiles?.username}`)
 			.in("status", ["Approved", "Checked out"]);
 	}
 
@@ -141,6 +181,56 @@ export async function getPasses(role, userId) {
 	}
 
 	return passes;
+}
+
+export async function getFilteredPasses({ start_date, end_date, priority }) {
+	const {
+		data: { user },
+		error: userError,
+	} = await supabase.auth.getUser();
+
+	if (userError) {
+		console.error("Error fetching user", userError.message);
+
+		return null;
+	}
+
+	const { data: profiles, error: profilesError } = await supabase
+		.from("profiles")
+		.select("id, role, username")
+		.eq("auth_id", user.id)
+		.single();
+
+	if (profilesError) {
+		console.error("Error fetching profile", profilesError.message);
+		return null;
+	}
+
+	let statusFilter = ["Approved", "Checked out"];
+
+	let query = supabase.from("bookings").select("*").in("status", statusFilter);
+
+	if (profiles?.role === "user") {
+		query = query.or(
+			`user_id.eq.${profiles.id}, username.eq.${profiles.username}`
+		);
+	}
+
+	if (start_date && end_date) {
+		query = query.gte("start_date", start_date).lte("end_date", end_date);
+	}
+
+	if (profiles) {
+		query = query.eq("priority", priority);
+	}
+
+	const { data: filteredPasses, error: passesError } = await query;
+
+	if (passesError) {
+		console.error("Error fetching filtered passes", passesError.message);
+	}
+
+	return filteredPasses;
 }
 
 export async function updateBooking(updateData, id) {

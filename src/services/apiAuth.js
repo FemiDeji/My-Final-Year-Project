@@ -26,6 +26,10 @@ export async function signup({
 		throw new Error("User with this email or username already exisits");
 	}
 
+	if (existingUserError) {
+		console.error(existingUserError);
+	}
+
 	// Step 2: Sign up the user in the auth table
 	const { data, error } = await supabase.auth.signUp({
 		email,

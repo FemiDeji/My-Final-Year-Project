@@ -11,6 +11,7 @@ import * as userLocalStore from "../../hooks/auth/useLocalStore";
 import GeneralModal from "../../components/GeneralModal";
 import CustomButton from "../../components/CustomButton";
 import { IDLE_TIMEOUT, WARNING_TIME } from "../../constants/texts";
+import { General_White, General_Yellow } from "../../constants/colors";
 
 export default function ProtectedRoute({ children, authUser = [] }) {
 	const { logout, isLoggingOut } = useLogout();
@@ -62,14 +63,14 @@ export default function ProtectedRoute({ children, authUser = [] }) {
 	return hasAccess ? (
 		<>
 			{children}
-			<GeneralModal isOpen={showModal} height="30vh" classname={"xs:w-full"}>
+			<GeneralModal isOpen={showModal} height="18vh" classname={"xs:w-full"}>
 				<div className="flex flex-col justify-center items-center gap-2 text-[12]x">
 					<p className="text-[12px] font-medium">{"You've been inactive"}</p>
 					<p className="text-[12px]">You will be logged out in 1 minute.</p>
 					<CustomButton
 						label={"Stay Logged In"}
-						bgColor="#f2c008"
-						textColor="white"
+						bgColor={General_Yellow}
+						textColor={General_White}
 						bordered
 						type="button"
 						borderSize="lg"

@@ -112,8 +112,8 @@
 // 					</p>
 // 					<CustomButton
 // 						label={"Retry"}
-// 						bgColor="#f2c008"
-// 						textColor="#002855"
+// 						bgColor={General_Yellow}
+// 						textColor={General_Blue}
 // 						bordered
 // 						borderSize="lg"
 // 						onClick={checkLocation}
@@ -223,8 +223,8 @@ export default function useCheckLocation() {
 					</p>
 					<CustomButton
 						label={"Retry"}
-						bgColor="#f2c008"
-						textColor="#002855"
+						bgColor={General_Yellow}
+						textColor={General_Blue}
 						bordered
 						borderSize="lg"
 						onClick={checkLocation}

@@ -1,24 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { getFilteredBookings } from "../../services/apiBookings";
+import { getFilteredPasses } from "../../services/apiBookings";
 import toast from "react-hot-toast";
 
-export default function useFilterBookings() {
+export default function useFilterPasses() {
 	const queryClient = useQueryClient();
 
 	const {
-		mutateAsync: filterBookings,
+		mutateAsync: filteredPasses,
 		isPending,
 		error,
 	} = useMutation({
 		mutationFn: async ({ start_date, end_date, priority }) =>
-			getFilteredBookings({ start_date, end_date, priority }),
+			getFilteredPasses({ start_date, end_date, priority }),
 		onSuccess: (data) => {
-			queryClient.invalidateQueries(["filtered-bookings", data]);
+			queryClient.invalidateQueries(["filtered-passes", data]);
 			if (Array.isArray(data) && data.length === 0) {
 				toast.success("No data found for the selected filters.");
 			} else {
-				toast.success("Filtered successfully");
+				toast.success("Filtered successfully.");
 			}
 		},
 		onError: (err) => {
@@ -27,5 +26,5 @@ export default function useFilterBookings() {
 		},
 	});
 
-	return { filterBookings, isPending, error };
+	return { filteredPasses, isPending, error };
 }

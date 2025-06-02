@@ -133,10 +133,10 @@ export default function ResetPassword() {
 						<div className="w-full flex flex-row justify-center items-center gap-3 mt-3">
 							<CustomButton
 								label={"Cancel"}
-								bgColor="#DFE6EC"
+								bgColor={General_Grey}
 								bordered
 								borderSize="lg"
-								textColor="#002855"
+								textColor={General_Blue}
 								onClick={() => {
 									reset();
 									navigate("/login");
@@ -144,10 +144,10 @@ export default function ResetPassword() {
 							/>
 							<CustomButton
 								label={"Submit"}
-								bgColor="#f2c008"
+								bgColor={General_Yellow}
 								bordered
 								borderSize="lg"
-								textColor="#002855"
+								textColor={General_Blue}
 								type="submit"
 							/>
 						</div>

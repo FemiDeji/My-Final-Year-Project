@@ -11,6 +11,12 @@ import useLogin from "../../hooks/auth/useLogin";
 import useUser from "../../hooks/auth/useUser";
 import useSendPasswordResetEmail from "../../hooks/auth/useSendPasswordResetEmail";
 import { newDecryptData, newEncryptData } from "../../helpers/encrypto";
+import {
+	General_Blue,
+	General_Grey,
+	General_White,
+	General_Yellow,
+} from "../../constants/colors";
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -135,8 +141,8 @@ export default function Login() {
 						<div className="flex gap-3 justify-center items-center w-full mt-2">
 							<CustomButton
 								label={"Login"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								type="submit"
@@ -144,8 +150,8 @@ export default function Login() {
 							/>
 							<CustomButton
 								label={"Sign up"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								disabled={isLogginIn}
@@ -194,8 +200,8 @@ export default function Login() {
 							<div className="flex justify-end items-end gap-3 ml-auto lg:w-full xs:w-full">
 								<CustomButton
 									label={"Cancel"}
-									bgColor="#DFE6EC"
-									textColor="#002855"
+									bgColor={General_Grey}
+									textColor={General_Blue}
 									bordered
 									borderSize="lg"
 									onClick={() => {
@@ -205,8 +211,8 @@ export default function Login() {
 								/>
 								<CustomButton
 									label={"Reset"}
-									bgColor="#f2c008"
-									textColor="#002855"
+									bgColor={General_Yellow}
+									textColor={General_Blue}
 									bordered
 									borderSize="lg"
 									type="submit"
@@ -232,8 +238,8 @@ export default function Login() {
 							<div className="flex flex-col justify-center items-center lg:w-[25%] xs:w-full">
 								<CustomButton
 									label={"OK"}
-									bgColor="#f2c008"
-									textColor="white"
+									bgColor={General_Yellow}
+									textColor={General_White}
 									bordered
 									type="button"
 									borderSize="lg"

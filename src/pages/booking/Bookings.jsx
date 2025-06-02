@@ -12,6 +12,11 @@ import { useForm } from "react-hook-form";
 import CustomSelectField from "../../components/CustomSelectField";
 import CustomInput from "../../components/CustomInput";
 import useFilterBookings from "../../hooks/booking/useFilterBookings";
+import {
+	General_Blue,
+	General_Grey,
+	General_Yellow,
+} from "../../constants/colors";
 
 export default function Bookings() {
 	const navigate = useNavigate();
@@ -138,8 +143,8 @@ export default function Bookings() {
 						<div className="lg:w-[20%] xs:w-[50%]">
 							<CustomButton
 								label={"Filter Bookings"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								onClick={() => setShowFilterModal(true)}>
@@ -151,8 +156,8 @@ export default function Bookings() {
 						<div className="lg:w-[20%] xs:w-[45%]">
 							<CustomButton
 								label={"Clear FIlter"}
-								bgColor="#f2c008"
-								textColor="#002855"
+								bgColor={General_Yellow}
+								textColor={General_Blue}
 								bordered
 								borderSize="lg"
 								onClick={() => setFilteredBookings([])}>
@@ -163,8 +168,8 @@ export default function Bookings() {
 					<div className="lg:w-[20%] xs:w-[45%]">
 						<CustomButton
 							label={"New Booking"}
-							bgColor="#f2c008"
-							textColor="#002855"
+							bgColor={General_Yellow}
+							textColor={General_Blue}
 							bordered
 							onClick={() => navigate("/bookings/new")}>
 							<FaPlus />
@@ -214,6 +219,7 @@ export default function Bookings() {
 						setShowFilterModal(false);
 						handleReset();
 					}}
+					height="45vh"
 					widthClass="xs:w-full w-[50%]">
 					<form
 						onSubmit={handleSubmit(onSubmit)}
@@ -258,7 +264,7 @@ export default function Bookings() {
 						<div className="flex flex-row gap-3 justify-center items-center ml-auto xs:mx-auto w-full">
 							<CustomButton
 								label={"Cancel"}
-								bgColor="#DFE6EC"
+								bgColor={General_Grey}
 								bordered
 								borderSize="lg"
 								onClick={() => {
@@ -268,7 +274,7 @@ export default function Bookings() {
 							/>
 							<CustomButton
 								label={"Filter"}
-								bgColor="#f2c008"
+								bgColor={General_Yellow}
 								bordered
 								borderSize="lg"
 								type="submit"
