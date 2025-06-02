@@ -219,7 +219,7 @@ export default function Bookings() {
 						setShowFilterModal(false);
 						handleReset();
 					}}
-					height="42vh"
+					height="40vh"
 					widthClass="xs:w-full w-[50%]">
 					<form
 						onSubmit={handleSubmit(onSubmit)}
