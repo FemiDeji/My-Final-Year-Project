@@ -21,7 +21,6 @@ body,
 	body,
 	#root {
 		height: 100vh;
-		overflow-y: auto;
 	}
 }
 
