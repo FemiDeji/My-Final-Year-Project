@@ -119,7 +119,7 @@ export default function SignUp() {
 						</div>
 						<div
 							className={`flex flex-col justify-start items-center gap-2 w-full px-5 ${
-								activeType === "user" ? "h-[60vh] overflow-y-auto" : "h-auto"
+								activeType === "user" ? "h-[60vh] overflow-y-auto" : "h-[60vh]"
 							}`}>
 							<div className="w-full flex flex-col justify-center items-center gap-4">
 								<div className="w-full xs:flex-col flex justify-center items-start gap-3">
@@ -314,35 +314,35 @@ export default function SignUp() {
 									</div>
 								</div>
 							</div>
-							<div className="flex gap-3 justify-between items-center w-full ml-auto mt-2">
-								<div className="xs:w-[40%] w-[30%]">
-									<CustomButton
-										label={"Back to Login"}
-										textColor={General_Blue}
-										bgColor={General_Yellow}
-										bordered
-										borderSize="lg"
-										onClick={() => {
-											setIsLoading(true);
-											delayAction(() => {
-												setIsLoading(false);
-												navigate("/login");
-											}, 2000);
-										}}
-										disabled={isSigningUp}
-									/>
-								</div>
-								<div className="w-[30%]">
-									<CustomButton
-										label={"Sign up"}
-										textColor={General_Blue}
-										bgColor={General_Yellow}
-										bordered
-										borderSize="lg"
-										type="submit"
-										disabled={isSigningUp}
-									/>
-								</div>
+						</div>
+						<div className="flex gap-3 justify-between items-center w-full ml-auto mt-2 px-4">
+							<div className="xs:w-[40%] w-[30%]">
+								<CustomButton
+									label={"Back to Login"}
+									textColor={General_Blue}
+									bgColor={General_Yellow}
+									bordered
+									borderSize="lg"
+									onClick={() => {
+										setIsLoading(true);
+										delayAction(() => {
+											setIsLoading(false);
+											navigate("/login");
+										}, 2000);
+									}}
+									disabled={isSigningUp}
+								/>
+							</div>
+							<div className="w-[30%]">
+								<CustomButton
+									label={"Sign up"}
+									textColor={General_Blue}
+									bgColor={General_Yellow}
+									bordered
+									borderSize="lg"
+									type="submit"
+									disabled={isSigningUp}
+								/>
 							</div>
 						</div>
 					</form>
