@@ -240,7 +240,7 @@ export default function Pass() {
 					onClose={() => setShowFilterModal(false)}
 					classname={"xs:w-full"}
 					height="40vh">
-					<form className="p-1 text-left flex flex-col gap-2">
+					<form className="p-1 text-left flex flex-col gap-2 items-center justify-center">
 						<CustomInput
 							type="date"
 							name="start_date"
