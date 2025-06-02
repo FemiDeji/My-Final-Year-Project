@@ -211,7 +211,7 @@ export default function Pass() {
 
 	return (
 		<Layout title={"Pass"}>
-			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
+			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full overflow-y-auto">
 				{passes?.length > 0 && (
 					<div className="lg:w-[20%] lg:ml-auto">
 						<CustomButton

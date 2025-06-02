@@ -138,7 +138,7 @@ export default function Bookings() {
 
 	return (
 		<Layout title={"Bookings"}>
-			<div className="bg-white rounded-lg shadow-sm flex flex-col w-full p-3">
+			<div className="bg-white rounded-lg shadow-sm flex flex-col w-full p-3 overflow-y-auto">
 				<div className="flex gap-4 justify-end items-center xs:flex xs:justify-between">
 					{filteredBookings.length === 0 && (
 						<div className="lg:w-[20%] xs:w-[50%]">
