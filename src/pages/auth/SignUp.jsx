@@ -77,11 +77,7 @@ export default function SignUp() {
 
 	return (
 		<div
-			className={`flex flex-row justify-center items-center w-full ${
-				activeType === "user"
-					? "overflow-y-auto min-h-screen h-[90vh]"
-					: "h-screen"
-			}`}>
+			className={`flex flex-row justify-center items-center w-full h-screen`}>
 			<div className="flex flex-col justify-center items-center h-full xs:hidden w-[50%] ">
 				<img
 					src="/AU_Senate_Building.jpg"
@@ -89,6 +85,7 @@ export default function SignUp() {
 					className="object-cover h-full"
 				/>
 			</div>
+
 			<div
 				className={`xs:w-full xs:h-screen w-[50%] flex flex-col justify-center items-center h-screen`}>
 				<div className="w-full h-screen">
@@ -99,16 +96,18 @@ export default function SignUp() {
 							className="object-contain object-center h-[70px] my-3 xs:h-[50px]"
 						/>
 					</div>
+					<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
+						Welcome To
+						<div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
+							PASS-BOOKING SYSTEM
+						</div>
+					</div>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div
-							className={`flex flex-col justify-start items-center gap-2 w-full px-5 h-auto`}>
+							className={`flex flex-col justify-start items-center gap-2 w-full px-5 ${
+								activeType === "user" ? "h-[70vh] overflow-y-auto" : "h-auto"
+							}`}>
 							<div className="flex xs:flex-col xs:items-start flex-col justify-between items-center w-full mb-3 gap-5 lg:gap-8">
-								<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
-									Welcome To
-									<div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
-										PASS-BOOKING SYSTEM
-									</div>
-								</div>
 								<div className="xs:pl-5 lg:pl-5 xs:mt-2 w-[40%] flex flex-row gap-2 justify-center items-center lg:mr-auto">
 									<span className="text-general-blue text-[1rem] xs:text-[0.9rem] font-medium">
 										Role:{" "}
