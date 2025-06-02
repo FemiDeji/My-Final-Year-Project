@@ -51,7 +51,7 @@ export default function Layout({
 	};
 
 	return (
-		<div className="min-h-screen flex flex-col h-full">
+		<div className="min-h-screen flex flex-col h-full xs:h-screen">
 			<Header
 				isSidebarOpen={isSidebarOpen}
 				setIsSidebarOpen={setIsSidebarOpen}
