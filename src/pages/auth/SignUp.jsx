@@ -77,7 +77,7 @@ export default function SignUp() {
 
 	return (
 		<div
-			className={`flex flex-row justify-center items-center w-full h-screen max-h-screen ${
+			className={`flex flex-row justify-center items-center w-full h-screen ${
 				activeType === "user" ? "overflow-y-auto" : ""
 			}`}>
 			<div className="flex flex-col justify-center items-center h-full xs:hidden w-[50%] ">
