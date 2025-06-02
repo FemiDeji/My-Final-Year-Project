@@ -56,7 +56,7 @@ export default function Layout({
 				isSidebarOpen={isSidebarOpen}
 				setIsSidebarOpen={setIsSidebarOpen}
 			/>
-			<div className="flex lg:min-h-screen h-full">
+			<div className="flex min-h-screen h-full">
 				<div
 					className={`flex h-full 
 						${showIconsOnly ? "lg:w-[7%] xl:w-[5%]" : "lg:w-[22%] xl:w-[18%]"}
