@@ -72,7 +72,7 @@ export default function Login() {
 
 	return (
 		<>
-			<div className="h-full  flex flex-row justify-center items-center w-full">
+			<div className="h-full flex flex-row justify-center items-center w-full overflow-hidden">
 				<div className="flex flex-col justify-center items-center xs:w-0 w-[50%] h-full">
 					<img
 						src="/AU_Senate_Building.jpg"

@@ -77,7 +77,7 @@ export default function SignUp() {
 
 	return (
 		<div
-			className={`flex flex-row justify-center items-center w-full h-screen`}>
+			className={`flex flex-row justify-center items-center w-full h-screen overflow-hidden`}>
 			<div className="flex flex-col justify-center items-center h-full xs:hidden w-[50%] ">
 				<img
 					src="/AU_Senate_Building.jpg"
