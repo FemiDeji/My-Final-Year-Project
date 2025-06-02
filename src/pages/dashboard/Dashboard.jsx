@@ -65,7 +65,7 @@ export default function Dashboard() {
 
 	return (
 		<Layout title={"Dashboard"}>
-			<div className="w-full flex flex-col gap-3 xs:gap-3 xs:overflow-y-auto">
+			<div className="w-full flex flex-col gap-3 xs:gap-3">
 				<Stats
 					bookings={recentBookings}
 					numApproved={numApproved}
@@ -73,7 +73,7 @@ export default function Dashboard() {
 					numCheckedIn={numCheckedIn}
 					numCheckedOut={numCheckedOut}
 				/>
-				<div className="rounded-lg px-3 py-5 xs:px-1 flex flex-row gap-1 xs:flex-col xs:gap-7 bg-white shadow-md">
+				<div className="rounded-lg px-3 py-5 xs:px-1 flex flex-row gap-1 xs:flex-col xs:gap-7 bg-white shadow-md xs:overflow-y-auto xs:h-[50vh]">
 					<ActivityChart data={data} />
 					<BookingSummary data={bookingData} />
 				</div>
