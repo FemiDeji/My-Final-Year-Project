@@ -91,7 +91,7 @@ export default function UpdateUserDataForm() {
 	};
 
 	return (
-		<div className="w-full rounded-lg bg-white p-4">
+		<div className="w-full rounded-lg bg-white p-4 h-[90vh] overflow-y-auto">
 			<div className="font-medium text-general-blue text-xl">Update Data</div>
 			<form onSubmit={handleSubmit(onSubmit)} className="mt-2 w-full">
 				<div className="flex justify-center items-center flex-col gap-3">
