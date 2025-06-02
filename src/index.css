@@ -23,7 +23,13 @@ body,
 		overflow-y: auto;
 		overflow: hidden;
 	}
+	/* body {
+		display: grid;
+		place-items: center;
+		width: 100%;
+	} */
 }
+
 .scrollable {
 	overflow-y: scroll;
 	-ms-overflow-style: none;
