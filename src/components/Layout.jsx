@@ -114,7 +114,7 @@ export default function Layout({
 					{divider && (
 						<div className="h-[0.15rem] w-full bg-[#e3e3e3] max-w-full shadow-lg"></div>
 					)}
-					<div className="w-full p-8 xs:p-4 flex-grow overflow-y-auto h-[70vh]">
+					<div className="w-full p-8 xs:p-4 flex-grow overflow-y-auto">
 						{children}
 					</div>
 				</div>
