@@ -88,6 +88,8 @@ export default function Request() {
 		priority: "Priority",
 		updated_at: "Updated At",
 		late_checkin: "Late Checkin",
+		security_name: "Security Name",
+		security_username: "Security ID",
 	};
 
 	// console.log(requests);

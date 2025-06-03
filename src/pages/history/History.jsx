@@ -22,6 +22,7 @@ import {
 	General_Grey,
 	General_Yellow,
 } from "../../constants/colors";
+import { ImageViewer } from "../../components/ImageViewer";
 
 export default function History() {
 	const today = new Date().toISOString().split("T")[0];
@@ -103,6 +104,10 @@ export default function History() {
 		rejection_reason: "Reason",
 		admin_name: "Admin Name",
 		priority: "Priority",
+		security_name: "Security Name",
+		security_username: "Security ID",
+		updated_at: "Updated At",
+		late_checkin: "Late Checkin",
 	};
 
 	const exemptedKeys = [
@@ -113,6 +118,7 @@ export default function History() {
 		"phone",
 		"room",
 		"email",
+		"image_evidence",
 	];
 
 	const handleReset = () => {
@@ -268,15 +274,24 @@ export default function History() {
 					onClose={() => setShowHistoryDetailsModal(false)}
 					showCloseButton
 					widthClass="w-full">
-					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-4">
-						{selectedHistory &&
-							Object.entries(selectedHistory)
-								.filter(([key]) => !exemptedKeys.includes(key))
-								.map(([a, b]) => {
-									return (
-										<CustomLabelValue value={b} label={labels[a]} key={a} />
-									);
-								})}
+					<div className="xs:py-4 xs:px-0 p-1 flex flex-col justify-center items-center gap-3">
+						<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-4">
+							{selectedHistory &&
+								Object.entries(selectedHistory)
+									.filter(([key]) => !exemptedKeys.includes(key))
+									.map(([a, b]) => {
+										return (
+											<CustomLabelValue value={b} label={labels[a]} key={a} />
+										);
+									})}
+						</div>
+						<div className="text-center">
+							<ImageViewer
+								title={"Evidence"}
+								src={selectedHistory?.image_evidence}
+								alt={`Image for ${selectedHistory.fullname}`}
+							/>
+						</div>
 					</div>
 				</GeneralModal>
 			)}
