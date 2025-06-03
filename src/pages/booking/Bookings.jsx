@@ -18,6 +18,7 @@ import {
 	General_Yellow,
 } from "../../constants/colors";
 import { PAGE_SIZE } from "../../constants/texts";
+import { delayAction } from "../../helpers/custom";
 
 export default function Bookings() {
 	const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Bookings() {
 	const [selectedBooking, setSelectedBooking] = useState(null);
 	const [selectedPriority, setSelectedPriority] = useState("");
 	const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { bookings, isPending } = useBookings();
 	const { filterBookings, isPending: isFiltering } = useFilterBookings();
@@ -66,6 +68,7 @@ export default function Bookings() {
 		"security_username",
 		"security_name",
 		"late_checkin",
+		"image_evidence",
 	];
 
 	const priorityOptions = [
@@ -172,7 +175,13 @@ export default function Bookings() {
 							bgColor={General_Yellow}
 							textColor={General_Blue}
 							bordered
-							onClick={() => navigate("/bookings/new")}>
+							onClick={() => {
+								setIsLoading(true);
+								delayAction(() => {
+									setIsLoading(false);
+									navigate("/bookings/new");
+								}, 2000);
+							}}>
 							<FaPlus />
 						</CustomButton>
 					</div>
@@ -200,7 +209,7 @@ export default function Bookings() {
 					showCloseButton
 					height="80vh"
 					widthClass="w-full">
-					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-1">
+					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-1 mt-3">
 						{selectedBooking &&
 							Object.entries(selectedBooking)
 								.filter(([key]) => !exemptedKeys.includes(key))
@@ -284,8 +293,11 @@ export default function Bookings() {
 					</form>
 				</GeneralModal>
 			)}
-			{(isPending || isFiltering) && (
-				<CustomBackdrop open={true} text={"Fetching bookings..."} />
+			{(isPending || isFiltering || isLoading) && (
+				<CustomBackdrop
+					open={true}
+					text={isLoading ? "Please wait..." : "Fetching bookings..."}
+				/>
 			)}
 		</Layout>
 	);

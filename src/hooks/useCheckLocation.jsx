@@ -90,7 +90,7 @@ export default function useCheckLocation() {
 				height="23vh"
 				classname="xs:w-full lg:w-[30%]">
 				<div className="flex flex-col justify-center items-center gap-2">
-					<p className="text-base xs:text-[12px] text-center">
+					<p className="text-sm xs:text-[12px] text-center">
 						<span className="font-medium">Location required.</span>
 						<br />
 						We could not access your location. Please make sure location

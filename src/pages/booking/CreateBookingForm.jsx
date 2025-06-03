@@ -15,7 +15,7 @@ import {
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/auth/useUser";
-import useCheckLocation from "../../hooks/useCheckLocation";
+// import useCheckLocation from "../../hooks/useCheckLocation";
 import { General_Grey, General_Yellow } from "../../constants/colors";
 
 export default function CreateBookingForm() {
@@ -68,8 +68,8 @@ export default function CreateBookingForm() {
 	});
 
 	const { createUpdateBooking, isBooking } = useCreateUpdateBooking();
-	const { withinLocation, locationChecked, RetryModal, locationCheckLoading } =
-		useCheckLocation();
+	// const { withinLocation, locationChecked, RetryModal, locationCheckLoading } =
+	// 	useCheckLocation();
 
 	const username = watch("username");
 	const isDisabled = !watch("fullname");
@@ -204,7 +204,7 @@ export default function CreateBookingForm() {
 							})}
 							error={errors?.username?.message}
 							placeholder={"09/9876"}
-							readOnly={!withinLocation}
+							// readOnly={!withinLocation}
 						/>
 
 						{isDisabled && username?.length === 7 && !errors?.username && (
@@ -445,16 +445,19 @@ export default function CreateBookingForm() {
 					/>
 				</div>
 			</form>
-			{locationCheckLoading ? (
+			{/* {locationCheckLoading ? (
 				<CustomBackdrop open={true} text={"Checking location..."} />
 			) : (
 				RetryModal
-			)}
+			)} */}
 			{(isPending || isBooking) && (
 				<CustomBackdrop
 					open={true}
 					text={
-						isBooking || !locationChecked
+						isBooking ||
+						{
+							/*!locationChecked*/
+						}
 							? "Please wait..."
 							: "Fetching profile..."
 					}

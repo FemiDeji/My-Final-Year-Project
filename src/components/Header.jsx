@@ -29,7 +29,7 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
 					)}
 				</div>
 				<img
-					src="AU_logo.jpg"
+					src="/AU_logo.jpg"
 					alt="AU logo"
 					className="h-[45px] xs:hidden xs:ml-auto cursor-pointer"
 					onClick={() => navigate("/dashboard")}
