@@ -290,7 +290,13 @@ export default function Request() {
 											bordered
 											borderSize="lg"
 											type="submit"
-											onClick={() => setStatus("Approved")}
+											onClick={() =>
+												setStatus(
+													selectedRequest?.status === "Late Checkin"
+														? "Checked In"
+														: "Approved"
+												)
+											}
 										/>
 									</div>
 								)}
@@ -311,7 +317,13 @@ export default function Request() {
 											bordered
 											borderSize="lg"
 											type="submit"
-											onClick={() => setStatus("Declined")}
+											onClick={() =>
+												setStatus(
+													selectedRequest?.status === "Late Checkin"
+														? "Checked-in Late"
+														: "Declined"
+												)
+											}
 										/>
 									</div>
 								)}

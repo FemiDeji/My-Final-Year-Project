@@ -23,10 +23,10 @@ export async function getHistory() {
 		return null;
 	}
 
-	let statusFilter = ["Declined", "Checked in"];
+	let statusFilter = ["Declined", "Checked in", "Checked-in Late"];
 
 	if (profiles?.role === "security") {
-		statusFilter = ["Checked in"];
+		statusFilter = ["Checked in", "Checked-in Late"];
 	}
 
 	let query = supabase.from("bookings").select("*").in("status", statusFilter);
@@ -70,10 +70,10 @@ export async function getFilteredHistory({ status, start_date, end_date }) {
 		return null;
 	}
 
-	let statusFilter = ["Declined", "Checked in"];
+	let statusFilter = ["Declined", "Checked in", "Checked-in Late"];
 
 	if (profiles?.role === "security") {
-		statusFilter = ["Checked in"];
+		statusFilter = ["Checked in", "Checked-in Late"];
 	}
 
 	let query = supabase.from("bookings").select("*").in("status", statusFilter);

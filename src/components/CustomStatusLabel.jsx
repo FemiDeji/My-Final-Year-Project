@@ -51,6 +51,12 @@ export default function CustomStatusLabel({ status }) {
 			icon: <MdWarning size={16} />,
 			label: "Late Checkin",
 		},
+		"checked-in late": {
+			colorClass: "bg-[#FF0000]",
+			iconClass: "text-white",
+			icon: <CgDanger size={16} />,
+			label: "Checked-in Late",
+		},
 		normal: {
 			colorClass: "bg-[#2196F3] ",
 			iconClass: "text-white",
