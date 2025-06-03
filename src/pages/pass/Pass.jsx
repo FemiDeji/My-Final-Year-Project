@@ -179,6 +179,8 @@ export default function Pass() {
 			return;
 		}
 
+		const file = data.image_evidence?.[0];
+
 		checkIn(
 			{
 				updateData: {
@@ -186,6 +188,7 @@ export default function Pass() {
 					late_checkin: data.late_checkin,
 				},
 				id: selectedPass?.id,
+				imageFile: file,
 			},
 			{
 				onSuccess: () => {
@@ -199,6 +202,7 @@ export default function Pass() {
 			updateData: {
 				status,
 				late_checkin: data.late_checkin,
+				image_evidence: file?.name,
 			},
 			id: selectedPass?.id,
 		});
@@ -246,7 +250,10 @@ export default function Pass() {
 			{showPassDetails && (
 				<GeneralModal
 					isOpen={showPassDetails}
-					onClose={() => setShowPassDetails(false)}
+					onClose={() => {
+						setShowPassDetails(false);
+						reset();
+					}}
 					showCloseButton
 					widthClass="w-full">
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -261,7 +268,7 @@ export default function Pass() {
 									})}
 						</div>
 						<div
-							className={`p-1 text-left ${
+							className={`p-1 py-2 text-left ${
 								!isLateCheckin ? "hidden" : "block"
 							}`}>
 							<CustomTextarea

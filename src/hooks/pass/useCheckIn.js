@@ -10,7 +10,8 @@ export default function useCheckIn() {
 		isPending,
 		error,
 	} = useMutation({
-		mutationFn: ({ updateData, id }) => checkInUser(updateData, id),
+		mutationFn: ({ updateData, id, imageFile }) =>
+			checkInUser(updateData, id, imageFile),
 		onSuccess: (data) => {
 			toast.success("Checked in sucessfully");
 			queryClient.invalidateQueries(["passes", data]);

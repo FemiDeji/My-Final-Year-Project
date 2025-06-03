@@ -117,7 +117,7 @@ function App() {
 							color: "#002855",
 							textAlign: "center",
 							// Responsive font size
-							"@media (max-width:426px)": {
+							"@media (maxWidth:426px)": {
 								fontSize: "8px",
 								maxWidth: "300px",
 								padding: "4px 8px",

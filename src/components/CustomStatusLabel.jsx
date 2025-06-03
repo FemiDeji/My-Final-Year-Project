@@ -45,6 +45,12 @@ export default function CustomStatusLabel({ status }) {
 			icon: <HiOutlineLogin size={16} />,
 			label: "Checkedin",
 		},
+		"late checkin": {
+			colorClass: "bg-[#FF0000]",
+			iconClass: "text-white",
+			icon: <MdWarning size={16} />,
+			label: "Late Checkin",
+		},
 		normal: {
 			colorClass: "bg-[#2196F3] ",
 			iconClass: "text-white",
@@ -58,7 +64,7 @@ export default function CustomStatusLabel({ status }) {
 			label: "Mid",
 		},
 		high: {
-			colorClass: "bg-[#FF0000] ",
+			colorClass: "bg-[#FF0000]",
 			iconClass: "text-white",
 			icon: <CgDanger size={16} />,
 			label: "High",

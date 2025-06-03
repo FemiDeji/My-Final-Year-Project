@@ -121,7 +121,7 @@ export async function getFilteredBookings({ start_date, end_date, priority }) {
 }
 
 export async function getRequests(role) {
-	let statusFilter = ["Pending"];
+	let statusFilter = ["Pending", "Late Checkin"];
 
 	if (role === "security") {
 		statusFilter = ["Approved"];

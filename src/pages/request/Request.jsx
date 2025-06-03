@@ -21,6 +21,7 @@ import {
 	General_Grey,
 	General_Yellow,
 } from "../../constants/colors";
+import { ImageViewer } from "../../components/ImageViewer";
 
 export default function Request() {
 	const [selectedRequest, setSelectedRequest] = useState(null);
@@ -64,6 +65,7 @@ export default function Request() {
 		"admin_username",
 		"security_username",
 		"security_name",
+		"image_evidence",
 	];
 
 	const labels = {
@@ -109,6 +111,7 @@ export default function Request() {
 	const handleViewRequestClick = (id) => {
 		const result = requests.find((requestId) => requestId.id === id);
 		result ? setSelectedRequest({ ...result }) : null;
+		console.log("selected request", selectedRequest);
 	};
 
 	const handleReset = () => {
@@ -244,6 +247,15 @@ export default function Request() {
 										);
 									})}
 						</div>
+						{selectedRequest?.image_evidence && (
+							<div className="mb-3">
+								<ImageViewer
+									title={"Evidence"}
+									src={selectedRequest?.image_evidence}
+									alt={`image for ${selectedRequest?.fullname}`}
+								/>
+							</div>
+						)}
 						<form
 							onSubmit={handleSubmit(onSubmit)}
 							className="flex flex-col gap-3 justify-center items-center w-full">
