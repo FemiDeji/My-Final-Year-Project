@@ -170,7 +170,7 @@ export async function getPasses() {
 	} else if (profiles?.role === "user") {
 		query = query
 			.or(`user_id.eq.${profiles?.id},username.eq.${profiles?.username}`)
-			.in("status", ["Approved", "Checked out"]);
+			.in("status", ["Approved", "Checked out", "Late Checkin"]);
 	}
 
 	const { data: passes, error: passesError } = await query;
