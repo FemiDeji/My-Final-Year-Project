@@ -10,7 +10,9 @@ function CustomLabelValue({ label, value }) {
 			</div>
 			<div className="w-full h-full p-2 border-l text-left font-[500] xs:text-[10px] xs:w-full">
 				{label === "Start Date" ||
+				label === "Start date" ||
 				label === "Return Date" ||
+				label === "Return date" ||
 				label === "Updated At"
 					? convertToDateTime(value)
 					: value}

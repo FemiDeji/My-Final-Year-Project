@@ -1,5 +1,21 @@
 import supabase, { supabaseUrl } from "./supabase";
 
+// export async function createNotification({
+// 	user_id,
+// 	role,
+// 	title,
+// 	message,
+// 	booking_id = null,
+// }) {
+// 	const { error } = await supabase
+// 		.from("notifications")
+// 		.insert([{ user_id, role, title, message, booking_id, is_read: false }]);
+
+// 	if (error) {
+// 		console.error("Failed to create notification:", error.message);
+// 	}
+// }
+
 export async function createUpdateBooking(newBooking) {
 	let status = "Pending";
 
@@ -16,8 +32,8 @@ export async function createUpdateBooking(newBooking) {
 
 	const { data: admins, error: adminsError } = await supabase
 		.from("profiles")
-		.select("email")
-		.or("role", ["admin", "super-admin"]);
+		.select("*")
+		.or("role", ["admin", "super-admin", "security"]);
 
 	if (adminsError) {
 		console.error("Failed to fetch admin emails", adminsError.message);
@@ -40,6 +56,14 @@ export async function createUpdateBooking(newBooking) {
 					emailError.message
 				);
 			}
+
+			// await createNotification({
+			// 	user_id: admin.id,
+			// 	role: admin.role,
+			// 	title: "New Booking Created",
+			// 	message: `${newBooking.fullname} with ${newBooking.username} submitted a new booking request.`,
+			// 	booking_id: data.id,
+			// });
 		}
 	}
 
@@ -94,6 +118,8 @@ export async function getBookings() {
 
 	return bookings;
 }
+
+export async function getNotifications() {}
 
 export async function getFilteredBookings({ start_date, end_date, priority }) {
 	const {
@@ -193,7 +219,6 @@ export async function getPasses() {
 	}
 
 	let query = supabase.from("bookings").select("*");
-	console.log("role", profiles.role);
 
 	if (profiles.role !== "user") {
 		query = query.in("status", ["Checked out"]);

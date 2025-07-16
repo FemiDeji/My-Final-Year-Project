@@ -36,7 +36,7 @@ export default function History() {
 	const [showHistoryDetailsModal, setShowHistoryDetailsModal] = useState(false);
 	const [showHistoryDownloadModal, setShowHistoryDownloadModal] =
 		useState(false);
-	const [fileFormat, setFileFormat] = useState("");
+	const [fileFormat, setFileFormat] = useState("pdf");
 	const [downloadableData, setDownloadableData] = useState(null);
 	const [pageNumber, setPageNumber] = useState(1);
 	const [pageSize] = useState(10);
@@ -83,32 +83,41 @@ export default function History() {
 		{ key: "start_date", value: "Start Date" },
 		{ key: "end_date", value: "Return Date" },
 		{ key: "num_days", value: "Duration" },
+		{ key: "", value: "" },
 		{ key: "status", value: "Status" },
 		{ key: "priority", value: "Priority" },
 	];
 
 	const labels = {
-		department: "Department",
-		destination: "Destination",
+		username: "Matric No",
 		email: "Email",
-		end_date: "Return date",
+		department: "Department",
 		guardian_name: "Guardian",
 		guardian_phone: "Guardian No",
-		purpose: "Purpose",
 		start_date: "Start date",
-		type: "Type",
-		status: "Status",
-		username: "Matric No",
+		end_date: "Return date",
 		num_days: "Duration",
+		type: "Type",
+		purpose: "Purpose",
+		destination: "Destination",
 		admin_username: "Admin Id",
-		rejection_reason: "Reason",
 		admin_name: "Admin Name",
-		priority: "Priority",
 		security_name: "Security Name",
 		security_username: "Security ID",
+		...(selectedHistory?.status === "Rejected" && {
+			rejection_reason: "Reason",
+		}),
+		status: "Status",
+		priority: "Priority",
 		updated_at: "Updated At",
-		late_checkin: "Late Checkin",
+		...(selectedHistory?.status === "Checked-in Late" && {
+			late_checkin: "Late Checkin",
+		}),
 	};
+
+	const downloadHeaders = Object.entries(labels)
+		.filter(([key]) => key !== "")
+		.map(([key, value]) => ({ key, value }));
 
 	const exemptedKeys = [
 		"id",
@@ -120,6 +129,14 @@ export default function History() {
 		"email",
 		"image_evidence",
 	];
+
+	if (selectedHistory?.status !== "Rejected") {
+		exemptedKeys.push("rejection_reason");
+	}
+
+	if (selectedHistory?.status !== "Checked-in Late") {
+		exemptedKeys.push("late_checkin");
+	}
 
 	const handleReset = () => {
 		setValue("status", "");
@@ -172,17 +189,17 @@ export default function History() {
 		reportTitle:
 			profile?.role === "user"
 				? `Report for ${profile?.username} from ${startDate} to ${endDate}`
-				: `Report from ${convertToDateTime(
-						startDate,
-						"Do MMMM YYYY"
-				  )} to ${convertToDateTime(endDate, "Do MMMM YYYY")}`,
+				: `Report from ${startDate} to ${endDate}`,
 		filename: `Report from ${startDate} to ${endDate}`,
-		dataHeaders: headers,
+		dataHeaders: downloadHeaders,
 		dataKey: "",
 		preEvent: null,
 		getData: () => {},
-		// startDate: convertToDateTime(startDate, "Do MMMM YYYY"),
-		// endDate: convertToDateTime(endDate, "Do MMMM YYYY"),
+		formatter: {
+			start_date: (date) => convertToDateTime(date),
+			end_date: (date) => convertToDateTime(date),
+			updated_at: (data) => convertToDateTime(data),
+		},
 	});
 
 	const handleDownload = async (data) => {
@@ -201,6 +218,7 @@ export default function History() {
 			setShowHistoryDownloadModal(false);
 			downloadAs(data.docFormat, downloadedData);
 			setDownloadableData(downloadedData);
+			reset();
 		} catch (err) {
 			console.log("Error fetching history for download", err);
 		}

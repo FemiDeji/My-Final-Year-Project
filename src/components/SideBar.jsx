@@ -68,9 +68,9 @@ export default function SideBar({
 				<div
 					className={`flex justify-center items-center ${
 						!showIconsOnly ? "ml-3 xs:ml-1" : ""
-					} xs:gap-1 gap-1`}>
+					} xs:gap-1 gap-3`}>
 					{!showIconsOnly && (
-						<div className="text-[0.74rem] font-medium xs:text-[12px]">
+						<div className="text-[0.74rem] xl:text-[0.8rem] lg:text-[0.8rem] font-medium xs:text-[12px]">
 							{`PBS ${
 								profile?.role === "user"
 									? "STUDENT"

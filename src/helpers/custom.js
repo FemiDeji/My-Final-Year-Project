@@ -111,6 +111,41 @@ export const transformData = (data) => {
 	return newData;
 };
 
+// export const exportPDF = (
+// 	title,
+// 	headers,
+// 	dataKeys,
+// 	data,
+// 	filename,
+// 	unit = "pt",
+// 	size = "A2",
+// 	orientation = "landscape",
+// 	marginLeft = 40,
+// 	fontSize = 18
+// ) => {
+// 	const doc = new jsPDF(orientation, unit, size);
+
+// 	doc.setFontSize(fontSize);
+
+// 	const transformedData = data?.map((elt) => {
+// 		return [...dataKeys.map((key) => elt[key])];
+// 	});
+
+// 	if (transformedData) {
+// 		let content = {
+// 			startY: 50,
+// 			head: headers,
+// 			body: transformedData,
+// 		};
+// 		autoTable(doc, {
+// 			...content,
+// 		});
+
+// 		doc.text(title, marginLeft, 40);
+// 		doc.save(filename);
+// 	}
+// };
+
 export const exportPDF = (
 	title,
 	headers,
@@ -124,21 +159,17 @@ export const exportPDF = (
 	fontSize = 18
 ) => {
 	const doc = new jsPDF(orientation, unit, size);
-
 	doc.setFontSize(fontSize);
 
-	const transformedData = data?.map((elt) => {
-		return [...dataKeys.map((key) => elt[key])];
-	});
+	if (data && Array.isArray(data)) {
+		const transformedData = data.map((row) =>
+			dataKeys.map((key) => row[key] ?? "")
+		);
 
-	if (transformedData) {
-		let content = {
+		autoTable(doc, {
 			startY: 50,
 			head: headers,
 			body: transformedData,
-		};
-		autoTable(doc, {
-			...content,
 		});
 
 		doc.text(title, marginLeft, 40);

@@ -19,6 +19,7 @@ function useCustomFileDownload(data) {
 		startDate,
 		endDate,
 		downloadType = "PDF",
+		formatter = {},
 	} = data;
 
 	const getFileName = (extension) => {
@@ -60,6 +61,18 @@ function useCustomFileDownload(data) {
 		return dataKeys;
 	};
 
+	const applyFormatters = (data, formatters = {}) => {
+		return data.map((row) => {
+			const formattedRow = { ...row };
+			for (const key in formatters) {
+				if (row[key]) {
+					formattedRow[key] = formatters[key](row[key]);
+				}
+			}
+			return formattedRow;
+		});
+	};
+
 	const downloadAs = (type = "PDF", data) => {
 		if (preEvent) {
 			getData()
@@ -68,15 +81,18 @@ function useCustomFileDownload(data) {
 					if (response) {
 						downloadableData = response[dataKey];
 					}
+
 					if (type == "PDF") {
+						const formattedData = applyFormatters(downloadableData, formatter);
 						exportPDF(
 							getPDFTitle(),
 							getRequiredHeaders(),
 							getPDFDataKeys(),
-							downloadableData,
+							formattedData,
 							getFileName(".pdf")
 						);
 					} else if (type == "EXCEL") {
+						// const formattedData = applyFormatters(downloadableData, formatter);
 						downloadExcel(
 							downloadableData,
 							getFileName(".xlsx"),
@@ -84,8 +100,9 @@ function useCustomFileDownload(data) {
 							getPDFDataKeys()
 						);
 					} else if (type == "CSV") {
+						const formattedData = applyFormatters(downloadableData, formatter);
 						makeCsv(
-							getTableDataForExport(downloadableData, getRequiredHeaders()),
+							getTableDataForExport(formattedData, getRequiredHeaders()),
 							getFileName(".csv")
 						);
 					}
@@ -99,13 +116,16 @@ function useCustomFileDownload(data) {
 			if (data) {
 				toBeDownloaded = data;
 			}
+
+			const formattedData = applyFormatters(toBeDownloaded, formatter);
+
 			setTimeout(() => {
 				if (type == "PDF") {
 					exportPDF(
 						getPDFTitle(),
 						getRequiredHeaders(),
 						getPDFDataKeys(),
-						toBeDownloaded,
+						formattedData,
 						getFileName(".pdf")
 					);
 				} else if (type == "EXCEL") {
@@ -117,7 +137,7 @@ function useCustomFileDownload(data) {
 					);
 				} else if (type == "CSV") {
 					makeCsv(
-						getTableDataForExport(toBeDownloaded, getRequiredHeaders()),
+						getTableDataForExport(formattedData, getRequiredHeaders()),
 						getFileName(".csv")
 					);
 				}

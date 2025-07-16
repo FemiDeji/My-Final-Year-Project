@@ -162,19 +162,18 @@ export default function Pass() {
 				end_date: data.end_date,
 				priority: data.priority,
 			});
-			console.log("res", response);
+
 			setShowFilterModal(false);
 			setFilterPass(response);
 			reset();
 		} catch (err) {
 			console.log("err", err);
 		}
-		console.log({ ...data, status });
+
 		reset();
 	};
 
 	const onSubmit = async (data) => {
-		console.log({ status, reason: data.late_checkin });
 		const isAtLocation = await checkLocation();
 		if (!isAtLocation) {
 			toast.error("You're not within the allowed location.");
@@ -274,7 +273,7 @@ export default function Pass() {
 					height="xs:h-[90vh]"
 					widthClass="w-full">
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<div className="grid grid-cols-2 xs:flex xs:flex-col w-full gap-2 items-center text-left p-1">
+						<div className="grid grid-cols-2 xs:flex xs:flex-col w-full gap-2 items-center text-left p-4 xs:p-1">
 							{selectedPass &&
 								Object.entries(selectedPass)
 									.filter(([key]) => !exemptedKeys.includes(key))
