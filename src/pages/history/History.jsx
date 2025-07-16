@@ -226,7 +226,7 @@ export default function History() {
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full">
 				<div className="flex justify-end items-center gap-3 w-full">
 					{history?.length > 0 && (
-						<div className="lg:w-[22%] xs:w-[40%]">
+						<div className="lg:w-[22%] xs:w-[45%]">
 							<CustomButton
 								label={"Filter History"}
 								bgColor={General_Yellow}
@@ -273,6 +273,7 @@ export default function History() {
 					isOpen={showHistoryDetailsModal}
 					onClose={() => setShowHistoryDetailsModal(false)}
 					showCloseButton
+					height="xs:h-[90vh]"
 					widthClass="w-full">
 					<div className="xs:py-4 xs:px-0 p-1 flex flex-col justify-center items-center gap-3">
 						<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-4">
@@ -285,7 +286,12 @@ export default function History() {
 										);
 									})}
 						</div>
-						<div className="text-center">
+						<div
+							className={`${
+								selectedHistory?.status !== "Checked-in Late"
+									? "hidden"
+									: "block"
+							} text-center`}>
 							<ImageViewer
 								title={"Evidence"}
 								src={selectedHistory?.image_evidence}
@@ -303,7 +309,7 @@ export default function History() {
 						setShowFilterModal(false);
 						handleReset();
 					}}
-					height="xs:60vh"
+					height="xs:h-[60vh]"
 					widthClass="xs:w-full w-[50%]">
 					<form
 						onSubmit={handleSubmit(onSubmit)}
@@ -369,7 +375,7 @@ export default function History() {
 				<GeneralModal
 					isOpen={showHistoryDownloadModal}
 					showCloseButton
-					height="xs:80vh"
+					height="xs:h-[80vh]"
 					widthClass="w-[50%] xs:w-full"
 					onClose={() => {
 						setShowHistoryDownloadModal(false);
@@ -379,7 +385,7 @@ export default function History() {
 					<form
 						onSubmit={handleSubmit(handleDownload)}
 						className="flex flex-col justify-center items-center w-full my-3 text-left gap-3">
-						<p className="text-center">
+						<p className="text-center xs:text-[12px]">
 							Please select the format you would like to download
 						</p>
 						<CustomSelectField

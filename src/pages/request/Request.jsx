@@ -68,6 +68,10 @@ export default function Request() {
 		"image_evidence",
 	];
 
+	if (selectedRequest?.status !== "Checked out") {
+		exemptedKeys.push("late_checkin");
+	}
+
 	const labels = {
 		department: "Department",
 		destination: "Destination",
@@ -87,7 +91,9 @@ export default function Request() {
 		fullname: "Full Name",
 		priority: "Priority",
 		updated_at: "Updated At",
-		late_checkin: "Late Checkin",
+		...(selectedRequest?.status === "Checked out" && {
+			late_checkin: "Late Checkin",
+		}),
 		security_name: "Security Name",
 		security_username: "Security ID",
 	};
@@ -232,6 +238,7 @@ export default function Request() {
 			{showRequestDetailsModal && (
 				<GeneralModal
 					classname={"xs:h-[90%]"}
+					height="65vh xs:90vh"
 					isOpen={showRequestDetailsModal}
 					onClose={() => setShowRequestDetailsModal(false)}
 					showCloseButton

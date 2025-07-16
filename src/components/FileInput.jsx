@@ -26,7 +26,7 @@ export default function FileInput({
 					{...register}
 					onChange={onChange}
 					type={type}
-					className="text-[0.7rem] xs:text-[0.65rem] rounded-sm file:font-medium file:px-4 xs:file:px-1.5 file:py-[0.36rem] file:rounded-md file:border-none file:cursor-pointer file:transition-colors file:duration-200 hover:file:bg-brand-700"
+					className="text-[0.7rem] xs:text-[0.5rem] rounded-sm file:font-medium file:px-4 xs:file:px-1 file:py-[0.36rem] file:rounded-md file:border-none file:cursor-pointer file:transition-colors file:duration-200 hover:file:bg-brand-700"
 					name={name}
 				/>
 			</fieldset>

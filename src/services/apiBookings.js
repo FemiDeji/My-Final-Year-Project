@@ -14,6 +14,35 @@ export async function createUpdateBooking(newBooking) {
 		throw new Error("Booking could not be created");
 	}
 
+	const { data: admins, error: adminsError } = await supabase
+		.from("profiles")
+		.select("email")
+		.or("role", ["admin", "super-admin"]);
+
+	if (adminsError) {
+		console.error("Failed to fetch admin emails", adminsError.message);
+	} else if (admins && admins.length > 0) {
+		for (const admin of admins) {
+			const { error: emailError } = await supabase.functions.invoke(
+				"send-email",
+				{
+					body: {
+						to: admin.email,
+						subject: "New Booking Created",
+						html: `<p>A new booking has been submitted by <strong>${newBooking.fullname}</strong> with Matric No : <Strong>${newBooking.username}</Strong>.</br>Priority:${newBooking.priority}</p>`,
+					},
+				}
+			);
+
+			if (emailError) {
+				console.error(
+					`Failed to send email to ${admin.email}`,
+					emailError.message
+				);
+			}
+		}
+	}
+
 	return data;
 }
 
@@ -164,13 +193,14 @@ export async function getPasses() {
 	}
 
 	let query = supabase.from("bookings").select("*");
+	console.log("role", profiles.role);
 
-	if (profiles?.role !== "user") {
-		query = query.eq("status", "Checked out");
-	} else if (profiles?.role === "user") {
-		query = query
-			.or(`user_id.eq.${profiles?.id},username.eq.${profiles?.username}`)
-			.in("status", ["Approved", "Checked out", "Late Checkin"]);
+	if (profiles.role !== "user") {
+		query = query.in("status", ["Checked out"]);
+	} else if (profiles.role === "user") {
+		query = query.or(
+			`and(user_id.eq.${profiles.id},status.in.("Approved","Checked out","Late Checkin")),and(username.eq.${profiles.username},status.in.("Approved","Checked out","Late Checkin"))`
+		);
 	}
 
 	const { data: passes, error: passesError } = await query;
@@ -233,6 +263,28 @@ export async function getFilteredPasses({ start_date, end_date, priority }) {
 	return filteredPasses;
 }
 
+export async function notifyUserOnApproval(bookingId) {
+	const { data: booking, error } = await supabase
+		.from("bookings")
+		.select("id, fullname, username, email, status")
+		.eq("id", bookingId)
+		.single();
+
+	if (error || !booking) {
+		console.error("Error fetching booking for approval", error);
+	}
+
+	if (booking.status !== "Approved") return;
+
+	await supabase.functions.invoke("send-email", {
+		body: {
+			to: booking.email,
+			subject: "Booking Approved",
+			html: `<p>Hi ${booking.fullname},<br/><br/>Your booking request has been <strong>approved</strong>. You can now proceed to the next stage.</p>`,
+		},
+	});
+}
+
 export async function updateBooking(updateData, id) {
 	if (!id) {
 		console.error("Error: Booking ID is undefined orr invalid!");
@@ -249,6 +301,15 @@ export async function updateBooking(updateData, id) {
 	if (updateBookingError) {
 		console.error("Error updating status: ", updateBookingError.message);
 		throw new Error("Booking could not be updated");
+	}
+
+	// Notify the user is status is 'Approved'
+	if (updateData.status === "Approved") {
+		try {
+			await notifyUserOnApproval(id);
+		} catch (err) {
+			console.log("Failed to send approval email to user: ", err);
+		}
 	}
 
 	return updateBooking;

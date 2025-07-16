@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { getDistanceInMeters } from "../helpers/dateAndTime";
 import toast from "react-hot-toast";
 import { CAMPUS_LOCATION } from "../constants/geoLocationParams";
@@ -48,6 +48,7 @@ export default function useCheckLocation() {
 			}
 
 			setWithinLocation(isWithin);
+			return isWithin;
 		} catch (error) {
 			switch (error.code) {
 				case error.PERMISSION_DENIED:
@@ -68,26 +69,30 @@ export default function useCheckLocation() {
 			}
 			console.error("Geolocation error:", error.message);
 			setShowRetryModal(true);
+			setWithinLocation(false);
+			return false;
 		} finally {
 			setLocationCheckLoading(false);
 			setLocationChecked(true);
 		}
 	}, []);
 
-	useEffect(() => {
-		checkLocation();
-	}, [checkLocation]);
+	// useEffect(() => {
+	// 	checkLocation();
+	// }, [checkLocation]);
 
 	return {
 		withinLocation,
 		locationChecked,
 		locationCheckLoading,
+		checkLocation,
 		RetryModal: (
 			<GeneralModal
 				isOpen={showRetryModal}
 				showCloseButton
 				onClose={() => setShowRetryModal(false)}
 				height="23vh"
+				zIndex={100003}
 				classname="xs:w-full lg:w-[30%]">
 				<div className="flex flex-col justify-center items-center gap-2">
 					<p className="text-sm xs:text-[12px] text-center">

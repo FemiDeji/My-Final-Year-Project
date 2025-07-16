@@ -43,7 +43,7 @@ export default function CustomStatusLabel({ status }) {
 			colorClass: "bg-general-green ",
 			iconClass: "text-white",
 			icon: <HiOutlineLogin size={16} />,
-			label: "Checkedin",
+			label: "Checked in",
 		},
 		"late checkin": {
 			colorClass: "bg-[#FF0000]",

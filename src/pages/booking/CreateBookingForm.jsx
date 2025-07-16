@@ -15,8 +15,9 @@ import {
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/auth/useUser";
-// import useCheckLocation from "../../hooks/useCheckLocation";
+import useCheckLocation from "../../hooks/useCheckLocation";
 import { General_Grey, General_Yellow } from "../../constants/colors";
+import toast from "react-hot-toast";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
@@ -68,8 +69,8 @@ export default function CreateBookingForm() {
 	});
 
 	const { createUpdateBooking, isBooking } = useCreateUpdateBooking();
-	// const { withinLocation, locationChecked, RetryModal, locationCheckLoading } =
-	// 	useCheckLocation();
+	const { checkLocation, locationChecked, RetryModal, locationCheckLoading } =
+		useCheckLocation();
 
 	const username = watch("username");
 	const isDisabled = !watch("fullname");
@@ -126,6 +127,12 @@ export default function CreateBookingForm() {
 	}, [purpose, priorityLevels.High, priorityLevels.Mid]);
 
 	const onSubmit = async (data) => {
+		const isAtLocation = await checkLocation();
+		if (!isAtLocation) {
+			toast.error("You're not within the allowed location.");
+			return;
+		}
+
 		if (submitType === "fetchProfile") {
 			try {
 				const response = await profile(data.username);
@@ -204,7 +211,6 @@ export default function CreateBookingForm() {
 							})}
 							error={errors?.username?.message}
 							placeholder={"09/9876"}
-							// readOnly={!withinLocation}
 						/>
 
 						{isDisabled && username?.length === 7 && !errors?.username && (
@@ -335,7 +341,7 @@ export default function CreateBookingForm() {
 										return "Long pass must be booked at least 2 days ahead";
 									}
 
-									if (passType === "Long" && value <= getValues().endDate) {
+									if (passType === "Long" && value >= getValues().endDate) {
 										return "Start date cannot be after end date";
 									}
 								},
@@ -445,19 +451,16 @@ export default function CreateBookingForm() {
 					/>
 				</div>
 			</form>
-			{/* {locationCheckLoading ? (
+			{locationCheckLoading ? (
 				<CustomBackdrop open={true} text={"Checking location..."} />
 			) : (
 				RetryModal
-			)} */}
+			)}
 			{(isPending || isBooking) && (
 				<CustomBackdrop
 					open={true}
 					text={
-						isBooking ||
-						{
-							/*!locationChecked*/
-						}
+						isBooking || !locationChecked
 							? "Please wait..."
 							: "Fetching profile..."
 					}

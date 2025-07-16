@@ -42,8 +42,8 @@ function GeneralModal({
 				<div
 					className={`${
 						transparent ? "" : "bg-white"
-					} w-3/4 rounded-lg p-5 mx-auto `}
-					style={{ height: height, overflowY: "auto" }}>
+					} w-3/4 rounded-lg p-5 mx-auto ${height}`}
+					style={{ overflowY: "auto" }}>
 					{children}
 				</div>
 			</div>

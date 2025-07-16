@@ -22,6 +22,7 @@ import CustomSelectField from "../../components/CustomSelectField";
 import { PAGE_SIZE } from "../../constants/texts";
 import useCheckIn from "../../hooks/pass/useCheckIn";
 import FileInput from "../../components/FileInput";
+import useCheckLocation from "../../hooks/useCheckLocation";
 
 export default function Pass() {
 	const [showPassDetails, setShowPassDetails] = useState(false);
@@ -40,6 +41,8 @@ export default function Pass() {
 	const { passes, isPending } = usePasses();
 	const { filteredPasses, isPending: isFiltering } = useFilterPasses();
 	const { checkIn, isPending: isCheckingIn } = useCheckIn();
+	const { locationChecked, checkLocation, RetryModal, locationCheckLoading } =
+		useCheckLocation();
 
 	const {
 		handleSubmit,
@@ -80,30 +83,6 @@ export default function Pass() {
 		"image_evidence",
 	];
 
-	const labels = {
-		department: "Department",
-		destination: "Destination",
-		email: "Email",
-		end_date: "Return Date",
-		guardian_name: "Guardian",
-		guardian_phone: "Guardian contact",
-		purpose: "Purpose",
-		start_date: "Start Date",
-		type: "Type",
-		status: "Status",
-		username: "Matric No",
-		num_days: "Duration",
-		admin_id: "Admin ID",
-		phone: "Phone",
-		room: "Room",
-		fullname: "Full Name",
-		priority: "Priority",
-		admin_name: "Staff Name",
-		admin_username: "Staff ID",
-		updated_at: "Updated At",
-		late_checkin: "Late Checkin",
-	};
-
 	const priorityOptions = [
 		{ key: "Normal", value: "Normal" },
 		{ key: "Mid", value: "Mid" },
@@ -140,6 +119,37 @@ export default function Pass() {
 		return isSameDayLate || isAfterReturnDate;
 	})();
 
+	if (!isLateCheckin && selectedPass?.status === "Checked out") {
+		exemptedKeys.push("late_checkin");
+	}
+
+	const labels = {
+		department: "Department",
+		destination: "Destination",
+		email: "Email",
+		end_date: "Return Date",
+		guardian_name: "Guardian",
+		guardian_phone: "Guardian contact",
+		purpose: "Purpose",
+		start_date: "Start Date",
+		type: "Type",
+		status: "Status",
+		username: "Matric No",
+		num_days: "Duration",
+		admin_id: "Admin ID",
+		phone: "Phone",
+		room: "Room",
+		fullname: "Full Name",
+		priority: "Priority",
+		admin_name: "Staff Name",
+		admin_username: "Staff ID",
+		updated_at: "Updated At",
+		...(isLateCheckin &&
+			selectedPass?.status === "Checked out" && {
+				late_checkin: "Late Checkin",
+			}),
+	};
+
 	const handleViewClick = (id) => {
 		const result = passes.find((pass) => pass.id == id);
 		setSelectedPass({ ...result });
@@ -163,8 +173,14 @@ export default function Pass() {
 		reset();
 	};
 
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
 		console.log({ status, reason: data.late_checkin });
+		const isAtLocation = await checkLocation();
+		if (!isAtLocation) {
+			toast.error("You're not within the allowed location.");
+			return;
+		}
+
 		if (!selectedPass?.id) {
 			console.error("Error: No pass selected");
 			toast.error("No pass selected");
@@ -255,6 +271,7 @@ export default function Pass() {
 						reset();
 					}}
 					showCloseButton
+					height="xs:h-[90vh]"
 					widthClass="w-full">
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="grid grid-cols-2 xs:flex xs:flex-col w-full gap-2 items-center text-left p-1">
@@ -269,12 +286,18 @@ export default function Pass() {
 						</div>
 						<div
 							className={`p-1 py-2 text-left ${
-								!isLateCheckin ? "hidden" : "block"
+								!isLateCheckin && selectedPass?.status !== "Checked-out"
+									? "hidden"
+									: "block"
 							}`}>
 							<CustomTextarea
 								register={register("late_checkin", {
 									validate: (value) => {
-										if (isLateCheckin && !value) {
+										if (
+											isLateCheckin &&
+											!value &&
+											selectedPass?.status !== "Checked-out"
+										) {
 											return "Reason is required for late checkin";
 										}
 										return true;
@@ -286,7 +309,9 @@ export default function Pass() {
 						</div>
 						<div
 							className={`${
-								!isLateCheckin ? "hidden" : "block"
+								!isLateCheckin && selectedPass?.status !== "Checked-out"
+									? "hidden"
+									: "block"
 							} p-1 text-left`}>
 							<FileInput
 								label={"Upload Image (optional)"}
@@ -386,11 +411,19 @@ export default function Pass() {
 					</form>
 				</GeneralModal>
 			)}
-
+			{locationCheckLoading ? (
+				<CustomBackdrop open={true} text={"Checking location..."} />
+			) : (
+				RetryModal
+			)}
 			{(isPending || isFiltering || isCheckingIn) && (
 				<CustomBackdrop
 					open={true}
-					text={isCheckingIn ? "Please wait..." : "Fetching data..."}
+					text={
+						isCheckingIn || !locationChecked
+							? "Please wait..."
+							: "Fetching data..."
+					}
 				/>
 			)}
 		</Layout>

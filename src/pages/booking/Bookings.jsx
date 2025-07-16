@@ -207,7 +207,7 @@ export default function Bookings() {
 					isOpen={showBookingDetailsModal}
 					onClose={() => setShowBookingDetailsModal(false)}
 					showCloseButton
-					height="80vh"
+					height="xs:h-[80vh]"
 					widthClass="w-full">
 					<div className="grid grid-cols-2 xs:flex xs:flex-col w-full xs:px-0 xs:py-4 gap-2 items-center text-left p-1 mt-3">
 						{selectedBooking &&
