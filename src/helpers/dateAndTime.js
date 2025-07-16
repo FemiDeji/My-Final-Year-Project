@@ -51,3 +51,11 @@ export const combineDateWithCurrentTime = (selectedDate) => {
 
 	return new Date(combined).toISOString(); // final result in ISO format
 };
+
+export const canCheckOut = (startDate, endDate) => {
+	const now = new Date();
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+
+	return now >= start && now <= end;
+};

@@ -73,16 +73,6 @@ export default function Pass() {
 		{ key: "priority", value: "Priority" },
 	];
 
-	const exemptedKeys = [
-		"id",
-		"user_id",
-		"created_at",
-		"rejection_reason",
-		"security_username",
-		"security_name",
-		"image_evidence",
-	];
-
 	const priorityOptions = [
 		{ key: "Normal", value: "Normal" },
 		{ key: "Mid", value: "Mid" },
@@ -119,7 +109,17 @@ export default function Pass() {
 		return isSameDayLate || isAfterReturnDate;
 	})();
 
-	if (!isLateCheckin && selectedPass?.status === "Checked out") {
+	const exemptedKeys = [
+		"id",
+		"user_id",
+		"created_at",
+		"rejection_reason",
+		"security_username",
+		"security_name",
+		"image_evidence",
+	];
+
+	if (selectedPass?.status !== "Checked out" && !isLateCheckin) {
 		exemptedKeys.push("late_checkin");
 	}
 
@@ -285,7 +285,7 @@ export default function Pass() {
 						</div>
 						<div
 							className={`p-1 py-2 text-left ${
-								!isLateCheckin && selectedPass?.status !== "Checked-out"
+								!isLateCheckin && selectedPass?.status !== "Checked out"
 									? "hidden"
 									: "block"
 							}`}>
@@ -295,7 +295,7 @@ export default function Pass() {
 										if (
 											isLateCheckin &&
 											!value &&
-											selectedPass?.status !== "Checked-out"
+											selectedPass?.status === "Checked out"
 										) {
 											return "Reason is required for late checkin";
 										}
@@ -308,7 +308,7 @@ export default function Pass() {
 						</div>
 						<div
 							className={`${
-								!isLateCheckin && selectedPass?.status !== "Checked-out"
+								!isLateCheckin && selectedPass?.status !== "Checked out"
 									? "hidden"
 									: "block"
 							} p-1 text-left`}>

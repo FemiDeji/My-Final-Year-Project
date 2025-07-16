@@ -22,6 +22,7 @@ import {
 	General_Yellow,
 } from "../../constants/colors";
 import { ImageViewer } from "../../components/ImageViewer";
+import { canCheckOut } from "../../helpers/dateAndTime";
 
 export default function Request() {
 	const [selectedRequest, setSelectedRequest] = useState(null);
@@ -150,11 +151,18 @@ export default function Request() {
 				status,
 			};
 		} else if (profile?.role === "security") {
-			requestData = {
-				security_username: profile?.username,
-				security_name: profile?.fullname,
-				status,
-			};
+			if (canCheckOut(data.start_date, data.end_date)) {
+				requestData = {
+					security_username: profile?.username,
+					security_name: profile?.fullname,
+					status,
+				};
+			} else {
+				toast.error(
+					"Pass can only be checked out between the start and end date."
+				);
+				return;
+			}
 		} else {
 			toast.error("Unauthorized role");
 			return;

@@ -362,8 +362,7 @@ export default function CreateBookingForm() {
 									? {
 											required: "End date is required",
 											validate: (value) =>
-												// console.log(value < getValues().startDate),
-												value >= getValues().startDate ||
+												value <= getValues().startDate ||
 												"End date cannot be before start date",
 									  }
 									: false
