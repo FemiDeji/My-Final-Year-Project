@@ -1,7 +1,7 @@
 export const CAMPUS_LOCATION = {
 	latitude: 7.737564333771149,
 	longitude: 4.444108162049442,
-	radiusInMeters: 300,
+	radiusInMeters: 1000,
 };
 
 // For Adeleke Uni
