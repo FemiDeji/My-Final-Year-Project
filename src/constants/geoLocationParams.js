@@ -1,6 +1,6 @@
 export const CAMPUS_LOCATION = {
-	latitude: 7.74,
-	longitude: 4.44,
+	latitude: 7.737564333771149,
+	longitude: 4.444108162049442,
 	radiusInMeters: 300,
 };
 
