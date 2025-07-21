@@ -93,7 +93,7 @@ export default function SignUp() {
 						<img
 							src="AU_logo.jpg"
 							alt="AU logo"
-							className="object-contain object-center h-[70px] my-3 xs:h-[50px]"
+							className="object-contain object-center h-[65px] my-3 xs:h-[50px]"
 						/>
 					</div>
 					<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
