@@ -97,10 +97,10 @@ export default function SignUp() {
 						/>
 					</div>
 					<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
-						SIGN UP INTO
-						<div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
+						SIGN UP
+						{/* <div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
 							PASS-BOOKING SYSTEM
-						</div>
+						</div> */}
 					</div>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="flex xs:flex-col xs:items-start flex-col justify-between items-center w-full mb-3 gap-5 lg:gap-8 mt-3 xs:pl-4">
