@@ -97,7 +97,7 @@ export default function SignUp() {
 						/>
 					</div>
 					<div className="text-general-blue font-semibold text-xl xl:text-base text-center xs:mx-auto">
-						Welcome To
+						SIGN UP INTO
 						<div className="text-general-blue text-sm font-medium xs:text-[0.8rem]">
 							PASS-BOOKING SYSTEM
 						</div>
@@ -119,7 +119,7 @@ export default function SignUp() {
 						</div>
 						<div
 							className={`flex flex-col justify-start items-center gap-2 w-full px-5 ${
-								activeType === "user" ? "xs:h-[60vh] overflow-y-auto" : "h-auto"
+								activeType === "user" ? "xs:h-[70vh] overflow-y-auto" : "h-auto"
 							}`}>
 							<div className="w-full flex flex-col justify-center items-center gap-4">
 								<div className="w-full xs:flex-col flex justify-center items-start gap-3">

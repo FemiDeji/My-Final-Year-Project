@@ -149,7 +149,7 @@ export default function CreateBookingForm() {
 			try {
 				const isAtLocation = await checkLocation();
 				if (!isAtLocation) {
-					toast.error("You're not within the allowed location.");
+					toast.error("You must be within the university campus.");
 					return;
 				}
 
