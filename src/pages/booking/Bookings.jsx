@@ -264,9 +264,7 @@ export default function Bookings() {
 							options={priorityOptions}
 							optionKey="key"
 							optionLabel="value"
-							register={register("priority", {
-								required: "Priority is required",
-							})}
+							register={register("priority")}
 							error={errors?.priority?.message}
 							onChange={setSelectedPriority}
 							initialValue={selectedPriority}
