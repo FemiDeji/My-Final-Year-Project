@@ -198,266 +198,268 @@ export default function CreateBookingForm() {
 			title={`New ${
 				currentUser?.role === "super-admin" ? "Request" : "Booking"
 			}`}>
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col gap-5 mt-5 text-left py-2">
-				<div className="flex flex-row xs:flex-col gap-3">
-					<div className="w-full">
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="flex flex-col gap-5 mt-5 text-left py-2 h-[70vh] overflow-y-auto">
+					<div className="flex flex-row xs:flex-col gap-3">
+						<div className="w-full">
+							<CustomInput
+								name="username"
+								label={"Matric No"}
+								register={register("username", {
+									pattern: {
+										value: /^\d{2}\/\d{4}$/,
+										message: "Matric number is invalid. Use a valid format",
+									},
+								})}
+								error={errors?.username?.message}
+								placeholder={"09/9876"}
+							/>
+
+							{isDisabled && username?.length === 7 && !errors?.username && (
+								<div className="w-full flex justify-end items-center">
+									<button
+										className="lg:w-[30%] xs:w-[35%] text-center text-[11px] mt-2 border rounded-full bg-general-yellow px-2 py-1 text-general-blue font-semibold ml-auto"
+										onClick={() => {
+											setSubmitType("fetchProfile");
+										}}
+										type="submit">
+										Fetch
+									</button>
+								</div>
+							)}
+						</div>
 						<CustomInput
-							name="username"
-							label={"Matric No"}
-							register={register("username", {
-								pattern: {
-									value: /^\d{2}\/\d{4}$/,
-									message: "Matric number is invalid. Use a valid format",
-								},
-							})}
-							error={errors?.username?.message}
-							placeholder={"09/9876"}
+							name="fullname"
+							label={"Fullname"}
+							register={register("fullname")}
+							readOnly
+							error={errors?.fullname?.message}
+						/>
+					</div>
+
+					<div className="flex flex-row xs:flex-col gap-3">
+						<CustomInput
+							name="email"
+							label={"Email"}
+							register={register("email")}
+							readOnly
+							error={errors?.email?.message}
+						/>
+						<CustomInput
+							name="department"
+							label={"Department"}
+							register={register("department")}
+							readOnly
+							error={errors?.department?.message}
+						/>
+					</div>
+					<div className="flex flex-row xs:flex-col gap-3">
+						<CustomInput
+							name="level"
+							label={"Level"}
+							register={register("level")}
+							readOnly
+							error={errors?.level?.message}
+						/>
+						<CustomInput
+							name="phone"
+							label={"Phone"}
+							register={register("phone")}
+							readOnly
+							error={errors?.phone?.message}
+						/>
+					</div>
+					<div className="flex flex-row xs:flex-col gap-3">
+						<CustomInput
+							name="room"
+							label={"Room"}
+							register={register("room")}
+							readOnly
+							error={errors?.room?.message}
+						/>
+						<CustomInput
+							name="guardian_name"
+							label={"Guardian Name"}
+							register={register("guardian_name")}
+							readOnly
+							error={errors?.guardian_name?.message}
+						/>
+					</div>
+					<div className="flex flex-row xs:flex-col gap-3">
+						<CustomInput
+							name="guardian_phone"
+							label={"Guardian Phone"}
+							register={register("guardian_phone")}
+							error={errors?.guardian_phone?.message}
+							readOnly
 						/>
 
-						{isDisabled && username?.length === 7 && !errors?.username && (
-							<div className="w-full flex justify-end items-center">
-								<button
-									className="lg:w-[30%] xs:w-[35%] text-center text-[11px] mt-2 border rounded-full bg-general-yellow px-2 py-1 text-general-blue font-semibold ml-auto"
-									onClick={() => {
-										setSubmitType("fetchProfile");
-									}}
-									type="submit">
-									Fetch
-								</button>
-							</div>
-						)}
+						<CustomSelectField
+							name="type"
+							label={"Pass Type"}
+							readOnly={isDisabled}
+							options={passTypeOptions}
+							onChange={setPassType}
+							optionKey="key"
+							optionLabel="value"
+							register={register(
+								"type",
+								submitType === "general" && !passType
+									? { required: "Pass type is required" }
+									: false
+							)}
+							error={errors?.type?.message}
+							initialValue="Short"
+						/>
 					</div>
-					<CustomInput
-						name="fullname"
-						label={"Fullname"}
-						register={register("fullname")}
-						readOnly
-						error={errors?.fullname?.message}
-					/>
-				</div>
-
-				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomInput
-						name="email"
-						label={"Email"}
-						register={register("email")}
-						readOnly
-						error={errors?.email?.message}
-					/>
-					<CustomInput
-						name="department"
-						label={"Department"}
-						register={register("department")}
-						readOnly
-						error={errors?.department?.message}
-					/>
-				</div>
-				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomInput
-						name="level"
-						label={"Level"}
-						register={register("level")}
-						readOnly
-						error={errors?.level?.message}
-					/>
-					<CustomInput
-						name="phone"
-						label={"Phone"}
-						register={register("phone")}
-						readOnly
-						error={errors?.phone?.message}
-					/>
-				</div>
-				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomInput
-						name="room"
-						label={"Room"}
-						register={register("room")}
-						readOnly
-						error={errors?.room?.message}
-					/>
-					<CustomInput
-						name="guardian_name"
-						label={"Guardian Name"}
-						register={register("guardian_name")}
-						readOnly
-						error={errors?.guardian_name?.message}
-					/>
-				</div>
-				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomInput
-						name="guardian_phone"
-						label={"Guardian Phone"}
-						register={register("guardian_phone")}
-						error={errors?.guardian_phone?.message}
-						readOnly
-					/>
-
-					<CustomSelectField
-						name="type"
-						label={"Pass Type"}
-						readOnly={isDisabled}
-						options={passTypeOptions}
-						onChange={setPassType}
-						optionKey="key"
-						optionLabel="value"
-						register={register(
-							"type",
-							submitType === "general" && !passType
-								? { required: "Pass type is required" }
-								: false
-						)}
-						error={errors?.type?.message}
-						initialValue="Short"
-					/>
-				</div>
-				<div className="flex flex-row xs:flex-col gap-3">
-					<CustomInput
-						name="startDate"
-						label={`${passType === "Long" ? "Start" : ""} Date`}
-						type="date"
-						disabled={isDisabled}
-						register={register(
-							"startDate",
-
-							{
-								required:
-									submitType === "general" ? "Start date is required" : false,
-								validate: (value) => {
-									const today = new Date();
-									today.setHours(0, 0, 0, 0);
-
-									const selectedDate = new Date(value);
-									selectedDate.setHours(0, 0, 0, 0);
-
-									const diffInDays = Math.floor(
-										(selectedDate - today) / (1000 * 60 * 60 * 24)
-									);
-
-									if (passType === "Short" && diffInDays <= 0) {
-										return "Short pass must be booked a day ahead";
-									}
-
-									if (passType === "Long" && diffInDays <= 1) {
-										return "Long pass must be booked at least 2 days ahead";
-									}
-
-									if (
-										passType === "Long" &&
-										new Date(value) >= new Date(getValues().endDate)
-									) {
-										return "Start date cannot be after end date";
-									}
-								},
-							}
-						)}
-						error={errors?.startDate?.message}
-					/>
-
-					{passType === "Long" && (
+					<div className="flex flex-row xs:flex-col gap-3">
 						<CustomInput
-							name="endDate"
-							label={"End Date"}
+							name="startDate"
+							label={`${passType === "Long" ? "Start" : ""} Date`}
 							type="date"
 							disabled={isDisabled}
 							register={register(
-								"endDate",
-								submitType === "general" && passType === "Long"
+								"startDate",
+
+								{
+									required:
+										submitType === "general" ? "Start date is required" : false,
+									validate: (value) => {
+										const today = new Date();
+										today.setHours(0, 0, 0, 0);
+
+										const selectedDate = new Date(value);
+										selectedDate.setHours(0, 0, 0, 0);
+
+										const diffInDays = Math.floor(
+											(selectedDate - today) / (1000 * 60 * 60 * 24)
+										);
+
+										if (passType === "Short" && diffInDays <= 0) {
+											return "Short pass must be booked a day ahead";
+										}
+
+										if (passType === "Long" && diffInDays <= 1) {
+											return "Long pass must be booked at least 2 days ahead";
+										}
+
+										if (
+											passType === "Long" &&
+											new Date(value) >= new Date(getValues().endDate)
+										) {
+											return "Start date cannot be after end date";
+										}
+									},
+								}
+							)}
+							error={errors?.startDate?.message}
+						/>
+
+						{passType === "Long" && (
+							<CustomInput
+								name="endDate"
+								label={"End Date"}
+								type="date"
+								disabled={isDisabled}
+								register={register(
+									"endDate",
+									submitType === "general" && passType === "Long"
+										? {
+												required: "End date is required",
+												validate: (value) => {
+													if (
+														new Date(value) <= new Date(getValues().startDate)
+													) {
+														return "End date cannot be before start date";
+													}
+												},
+										  }
+										: false
+								)}
+								error={errors?.endDate?.message}
+							/>
+						)}
+					</div>
+
+					<div className="flex flex-row xs:flex-col gap-3">
+						{passType === "Long" && (
+							<CustomInput
+								name="num_days"
+								label={"Number of Days"}
+								register={register("num_days", {
+									validate: (value) => {
+										if (passType === "Long" && Number(value < 0)) {
+											return "A long pass must be more than a day";
+										}
+										return true;
+									},
+								})}
+								readOnly
+								error={errors?.num_days?.message}
+							/>
+						)}
+
+						<CustomSelectField
+							name="destination"
+							label={"Destination"}
+							readOnly={isDisabled}
+							placeholder={"State"}
+							options={states}
+							optionKey="state"
+							optionLabel="state"
+							register={register(
+								"destination",
+								submitType === "general"
 									? {
-											required: "End date is required",
-											validate: (value) => {
-												if (
-													new Date(value) <= new Date(getValues().startDate)
-												) {
-													return "End date cannot be before start date";
-												}
-											},
+											required: "Destination is required",
 									  }
 									: false
 							)}
-							error={errors?.endDate?.message}
+							error={errors?.destination?.message}
 						/>
-					)}
-				</div>
-
-				<div className="flex flex-row xs:flex-col gap-3">
-					{passType === "Long" && (
-						<CustomInput
-							name="num_days"
-							label={"Number of Days"}
-							register={register("num_days", {
-								validate: (value) => {
-									if (passType === "Long" && Number(value < 0)) {
-										return "A long pass must be more than a day";
-									}
-									return true;
-								},
-							})}
-							readOnly
-							error={errors?.num_days?.message}
+					</div>
+					<div className="w-full">
+						<CustomTextarea
+							label={"Purpose"}
+							name="purpose"
+							placeholder={"Write your purpose here."}
+							disabled={isDisabled}
+							register={register(
+								"purpose",
+								submitType === "general" && { required: "Purpose is required" }
+							)}
+							error={errors?.purpose?.message}
 						/>
-					)}
+					</div>
 
-					<CustomSelectField
-						name="destination"
-						label={"Destination"}
-						readOnly={isDisabled}
-						placeholder={"State"}
-						options={states}
-						optionKey="state"
-						optionLabel="state"
-						register={register(
-							"destination",
-							submitType === "general"
-								? {
-										required: "Destination is required",
-								  }
-								: false
-						)}
-						error={errors?.destination?.message}
-					/>
-				</div>
-				<div className="w-full">
-					<CustomTextarea
-						label={"Purpose"}
-						name="purpose"
-						placeholder={"Write your purpose here."}
-						disabled={isDisabled}
-						register={register(
-							"purpose",
-							submitType === "general" && { required: "Purpose is required" }
-						)}
-						error={errors?.purpose?.message}
-					/>
-				</div>
-
-				<div className="flex flex-row justify-center xs:justify-end items-center xs:items-end gap-3 w-[30%] ml-auto xs:w-full xs:m-0">
-					<CustomButton
-						label={"Cancel"}
-						bgColor={General_Grey}
-						bordered
-						borderSize="lg"
-						onClick={() => {
-							navigate(
-								currentUser?.role === "super-admin" ? "/requests" : "/bookings"
-							);
-							reset();
-						}}
-						disabled={isBooking}
-					/>
-					<CustomButton
-						label={"Submit"}
-						onClick={() => {
-							setSubmitType("general");
-							console.log("clicked");
-						}}
-						bordered
-						bgColor={General_Yellow}
-						type="submit"
-						disabled={isDisabled || isBooking}
-					/>
+					<div className="flex flex-row justify-center xs:justify-end items-center xs:items-end gap-3 w-[30%] ml-auto xs:w-full xs:m-0">
+						<CustomButton
+							label={"Cancel"}
+							bgColor={General_Grey}
+							bordered
+							borderSize="lg"
+							onClick={() => {
+								navigate(
+									currentUser?.role === "super-admin"
+										? "/requests"
+										: "/bookings"
+								);
+								reset();
+							}}
+							disabled={isBooking}
+						/>
+						<CustomButton
+							label={"Submit"}
+							onClick={() => {
+								setSubmitType("general");
+								console.log("clicked");
+							}}
+							bordered
+							bgColor={General_Yellow}
+							type="submit"
+							disabled={isDisabled || isBooking}
+						/>
+					</div>
 				</div>
 			</form>
 
