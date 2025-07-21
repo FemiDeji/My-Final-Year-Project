@@ -62,7 +62,11 @@ export default function SideBar({
 						: "xl:w-[15%] lg:w-[22%] xs:w-[60%]"
 				}`}>
 				<div className="text-center mb-2 lg:hidden flex justify-center">
-					<img src="AU_logo.jpg" alt="AU logo" className="h-[40px] lg:hidden" />
+					<img
+						src="/AU_logo.jpg"
+						alt="AU logo"
+						className="h-[40px] lg:hidden"
+					/>
 				</div>
 
 				<div
@@ -165,7 +169,7 @@ export default function SideBar({
 					)}
 				</div>
 
-				<div className="lg:hidden flex flex-col gap-2 ml-3 mt-56 w-full">
+				<div className="lg:hidden flex flex-col gap-2 ml-3 mt-32 w-full">
 					<div className="text-[10.5px] text-general-blue font-medium">
 						{convertToDateTime(user?.user?.last_sign_in_at)}
 					</div>

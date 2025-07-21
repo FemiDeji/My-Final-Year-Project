@@ -15,9 +15,9 @@ import {
 import useCreateUpdateBooking from "../../hooks/booking/useCreateUpdateBooking";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../hooks/auth/useUser";
-import useCheckLocation from "../../hooks/useCheckLocation";
 import { General_Grey, General_Yellow } from "../../constants/colors";
 import toast from "react-hot-toast";
+import useCheckLocation from "../../hooks/useCheckLocation";
 
 export default function CreateBookingForm() {
 	const { profile, isPending } = useGetProfile();
@@ -28,6 +28,7 @@ export default function CreateBookingForm() {
 	const [priority, setPriority] = useState("");
 
 	const { profile: currentUser } = useUser();
+	const { checkLocation } = useCheckLocation();
 
 	const addDays = (date, days) => {
 		const result = new Date(date);
@@ -69,8 +70,6 @@ export default function CreateBookingForm() {
 	});
 
 	const { createUpdateBooking, isBooking } = useCreateUpdateBooking();
-	const { checkLocation, locationChecked, RetryModal, locationCheckLoading } =
-		useCheckLocation();
 
 	const username = watch("username");
 	const isDisabled = !watch("fullname");
@@ -127,12 +126,6 @@ export default function CreateBookingForm() {
 	}, [purpose, priorityLevels.High, priorityLevels.Mid]);
 
 	const onSubmit = async (data) => {
-		const isAtLocation = await checkLocation();
-		if (!isAtLocation) {
-			toast.error("You're not within the allowed location.");
-			return;
-		}
-
 		if (submitType === "fetchProfile") {
 			try {
 				const response = await profile(data.username);
@@ -153,26 +146,36 @@ export default function CreateBookingForm() {
 			}
 		}
 		if (submitType === "general") {
-			const bookingData = {
-				username: data.username,
-				email: data.email,
-				fullname: data.fullname,
-				department: data.department,
-				phone: data.phone,
-				room: data.room,
-				start_date: combineDateWithCurrentTime(data.startDate),
-				end_date: combineDateWithCurrentTime(data.endDate),
-				user_id: userDetails.id,
-				guardian_name: data.guardian_name,
-				guardian_phone: data.guardian_phone,
-				type: data.type,
-				destination: data.destination,
-				purpose: data.purpose,
-				num_days: data.num_days,
-				priority,
-			};
+			try {
+				const isAtLocation = await checkLocation();
+				if (!isAtLocation) {
+					toast.error("You're not within the allowed location.");
+					return;
+				}
 
-			createUpdateBooking(bookingData, { onSuccess: () => handleReset() });
+				const bookingData = {
+					username: data.username,
+					email: data.email,
+					fullname: data.fullname,
+					department: data.department,
+					phone: data.phone,
+					room: data.room,
+					start_date: combineDateWithCurrentTime(data.startDate),
+					end_date: combineDateWithCurrentTime(data.endDate),
+					user_id: userDetails.id,
+					guardian_name: data.guardian_name,
+					guardian_phone: data.guardian_phone,
+					type: data.type,
+					destination: data.destination,
+					purpose: data.purpose,
+					num_days: data.num_days,
+					priority,
+				};
+
+				createUpdateBooking(bookingData, { onSuccess: () => handleReset() });
+			} catch {
+				toast.error("Unable to verify your location.");
+			}
 		}
 	};
 
@@ -341,7 +344,10 @@ export default function CreateBookingForm() {
 										return "Long pass must be booked at least 2 days ahead";
 									}
 
-									if (passType === "Long" && value >= getValues().endDate) {
+									if (
+										passType === "Long" &&
+										new Date(value) >= new Date(getValues().endDate)
+									) {
 										return "Start date cannot be after end date";
 									}
 								},
@@ -361,9 +367,13 @@ export default function CreateBookingForm() {
 								submitType === "general" && passType === "Long"
 									? {
 											required: "End date is required",
-											validate: (value) =>
-												value <= getValues().startDate ||
-												"End date cannot be before start date",
+											validate: (value) => {
+												if (
+													new Date(value) <= new Date(getValues().startDate)
+												) {
+													return "End date cannot be before start date";
+												}
+											},
 									  }
 									: false
 							)}
@@ -450,19 +460,11 @@ export default function CreateBookingForm() {
 					/>
 				</div>
 			</form>
-			{locationCheckLoading ? (
-				<CustomBackdrop open={true} text={"Checking location..."} />
-			) : (
-				RetryModal
-			)}
+
 			{(isPending || isBooking) && (
 				<CustomBackdrop
 					open={true}
-					text={
-						isBooking || !locationChecked
-							? "Please wait..."
-							: "Fetching profile..."
-					}
+					text={isBooking ? "Please wait..." : "Fetching profile..."}
 				/>
 			)}
 		</Layout>

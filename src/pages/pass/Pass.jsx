@@ -41,8 +41,7 @@ export default function Pass() {
 	const { passes, isPending } = usePasses();
 	const { filteredPasses, isPending: isFiltering } = useFilterPasses();
 	const { checkIn, isPending: isCheckingIn } = useCheckIn();
-	const { locationChecked, checkLocation, RetryModal, locationCheckLoading } =
-		useCheckLocation();
+	const { checkLocation } = useCheckLocation();
 
 	const {
 		handleSubmit,
@@ -174,53 +173,48 @@ export default function Pass() {
 	};
 
 	const onSubmit = async (data) => {
-		const isAtLocation = await checkLocation();
-		if (!isAtLocation) {
-			toast.error("You're not within the allowed location.");
-			return;
-		}
-
-		if (!selectedPass?.id) {
-			console.error("Error: No pass selected");
-			toast.error("No pass selected");
-			return;
-		}
-		if (selectedPass?.status !== "Checked out") {
-			toast.error("Pass not approved yet");
-			return;
-		}
-		if (isLateCheckin && !data.late_checkin) {
-			toast.error("You're late. Please provide a reason.");
-			return;
-		}
-
-		const file = data.image_evidence?.[0];
-
-		checkIn(
-			{
-				updateData: {
-					status,
-					late_checkin: data.late_checkin,
-				},
-				id: selectedPass?.id,
-				imageFile: file,
-			},
-			{
-				onSuccess: () => {
-					reset();
-					setShowPassDetails(false);
-				},
+		try {
+			const isAtLocation = await checkLocation();
+			if (!isAtLocation) {
+				toast.error("You're not within the allowed location.");
+				return;
 			}
-		);
 
-		console.log("data", {
-			updateData: {
-				status,
-				late_checkin: data.late_checkin,
-				image_evidence: file?.name,
-			},
-			id: selectedPass?.id,
-		});
+			if (!selectedPass?.id) {
+				console.error("Error: No pass selected");
+				toast.error("No pass selected");
+				return;
+			}
+			if (selectedPass?.status !== "Checked out") {
+				toast.error("Pass not approved yet");
+				return;
+			}
+			if (isLateCheckin && !data.late_checkin) {
+				toast.error("You're late. Please provide a reason.");
+				return;
+			}
+
+			const file = data.image_evidence?.[0];
+
+			checkIn(
+				{
+					updateData: {
+						status,
+						late_checkin: data.late_checkin,
+					},
+					id: selectedPass?.id,
+					imageFile: file,
+				},
+				{
+					onSuccess: () => {
+						reset();
+						setShowPassDetails(false);
+					},
+				}
+			);
+		} catch {
+			toast.error("Unable to verify your location");
+		}
 	};
 
 	const passData = filterPass?.length > 0 ? filterPass : passes;
@@ -410,19 +404,10 @@ export default function Pass() {
 					</form>
 				</GeneralModal>
 			)}
-			{locationCheckLoading ? (
-				<CustomBackdrop open={true} text={"Checking location..."} />
-			) : (
-				RetryModal
-			)}
 			{(isPending || isFiltering || isCheckingIn) && (
 				<CustomBackdrop
 					open={true}
-					text={
-						isCheckingIn || !locationChecked
-							? "Please wait..."
-							: "Fetching data..."
-					}
+					text={isCheckingIn ? "Please wait..." : "Fetching data..."}
 				/>
 			)}
 		</Layout>

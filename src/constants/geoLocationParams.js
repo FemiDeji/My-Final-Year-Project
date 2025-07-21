@@ -1,12 +1,17 @@
 export const CAMPUS_LOCATION = {
-	latitude: 7.737564333771149,
-	longitude: 4.444108162049442,
+	latitude: 7.735151047797988,
+	// latitude: 6.481181459181912,
+	longitude: 4.44396868205197,
+	// longitude: 3.361134537858388,
 	radiusInMeters: 1000,
 };
 
-// For Adeleke Uni
+export const LOCATION_DISTANCE_THRESHOLD = 1150;
 
-// For FirstBank
-// latitude: 6.481022800408786,
-// longitude: 3.3611686518401305,
-// 6.481022800408786, 3.3611686518401305
+// For Adeleke Uni
+// 7.735151047797988, 4.44396868205197
+
+/* For FirstBank
+6.481181459181912, 3.3611559955308903
+latitude: 6.481022800408786,
+longitude: 3.3611686518401305 */

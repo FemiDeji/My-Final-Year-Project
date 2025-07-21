@@ -1,116 +1,104 @@
 import { useCallback, useState } from "react";
 import { getDistanceInMeters } from "../helpers/dateAndTime";
 import toast from "react-hot-toast";
-import { CAMPUS_LOCATION } from "../constants/geoLocationParams";
-import GeneralModal from "../components/GeneralModal";
-import CustomButton from "../components/CustomButton";
-import { General_Blue, General_Yellow } from "../constants/colors";
-
-// Promisify the geolocation API
-const getCurrentPosition = () => {
-	return new Promise((resolve, reject) => {
-		navigator.geolocation.getCurrentPosition(resolve, reject);
-	});
-};
+import {
+	CAMPUS_LOCATION,
+	LOCATION_DISTANCE_THRESHOLD,
+} from "../constants/geoLocationParams";
+import { getCachedCoords, saveCoordsToCache } from "../helpers/locationCache";
 
 export default function useCheckLocation() {
-	const [withinLocation, setWithinLocation] = useState(false);
-	const [locationChecked, setLocationChecked] = useState(false);
-	const [showRetryModal, setShowRetryModal] = useState(false);
-	const [locationCheckLoading, setLocationCheckLoading] = useState(false);
+	const [isChecking, setIsChecking] = useState(false);
+	const [hasChecked, setHasChecked] = useState(false);
+	const [error, setError] = useState(false);
 
-	const checkLocation = useCallback(async () => {
-		setLocationCheckLoading(true);
-		setShowRetryModal(false);
-		try {
+	const checkLocation = useCallback(() => {
+		return new Promise((resolve, reject) => {
+			setIsChecking(true);
+			setError(null);
+
 			if (!navigator.geolocation) {
-				toast.error("Geolocation is not supported by your browser");
-				setShowRetryModal(true);
-				setLocationChecked(true);
+				const msg = "Geolocation is not supported by your browser";
+				setError(msg);
+				setIsChecking(false);
+				toast.error(msg);
+
 				return;
 			}
 
-			const position = await getCurrentPosition();
-			const { latitude, longitude } = position.coords;
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					const { latitude, longitude } = position.coords;
+					const currentCoords = { latitude, longitude };
+					const cachedCoords = getCachedCoords();
 
-			const distance = getDistanceInMeters(
-				latitude,
-				longitude,
-				CAMPUS_LOCATION.latitude,
-				CAMPUS_LOCATION.longitude
+					if (cachedCoords) {
+						const movedDistance = getDistanceInMeters(
+							latitude,
+							longitude,
+							cachedCoords.latitude,
+							cachedCoords.longitude
+						);
+
+						if (movedDistance < LOCATION_DISTANCE_THRESHOLD) {
+							setHasChecked(true);
+							setIsChecking(false);
+							return resolve(true);
+						}
+					}
+
+					const distance = getDistanceInMeters(
+						latitude,
+						longitude,
+						CAMPUS_LOCATION.latitude,
+						CAMPUS_LOCATION.longitude
+					);
+					const isWithin = distance <= CAMPUS_LOCATION.radiusInMeters;
+
+					if (isWithin) {
+						saveCoordsToCache(currentCoords);
+					}
+
+					setHasChecked(true);
+					setIsChecking(false);
+					resolve(isWithin);
+				},
+
+				(err) => {
+					switch (err.code) {
+						case err.PERMISSION_DENIED:
+							toast.error(
+								"You denied location access. Please enable it and try again."
+							);
+							break;
+						case err.POSITION_UNAVAILABLE:
+							toast.error(
+								"We couldn't determine your location. Please try again."
+							);
+							break;
+						case err.TIMEOUT:
+							toast.error(
+								"Location request timed out. Please check your connection and try again."
+							);
+							break;
+						default:
+							toast.error("An unknown error occurred while fetching location.");
+					}
+
+					console.error("Geolocation error:", err.message);
+					setError(err.message);
+					setHasChecked(false);
+					setIsChecking(false);
+					reject(false);
+				}
 			);
-
-			const isWithin = distance <= CAMPUS_LOCATION.radiusInMeters;
-
-			if (!isWithin) {
-				toast.error("You must be on campus to book a pass.");
-				setShowRetryModal(true);
-			}
-
-			setWithinLocation(isWithin);
-			return isWithin;
-		} catch (error) {
-			switch (error.code) {
-				case error.PERMISSION_DENIED:
-					toast.error(
-						"You denied location access. Please enable it and try again."
-					);
-					break;
-				case error.POSITION_UNAVAILABLE:
-					toast.error("We couldn't determine your location. Please try again.");
-					break;
-				case error.TIMEOUT:
-					toast.error(
-						"Location request timed out. Please check your connection and try again."
-					);
-					break;
-				default:
-					toast.error("An unknown error occurred while fetching location.");
-			}
-			console.error("Geolocation error:", error.message);
-			setShowRetryModal(true);
-			setWithinLocation(false);
-			return false;
-		} finally {
-			setLocationCheckLoading(false);
-			setLocationChecked(true);
-		}
+		});
 	}, []);
 
-	// useEffect(() => {
-	// 	checkLocation();
-	// }, [checkLocation]);
-
 	return {
-		withinLocation,
-		locationChecked,
-		locationCheckLoading,
+		hasChecked,
+		isChecking,
+		error,
 		checkLocation,
-		RetryModal: (
-			<GeneralModal
-				isOpen={showRetryModal}
-				showCloseButton
-				onClose={() => setShowRetryModal(false)}
-				height="23vh"
-				zIndex={100003}
-				classname="xs:w-full lg:w-[30%]">
-				<div className="flex flex-col justify-center items-center gap-2">
-					<p className="text-sm xs:text-[12px] text-center">
-						<span className="font-medium">Location required.</span>
-						<br />
-						We could not access your location. Please make sure location
-						services are enabled and try again.
-					</p>
-					<CustomButton
-						label={"Retry"}
-						bgColor={General_Yellow}
-						textColor={General_Blue}
-						bordered
-						borderSize="lg"
-						onClick={checkLocation}
-					/>
-				</div>
-			</GeneralModal>
-		),
 	};
 }

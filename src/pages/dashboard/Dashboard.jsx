@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import Layout from "../../components/Layout";
 import useUser from "../../hooks/auth/useUser";
@@ -6,11 +7,13 @@ import Stats from "../booking/Stats";
 import useRecentBooking from "../booking/useRecentBooking";
 import ActivityChart from "./ActivityChart";
 import BookingSummary from "./BookingSummary";
+import useCheckLocation from "../../hooks/useCheckLocation";
 
 export default function Dashboard() {
 	// const thirtyDaysAgo = new Date();
 	// thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 	const { profile } = useUser();
+	const { checkLocation } = useCheckLocation();
 
 	const { recentBookings, isPending } = useRecentBooking();
 
@@ -63,6 +66,14 @@ export default function Dashboard() {
 		frequency: monthlyData[month].totalDays / monthlyData[month].bookings || 0,
 	}));
 
+	useEffect(() => {
+		if (profile?.role === "user") {
+			checkLocation().then((isWithin) => {
+				console.log("User is within location?", isWithin);
+			});
+		}
+	}, [profile?.role, checkLocation]);
+
 	return (
 		<Layout title={"Dashboard"}>
 			<div className="w-full flex flex-col gap-3 xs:gap-3">
@@ -78,7 +89,7 @@ export default function Dashboard() {
 					<BookingSummary data={bookingData} />
 				</div>
 			</div>
-
+			{}
 			{isPending && <CustomBackdrop open={true} text={"Please wait..."} />}
 		</Layout>
 	);
