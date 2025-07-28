@@ -8,12 +8,14 @@ import useRecentBooking from "../booking/useRecentBooking";
 import ActivityChart from "./ActivityChart";
 import BookingSummary from "./BookingSummary";
 import useCheckLocation from "../../hooks/useCheckLocation";
+import GeneralModal from "../../components/GeneralModal";
 
 export default function Dashboard() {
 	// const thirtyDaysAgo = new Date();
 	// thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 	const { profile } = useUser();
-	const { checkLocation } = useCheckLocation();
+	const { checkLocation, geoError, showGeoErrorModal, setShowGeoErrorModal } =
+		useCheckLocation();
 
 	const { recentBookings, isPending } = useRecentBooking();
 
@@ -68,9 +70,7 @@ export default function Dashboard() {
 
 	useEffect(() => {
 		if (profile?.role === "user") {
-			checkLocation().then((isWithin) => {
-				console.log("User is within location?", isWithin);
-			});
+			checkLocation();
 		}
 	}, [profile?.role, checkLocation]);
 
@@ -89,8 +89,18 @@ export default function Dashboard() {
 					<BookingSummary data={bookingData} />
 				</div>
 			</div>
-			{}
+
 			{isPending && <CustomBackdrop open={true} text={"Please wait..."} />}
+			{geoError && (
+				<GeneralModal
+					isOpen={showGeoErrorModal}
+					onClose={() => setShowGeoErrorModal(false)}
+					showCloseButton={true}
+					height="17vh"
+					classname={"xs:w-full lg:w-[30%]"}>
+					<div className="text-[14px] lg:w-[text-base] py-4">{geoError}</div>
+				</GeneralModal>
+			)}
 		</Layout>
 	);
 }

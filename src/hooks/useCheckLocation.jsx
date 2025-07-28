@@ -1,62 +1,44 @@
 import { useCallback, useState } from "react";
-import { getDistanceInMeters } from "../helpers/dateAndTime";
-import toast from "react-hot-toast";
-import {
-	CAMPUS_LOCATION,
-	LOCATION_DISTANCE_THRESHOLD,
-} from "../constants/geoLocationParams";
-import { getCachedCoords, saveCoordsToCache } from "../helpers/locationCache";
+
+import * as turf from "@turf/turf";
+import { adelekeUniversityPolygon } from "../constants/geoPolygon";
 
 export default function useCheckLocation() {
 	const [isChecking, setIsChecking] = useState(false);
 	const [hasChecked, setHasChecked] = useState(false);
-	const [error, setError] = useState(false);
+	const [geoError, setGeoError] = useState(null);
+	const [showGeoErrorModal, setShowGeoErrorModal] = useState(false);
 
 	const checkLocation = useCallback(() => {
 		return new Promise((resolve, reject) => {
 			setIsChecking(true);
-			setError(null);
+			setGeoError(null);
+			setShowGeoErrorModal(false);
 
 			if (!navigator.geolocation) {
 				const msg = "Geolocation is not supported by your browser";
-				setError(msg);
+				setGeoError(msg);
 				setIsChecking(false);
-				toast.error(msg);
-
-				return;
+				setShowGeoErrorModal(true);
+				return reject(false);
 			}
 
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					const { latitude, longitude } = position.coords;
-					const currentCoords = { latitude, longitude };
-					const cachedCoords = getCachedCoords();
+					const userPoint = turf.point([longitude, latitude]);
 
-					if (cachedCoords) {
-						const movedDistance = getDistanceInMeters(
-							latitude,
-							longitude,
-							cachedCoords.latitude,
-							cachedCoords.longitude
-						);
+					const universityPolygon = turf.polygon([adelekeUniversityPolygon]);
 
-						if (movedDistance < LOCATION_DISTANCE_THRESHOLD) {
-							setHasChecked(true);
-							setIsChecking(false);
-							return resolve(true);
-						}
-					}
-
-					const distance = getDistanceInMeters(
-						latitude,
-						longitude,
-						CAMPUS_LOCATION.latitude,
-						CAMPUS_LOCATION.longitude
+					const isWithin = turf.booleanPointInPolygon(
+						userPoint,
+						universityPolygon
 					);
-					const isWithin = distance <= CAMPUS_LOCATION.radiusInMeters;
 
-					if (isWithin) {
-						saveCoordsToCache(currentCoords);
+					if (!isWithin) {
+						const msg = "You are currently outside the campus zone.";
+						setGeoError(msg);
+						setShowGeoErrorModal(true);
 					}
 
 					setHasChecked(true);
@@ -65,28 +47,25 @@ export default function useCheckLocation() {
 				},
 
 				(err) => {
+					let msg = "An unknown error occured while fetching location.";
 					switch (err.code) {
 						case err.PERMISSION_DENIED:
-							toast.error(
-								"You denied location access. Please enable it and try again."
-							);
+							msg =
+								"You denied location access. Please enable it and try again to gain full access.";
 							break;
 						case err.POSITION_UNAVAILABLE:
-							toast.error(
-								"We couldn't determine your location. Please try again."
-							);
+							msg =
+								"We couldn't determine your location. Please try again to gain full access.";
 							break;
 						case err.TIMEOUT:
-							toast.error(
-								"Location request timed out. Please check your connection and try again."
-							);
+							msg =
+								"Location request timed out. Please check your connection and try again to gain full access.";
 							break;
-						default:
-							toast.error("An unknown error occurred while fetching location.");
 					}
 
 					console.error("Geolocation error:", err.message);
-					setError(err.message);
+					setGeoError(msg);
+					setShowGeoErrorModal(true);
 					setHasChecked(false);
 					setIsChecking(false);
 					reject(false);
@@ -98,7 +77,9 @@ export default function useCheckLocation() {
 	return {
 		hasChecked,
 		isChecking,
-		error,
+		geoError,
 		checkLocation,
+		showGeoErrorModal,
+		setShowGeoErrorModal,
 	};
 }
