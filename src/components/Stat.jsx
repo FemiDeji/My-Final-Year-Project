@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
-export default function Stat({ icon, title, value }) {
+export default function Stat({ icon, title, value, onclick = () => {} }) {
 	return (
-		<div className="bg-white shadow-sm rounded-lg p-2 py-3 flex flex-row justify-center items-center w-full">
+		<div
+			className="bg-white shadow-sm rounded-lg p-2 py-3 flex flex-row justify-center items-center w-full"
+			onClick={onclick}>
 			<div className="flex flex-row justify-start items-center gap-3 w-full">
 				<div
 					className={`flex justify-center items-center p-1 xs:p-0.5 w-9 h-10 xs:w-8 xs:h-8`}>
