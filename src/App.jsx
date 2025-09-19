@@ -49,7 +49,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/pass"
+						path="/passes"
 						element={
 							<ProtectedRoute
 								authUser={["user", "super-admin", "admin", "security"]}>

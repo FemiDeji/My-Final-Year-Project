@@ -143,8 +143,8 @@ export default function SideBar({
 					)}
 
 					<LinkItem
-						text={"Pass"}
-						url={"/pass"}
+						text={"Passes"}
+						url={"/passes"}
 						showIconOnly={showIconsOnly}
 						setIsSidebarOpen={setIsSidebarOpen}>
 						<IoTicketOutline />

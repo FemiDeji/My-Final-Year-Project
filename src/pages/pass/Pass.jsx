@@ -223,7 +223,7 @@ export default function Pass() {
 	const paginatedData = passData?.slice(startIndex, endIndex);
 
 	return (
-		<Layout title={"Pass"}>
+		<Layout title={"Passes"}>
 			<div className="bg-white rounded-lg p-3 shadow-sm flex flex-col w-full overflow-y-auto">
 				{passes?.length > 0 && (
 					<div className="lg:w-[20%] lg:ml-auto">
