@@ -14,7 +14,14 @@ function CustomBackdrop({ open, text }) {
 						visible={true}
 						height="70"
 						width="70"
-						colors={["red", "blue", "yellow", "green", "purple"]}
+						colors={[
+							"#f2c008",
+							"#f2c008",
+							"#002855",
+							"#002855",
+							"#f2c008",
+							"#002855",
+						]}
 					/>
 					<p className="mt-5 xs:text-xs">{text}</p>
 				</div>
