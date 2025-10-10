@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../components/CustomButton";
+import { General_Blue, General_Yellow } from "../../constants/colors";
 
 export default function ResetPasswordExpired() {
 	const navigate = useNavigate();

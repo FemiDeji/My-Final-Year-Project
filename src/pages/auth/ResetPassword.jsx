@@ -7,6 +7,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useUpdatePassword from "../../hooks/auth/useUpdatePassword";
 import CustomBackdrop from "../../components/CustomBackdrop";
 import { delayAction } from "../../helpers/custom";
+import {
+	General_Blue,
+	General_Grey,
+	General_Yellow,
+} from "../../constants/colors";
 
 export default function ResetPassword() {
 	const [showPassword, setShowPassword] = useState(false);
