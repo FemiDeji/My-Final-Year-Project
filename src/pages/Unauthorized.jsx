@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import CustomButton from "../components/CustomButton";
 import CustomBackArrow from "../components/CustomBackArrow";
 import Layout from "../components/Layout";
+import { General_Blue, General_Yellow } from "../constants/colors";
 
 export default function Unauthorized() {
 	const navigate = useNavigate();
