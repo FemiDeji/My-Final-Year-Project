@@ -17,7 +17,6 @@ export default function useCreateUpdateBooking() {
 	} = useMutation({
 		mutationFn: (newBooking) => createUpdateBookingApi(newBooking),
 		onSuccess: (data) => {
-			console.log("Data", data);
 			queryClient.invalidateQueries(["bookings", data]);
 			toast.success(
 				`${

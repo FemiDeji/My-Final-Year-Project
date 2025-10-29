@@ -275,7 +275,7 @@ export async function getFilteredPasses({ start_date, end_date, priority }) {
 		query = query.gte("start_date", start_date).lte("end_date", end_date);
 	}
 
-	if (profiles) {
+	if (priority) {
 		query = query.eq("priority", priority);
 	}
 
